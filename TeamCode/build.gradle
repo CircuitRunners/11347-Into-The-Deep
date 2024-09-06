@@ -39,6 +39,8 @@ dependencies {
     implementation 'org.team11260:fast-load:0.1.2'
 
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.13'
+
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.21'
 }
 
 repositories {
