@@ -4,10 +4,10 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class claw extends SubsystemBase {
+public class Claw extends SubsystemBase {
     Servo leftservo, rightservo;
 
-    public claw(HardwareMap h) {
+    public Claw(HardwareMap h) {
         leftservo = h.get(Servo.class, "leftservo");
         rightservo = h.get(Servo.class, "rightservo");
 
