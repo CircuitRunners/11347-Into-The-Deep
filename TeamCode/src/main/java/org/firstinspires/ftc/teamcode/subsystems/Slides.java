@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.subsystems;
-
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -24,8 +23,6 @@ public class Slides extends SubsystemBase{
 
     //sets power to 0
      public void slideBrakes(){
-        setLiftPower(0);
+        slidePower(0);
     }
-    
 }
-
