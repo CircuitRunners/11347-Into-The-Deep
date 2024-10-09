@@ -1,4 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-public class Diffy {
+public class Diffy extends SubsystemBase{
+    
+
+
+
+
+
 }
