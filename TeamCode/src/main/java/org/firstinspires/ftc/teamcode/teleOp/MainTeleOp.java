@@ -18,6 +18,8 @@ public class MainTeleOp extends CommandOpMode {
     public void initialize() {
         schedule(new BulkCacheCommand(hardwareMap));
         arm = new Arm(hardwareMap);
+        diffy = new Diffy(hardwareMap);
+        Slides = new Slides(hardwareMap);
 
     }
 
