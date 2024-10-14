@@ -5,23 +5,24 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw extends SubsystemBase {
-    Servo leftservo, rightservo;
+    Servo servo;
 
     public Claw(HardwareMap h) {
-        leftservo = h.get(Servo.class, "leftservo");
-        rightservo = h.get(Servo.class, "rightservo");
+        servo = h.get(Servo.class, "Claw Servo");
 
     }
 
-    public void rotation(){
-        leftservo.setPosition(0.25);
-        rightservo.setPosition(-0.25);
-
+    public void open(){
+        //Position is probably wrong
+        servo.setPosition(.25);
     }
 
-    public void spin(){
-        leftservo.setPosition(0.25);
-        rightservo.setPosition(0.25);
-
+    public void close() {
+        servo.setPosition(0);
     }
+
+    public void clawPosition(double position) {
+        servo.setPosition(position);
+    }
+
 }

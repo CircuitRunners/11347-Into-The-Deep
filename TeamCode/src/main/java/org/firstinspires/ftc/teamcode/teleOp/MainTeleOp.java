@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Slides;
 public class MainTeleOp extends CommandOpMode {
     //arm stuff
     public Arm arm;
-    public Slides slides;
+    public Slides lift;
     public Diffy diffy;
 
 
@@ -19,7 +19,7 @@ public class MainTeleOp extends CommandOpMode {
         schedule(new BulkCacheCommand(hardwareMap));
         arm = new Arm(hardwareMap);
         diffy = new Diffy(hardwareMap);
-        Slides = new Slides(hardwareMap);
+        lift = new Slides(hardwareMap);
 
     }
 
@@ -29,7 +29,7 @@ public class MainTeleOp extends CommandOpMode {
         arm.Power(gamepad2.left_stick_x); //justin i changed this to x
         //slide stuff
 
-        slides.slidePower(gamepad2.left_stick_y);
+        lift.setLiftPower(gamepad2.left_stick_y);
 
         //diffy stuff
 

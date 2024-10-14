@@ -4,19 +4,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 public class Slides extends SubsystemBase{
-    public enum SlidePosition {
-        //set numbers for this
-        DOWN(),
-        AUTO(),
-        SHORT(),
-        MID(),
-        HIGH();
+    public enum SlidePositions {
+        DOWN(0),
+        AUTO(100),
+        SHORT(200),
+        MID(300),
+        HIGH(400);
 
         public int position;
 
-        public SlidePositions (int position) {
+        SlidePositions(int position){
             this.position = position;
         }
 
@@ -27,43 +27,82 @@ public class Slides extends SubsystemBase{
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
 
-    public Slides(HardwareMap hardwareMap){
+    private VoltageSensor voltageSensor;
+    private double voltageComp;
+    private double VOLTAGE_WHEN_LIFT_TUNED = 13.0;
+
+    public Slides(HardwareMap hardwareMap) {
         leftSlideMotor = hardwareMap.get(DcMotorEx.class, "leftSlideMotor");
         rightSlideMotor = hardwareMap.get(DcMotorEx.class, "rightSlideMotor");
 
-    }
-    //even the motors
+        //even the motors
         leftSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-    //PID stuff
-    leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //PID stuff
+        leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-    //reverse motor
-    rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //reverse motor
+        rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-    //can change to break
-    leftSlideMotor.setMode(DcMotor.ZeroPowerBehavior.float);
-    rightSlideMotor.setMode(DcMotor.ZeroPowerBehavior.float);
+        // Negate the gravity when stopped
+        //TODO gravity PID coefficients?
+        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); // change to brake if bad
+        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        voltageComp = VOLTAGE_WHEN_LIFT_TUNED / voltageSensor.getVoltage();
+    }
 
-    //Sets power to slides
-    public void slidePower(double power){
+    @Override
+    public void periodic(){
+        // happens every loop
+    }
+
+    public void setLiftPower(double power){
+        //TODO this could be the PID demon
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
     }
 
-    //sets power to 0
-     public void slideBrakes(){
-        slidePower(0);
+    public void brake_power(){
+        setLiftPower(0);
     }
 
-    public void resetPosition(){
+    public double getLiftPosition(){
+        return rightSlideMotor.getCurrentPosition();
+    }
+
+    public double getLiftVelocity(){
+        return leftSlideMotor.getVelocity();
+    }
+
+    public boolean atUpperLimit(){
+        return getLiftPosition() > 2950;
+    }
+
+    public boolean atLowerLimit(){
+        return getLiftPosition() < 5;
+    }
+
+    public void setLeftPower (double power) {
+        leftSlideMotor.setPower(power);
+    }
+
+    public void setRightMotor (double power) {
+        rightSlideMotor.setPower(power);
+    }
+
+    public void resetLiftPosition(){
         leftSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-
-
+    public double getVoltageComp(){
+        return voltageComp;
+    }
 }
