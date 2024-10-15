@@ -12,7 +12,7 @@ public class Claw extends SubsystemBase {
 
     }
 
-    public void open(){
+    public void open(){8  
         //Position is probably wrong
         servo.setPosition(.25);
     }
@@ -25,4 +25,7 @@ public class Claw extends SubsystemBase {
         servo.setPosition(position);
     }
 
+    public double getPosition() {
+        return servo.getPosition();
+    }
 }

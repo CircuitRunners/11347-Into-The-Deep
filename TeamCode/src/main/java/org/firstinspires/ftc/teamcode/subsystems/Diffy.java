@@ -6,6 +6,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 public class Diffy extends SubsystemBase{
+
+    //TODO implement analog encoders for axons ⬇️⬇️⬇️
+    //get our analog input from the hardwareMap AnalogInput analogInput = hardwareMap.get(AnalogInput.class, "myanaloginput");
+    // get the voltage of our analog line // divide by 3.3 (the max voltage) to get a value between 0 and 1 // multiply by 360 to convert it to 0 to 360 degrees double position = analogInput.getVoltage() / 3.3 * 360;
+
     CRServo leftDiffyServo, rightDiffyServo;
     public Diffy (HardwareMap hardwareMap) {
             leftDiffyServo = hardwareMap.get(CRServo.class, "leftDiffyServo");
