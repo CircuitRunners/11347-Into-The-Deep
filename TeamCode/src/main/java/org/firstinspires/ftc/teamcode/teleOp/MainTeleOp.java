@@ -1,17 +1,21 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
-
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
+@TeleOp
 public class MainTeleOp extends CommandOpMode {
     //arm stuff
     public Arm arm;
     public Slides lift;
     public Diffy diffy;
+
+    public Claw claw;
 
 
     @Override
@@ -20,7 +24,7 @@ public class MainTeleOp extends CommandOpMode {
         arm = new Arm(hardwareMap);
         diffy = new Diffy(hardwareMap);
         lift = new Slides(hardwareMap);
-
+        claw = new Claw(hardwareMap);
     }
 
     @Override
@@ -35,6 +39,14 @@ public class MainTeleOp extends CommandOpMode {
 
         diffy.moveDiffy(gamepad2.right_stick_y);
         diffy.rotateDiffy(gamepad2.right_trigger-gamepad2.left_trigger);
+
+        //temp claw stuff
+        if (gamepad2.square) {
+            claw.open();
+        }
+        if (gamepad2.triangle) {
+            claw.close();
+        }
 
     }
 }
