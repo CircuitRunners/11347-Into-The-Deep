@@ -1,63 +1,98 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.kauailabs.navx.ftc.AHRS;
+import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-public class Drivebase extends SubsystemBase {
-    private DcMotorEx fl, fr, bl, br;
-    public IMU imu;
-    private IMU.Parameters parameters;
+public class Drivebase {
+    public AHRS imu;
+
+    private double imuPrevPositionRad = 0.0;
+
+    public DcMotorEx frontLeft, frontRight, backLeft, backRight;
+
 
     public Drivebase (HardwareMap hardwareMap) {
-        fl = hardwareMap.get(DcMotorEx.class, "fl");
-        fr = hardwareMap.get(DcMotorEx.class, "fr");
-        bl = hardwareMap.get(DcMotorEx.class, "bl");
-        br = hardwareMap.get(DcMotorEx.class, "br");
+        this.frontLeft = hardwareMap.get(DcMotorEx.class,"rightFront"); // Drivebase
+        this.frontRight = hardwareMap.get(DcMotorEx.class,"leftFront"); // Drivebase
+        this.backLeft = hardwareMap.get(DcMotorEx.class,"rightRear"); // Drivebase
+        this.backRight = hardwareMap.get(DcMotorEx.class,"leftRear"); // Drivebase
+        this.imu = AHRS.getInstance(hardwareMap.get(NavxMicroNavigationSensor.class, "navx"), AHRS.DeviceDataType.kProcessedData);
 
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        parameters = new IMU.Parameters(
-                new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.DOWN
-                )
-        );
-
-        imu.initialize(parameters);
+        commonMotorSetup();
     }
 
-    public void reset() {
-        imu.resetYaw();
+    private void commonMotorSetup() {
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void drive(double y, double x, double rx) {
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        // rx = right stick x
+        // x = left stick x
+        // y = left stick y (reversed in hardware)
+        y = -y; // y && strafe forward back
+        x = x * 1.1; // x && strafe right and left
+        rx = rx; // rx && turn left right angular
 
-        // Rotate the movement direction counter to the bot's rotation
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+        // Calculate the robot's heading from the IMU
+        double botHeading = getCorrectedYaw();
 
-        rotX = rotX * 1.1;  // Counteract imperfect strafing
+        // botHeading is in Radians
+        Vector2d botVector = new Vector2d(x, y).rotated(botHeading);
 
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double flpwr = (rotY + rotX + rx) / denominator;
-        double blpwr = (rotY - rotX + rx) / denominator;
-        double frpwr = (rotY - rotX - rx) / denominator;
-        double brpwr = (rotY + rotX - rx) / denominator;
+//        // Apply the calculated heading to the input vector for field centric
+        x = botVector.getX(); // strafe r/l transform values
+        y = botVector.getY(); // strafe f/b transform values
+        // note rx is not here since rotation is always field centric!
 
-        fl.setPower(flpwr);
-        bl.setPower(blpwr);
-        fr.setPower(frpwr);
-        br.setPower(brpwr);
+        // Calculate the motor powers
+        double frontLeftPower = y + x + rx;
+        double frontRightPower = y - x - rx;
+
+        double backLeftPower = y - x + rx;
+        double backRightPower = y + x - rx;
+
+        // Find the max power and make sure it ain't greater than 1
+        double denominator = max(
+                max(abs(frontLeftPower), abs(backLeftPower)),
+                max(abs(frontRightPower), abs(backRightPower))
+        );
+
+        if (denominator > 1.0) {
+            frontLeftPower /= denominator;
+            backLeftPower /= denominator;
+            frontRightPower /= denominator;
+            backRightPower /= denominator;
+        }
+
+        // Old method below, to ensure the CONTROLLERS no more than 1
+        // double denominator = max(abs(y) + abs(x) + abs(rx), 1);
+
+        // Set the motor powers
+        frontLeft.setPower(frontLeftPower);
+        backLeft.setPower(backLeftPower);
+        frontRight.setPower(frontRightPower);
+        backRight.setPower(backRightPower);
+    }
+
+    public double getCorrectedYaw () {
+        double imuDeg = imu.getYaw();
+        double imuRad = AngleUnit.RADIANS.fromDegrees(imuDeg);
+//        double imuRad = imuDeg;
+        double correctedRadReset = imuRad-imuPrevPositionRad;
+        return (1.0) * correctedRadReset; // * (14.0/180.0);
+    }
+
+    public void reset() {
+        imuPrevPositionRad = AngleUnit.RADIANS.fromDegrees(imu.getYaw());
     }
 }
