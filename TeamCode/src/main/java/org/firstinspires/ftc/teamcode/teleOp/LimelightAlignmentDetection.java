@@ -14,6 +14,8 @@ public class LimelightAlignmentDetection extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         limelight = new Limelight(hardwareMap);
 
+        waitForStart();
+
         while (opModeIsActive()) {
             limelight.detectBlock();
         }
