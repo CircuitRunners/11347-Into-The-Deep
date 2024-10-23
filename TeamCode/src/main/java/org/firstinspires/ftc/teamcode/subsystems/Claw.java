@@ -9,12 +9,11 @@ public class Claw extends SubsystemBase {
 
     public Claw(HardwareMap h) {
         servo = h.get(Servo.class, "Claw Servo");
-
     }
 
     public void open(){
         //Position is probably wrong
-        servo.setPosition(.8);
+        servo.setPosition(1);
     }
 
     public void close() {

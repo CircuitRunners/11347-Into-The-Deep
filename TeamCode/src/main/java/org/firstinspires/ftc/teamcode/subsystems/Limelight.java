@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -10,44 +8,31 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Limelight extends SubsystemBase {
 
     private Limelight3A limelight;
+    private double alignmentTolerance;
 
-    public Limelight(HardwareMap hardwareMap) {
+    public Limelight(HardwareMap hardwareMap, double tolerance) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        alignmentTolerance = tolerance;
     }
 
-    public void detectBlock() {
-        // Set telemetry update interval
-        telemetry.setMsTransmissionInterval(11);
-
-        // Start the Limelight
+    public void startLimelight() {
         limelight.start();
+    }
 
-        telemetry.addData(">", "Robot Ready. Press Play.");
-        telemetry.update();
+    public void stopLimelight() {
+        limelight.stop();
+    }
 
-        // Tolerance for center alignment (adjust if needed)
-        double alignmentTolerance = 5.0;  // +/- 5 degrees tolerance for tx and ty
+    public LLResult getLatestResult() {
+        return limelight.getLatestResult();
+    }
 
-        LLResult result = limelight.getLatestResult();
-
+    public boolean isTargetAligned(LLResult result) {
         if (result != null && result.isValid()) {
             double tx = result.getTx();  // Horizontal offset
             double ty = result.getTy();  // Vertical offset
-
-            telemetry.addData("tx", tx);
-            telemetry.addData("ty", ty);
-
-            // Check if both tx and ty are within the tolerance range for alignment
-            if (Math.abs(tx) <= alignmentTolerance && Math.abs(ty) <= alignmentTolerance) {
-                telemetry.addData("Alignment", "Target is centered!");
-            } else {
-                telemetry.addData("Alignment", "Target is NOT centered!");
-            }
-        } else {
-            telemetry.addData("Limelight", "No valid data");
+            return Math.abs(tx) <= alignmentTolerance && Math.abs(ty) <= alignmentTolerance;
         }
-
-        telemetry.update();
-        limelight.stop();
+        return false;
     }
 }
