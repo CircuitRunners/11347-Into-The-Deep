@@ -24,6 +24,7 @@ public class Slides extends SubsystemBase{
             return this.position;
         }
     }
+    private int UPPER_LIMIT = 2950;
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
 
@@ -61,7 +62,6 @@ public class Slides extends SubsystemBase{
     }
 
     public void setLiftPower(double power){
-        //TODO this could be the PID demon
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
     }
@@ -79,7 +79,7 @@ public class Slides extends SubsystemBase{
     }
 
     public boolean atUpperLimit(){
-        return getLiftPosition() > 2950;
+        return getLiftPosition() > UPPER_LIMIT;
     }
 
     public boolean atLowerLimit(){
