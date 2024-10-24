@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
+@Disabled
 @TeleOp(name = "Limelight Alignment Detection", group = "Sensor")
 public class LimelightAlignmentDetection extends LinearOpMode {
 
