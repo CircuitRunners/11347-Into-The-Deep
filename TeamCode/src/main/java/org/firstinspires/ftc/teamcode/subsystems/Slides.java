@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 public class Slides extends SubsystemBase{
+    //TODO Rename References
     public enum SlidePositions {
-        DOWN(0),
-        AUTO(100),
-        SHORT(200),
-        MID(300),
-        HIGH(400);
+        DOWN(0), // Ground
+        AUTO(100), // Low Bar
+        SHORT(200), // Low Bucket
+        MID(300), // High Bar
+        HIGH(400); // High Bucket
 
         public int position;
 
@@ -24,7 +25,7 @@ public class Slides extends SubsystemBase{
             return this.position;
         }
     }
-    private int UPPER_LIMIT = 2950;
+    private int UPPER_LIMIT = 9999999; //Change to actual limit
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
 

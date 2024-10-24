@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class PID {
     double integralSum = 0;
     private double lastError = 0;
-    private double kP, kI, kD;
+    public double kP, kI, kD;
 
     // kP = Aggressiveness
     // kD = Dampener (like a spring)
@@ -40,7 +40,7 @@ public class PID {
         this.kD = kD;
     }
 
-    public void overridePID (double kP, double kI, double kD) {
+    public void overridePID(double kP, double kI, double kD) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
