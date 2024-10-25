@@ -86,6 +86,7 @@ public class CRDiffy extends SubsystemBase {
         return leftAxon.getVoltage() / 3.3 * 360;
     }
 
+
     // Current right diffy position in degrees
     public double getRightDiffyPose() {
         return rightAxon.getVoltage() / 3.3 * 360;
@@ -101,6 +102,17 @@ public class CRDiffy extends SubsystemBase {
     public void moveDiffy(double power) {
         leftDiffyServo.setPower(power);
         rightDiffyServo.setPower(power);
+    }
+    public void posDiffyFlip(){
+
+        setLeftDiffyPosition(getLeftDiffyPose()/360+.5);
+        setRightDiffyPosition(-getRightDiffyPose()/360+.5);
+    }
+
+    public void negDiffyFlip(){
+
+        setLeftDiffyPosition(getLeftDiffyPose()/360-.5);
+        setRightDiffyPosition(-getRightDiffyPose()/360-.5);
     }
 
     // Stop both diffy servos

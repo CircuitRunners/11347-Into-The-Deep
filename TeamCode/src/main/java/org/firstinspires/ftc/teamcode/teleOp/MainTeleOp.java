@@ -23,7 +23,7 @@ public class MainTeleOp extends CommandOpMode {
     private CRDiffy diffy;
     private Claw claw;
     private Drivebase db;
-    private Limelight limelight;
+//    private Limelight limelight;
 
 //    private ManualLiftCommand manualLiftCommand;
 //    private ManualLiftResetCommand manualLiftResetCommand;
@@ -41,7 +41,7 @@ public class MainTeleOp extends CommandOpMode {
         lift = new Slides(hardwareMap);
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
-        limelight = new Limelight(hardwareMap, 5.0);
+//        limelight = new Limelight(hardwareMap, 5.0);
         telemetry.addData(">", "Hardware Map Initialized");
         telemetry.update();
 
@@ -49,7 +49,7 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.setMsTransmissionInterval(11);
 
         // Start the Limelight
-        limelight.startLimelight();
+//        limelight.startLimelight();
         telemetry.addData(">", "Limelight Ready");
         telemetry.update();
 
@@ -107,26 +107,35 @@ public class MainTeleOp extends CommandOpMode {
         if (gamepad2.triangle) {
             claw.close();
         }
-
-        LLResult result = limelight.getLatestResult();
-
-        if (result != null && result.isValid()) {
-            double tx = result.getTx();  // Horizontal offset
-            double ty = result.getTy();  // Vertical offset
-
-            telemetry.addData("tx", tx);
-            telemetry.addData("ty", ty);
-
-            if (limelight.isTargetAligned(result)) {
-                telemetry.addData("Alignment", "Target is centered!");
-            } else {
-                telemetry.addData("Alignment", "Target is NOT centered!");
-            }
-        } else {
-            telemetry.addData("Limelight", "No valid data");
+        if(gamepad2.dpad_up){
+            diffy.posDiffyFlip();
+            arm.setPosition((arm.getArmPosition()+0.5));
         }
-        // Stop Limelight
-        limelight.stopLimelight();
+        if(gamepad2.dpad_down){
+            diffy.negDiffyFlip();
+            arm.setPosition((arm.getArmPosition()-0.5));
+        }
+
+
+//        LLResult result = limelight.getLatestResult();
+//
+//        if (result != null && result.isValid()) {
+//            double tx = result.getTx();  // Horizontal offset
+//            double ty = result.getTy();  // Vertical offset
+//
+//            telemetry.addData("tx", tx);
+//            telemetry.addData("ty", ty);
+//
+//            if (limelight.isTargetAligned(result)) {
+//                telemetry.addData("Alignment", "Target is centered!");
+//            } else {
+//                telemetry.addData("Alignment", "Target is NOT centered!");
+//            }
+//        } else {
+//            telemetry.addData("Limelight", "No valid data");
+//        }
+//        // Stop Limelight
+//        limelight.stopLimelight();
 
         telemetry.addData("Lift Height", lift.getLiftPosition());
         telemetry.addData("imuHeading", db.getCorrectedYaw());

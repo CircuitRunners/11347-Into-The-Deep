@@ -21,10 +21,10 @@ public class Drivebase {
 
 
     public Drivebase (HardwareMap hardwareMap) {
-        this.frontLeft = hardwareMap.get(DcMotorEx.class,"rightFront"); // Drivebase
-        this.frontRight = hardwareMap.get(DcMotorEx.class,"leftFront"); // Drivebase
-        this.backLeft = hardwareMap.get(DcMotorEx.class,"rightRear"); // Drivebase
-        this.backRight = hardwareMap.get(DcMotorEx.class,"leftRear"); // Drivebase
+        this.frontLeft = hardwareMap.get(DcMotorEx.class,"leftFront"); // Drivebase
+        this.frontRight = hardwareMap.get(DcMotorEx.class,"rightFront"); // Drivebase
+        this.backLeft = hardwareMap.get(DcMotorEx.class,"leftRear"); // Drivebase
+        this.backRight = hardwareMap.get(DcMotorEx.class,"rightRear"); // Drivebase
         this.imu = AHRS.getInstance(hardwareMap.get(NavxMicroNavigationSensor.class, "navx"), AHRS.DeviceDataType.kProcessedData);
 
         commonMotorSetup();

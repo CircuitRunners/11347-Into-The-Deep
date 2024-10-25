@@ -33,6 +33,12 @@ public class Arm extends SubsystemBase {
     private double voltageComp;
     private double VOLTAGE_WHEN_TUNED = 13.0;
 
+    private double kP = 0.1,  kI = 0.01, kD = 0.005;
+
+    private double leftIntegral = 0, leftPreviousError = 0;
+    private double rightIntegral = 0, rightPreviousError = 0;
+
+
     public Arm(HardwareMap hardwareMap){
         armMotor = hardwareMap.get(DcMotorEx.class, "armmotor");
 
@@ -53,6 +59,29 @@ public class Arm extends SubsystemBase {
 
     public void setPower(double power) {
         armMotor.setPower(power);
+    }
+
+    public void setPosition(double targetPosition){
+        double currentPos = getArmPosition();
+        double error = targetPosition - currentPos;
+
+        // Proportional term
+        double pTerm = kP * error;
+
+        // Integral term
+        rightIntegral += error;
+        double iTerm = kI * rightIntegral;
+
+        // Derivative term
+        double derivative = error - rightPreviousError;
+        double dTerm = kD * derivative;
+
+        // PID output
+        double output = pTerm + iTerm + dTerm;
+
+        // Apply the PID output to the servo
+        setPower(output); // Adjust sign if necessary
+        rightPreviousError = error;
     }
 
     public void brake_power(){
