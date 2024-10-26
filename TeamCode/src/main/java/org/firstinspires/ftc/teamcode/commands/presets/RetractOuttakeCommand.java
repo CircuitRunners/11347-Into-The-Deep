@@ -17,7 +17,7 @@ public class RetractOuttakeCommand extends ParallelCommandGroup {
             new InstantCommand(),
             new SequentialCommandGroup(
                     new WaitCommand(800),
-                    new LiftPositionCommand(lift, Slides.SlidePositions.DOWN.position, false),
+                    new LiftPositionCommand(lift, Slides.SlidePositions.STAGE_0.position, false),
                     new WaitCommand(100),
                     new InstantCommand()
             )

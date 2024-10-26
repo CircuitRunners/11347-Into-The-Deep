@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.support.PID;
 
+@Disabled
 @TeleOp
 public class SlidePIDTest extends LinearOpMode {
 
@@ -53,11 +55,11 @@ public class SlidePIDTest extends LinearOpMode {
             if (gamepad2.dpad_right) pid.kD -= 0.01;
 
             // Move the lift up/down based on D-Pad inputs, with PID controlling the motion
-            if (gamepad2.dpad_down && !lift.atLowerLimit()) {
+            if (gamepad2.dpad_down) {
                 double targetPosition = currentPosition - 10; // Move down by 10 encoder ticks
                 double power = pid.runPID(currentPosition, targetPosition);
                 lift.setLiftPower(power);
-            } else if (gamepad2.dpad_up && !lift.atUpperLimit()) {
+            } else if (gamepad2.dpad_up) {
                 double targetPosition = currentPosition + 10; // Move up by 10 encoder ticks
                 double power = pid.runPID(currentPosition, targetPosition);
                 lift.setLiftPower(power);

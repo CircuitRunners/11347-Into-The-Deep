@@ -9,11 +9,11 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 public class Slides extends SubsystemBase{
     //TODO Rename References
     public enum SlidePositions {
-        DOWN(0), // Ground
-        AUTO(100), // Low Bar
-        SHORT(200), // Low Bucket
-        MID(300), // High Bar
-        HIGH(400); // High Bucket
+        STAGE_0(0), // Ground
+        AUTO(-100), // Low Bar
+        STAGE_1(-1070), // Low Bucket
+        STAGE_2(-2145), // High Bar
+        STAGE_3(-3160); // High Bucket
 
         public int position;
 
@@ -25,7 +25,7 @@ public class Slides extends SubsystemBase{
             return this.position;
         }
     }
-    private int UPPER_LIMIT = 9999999; //Change to actual limit
+    private int UPPER_LIMIT = -3180, LOWER_LIMIT = -10;
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
 
@@ -48,10 +48,10 @@ public class Slides extends SubsystemBase{
         //reverse motor
         leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // Negate the gravity when stopped
+        // Negate the gravity when stopped ?
         //TODO gravity PID coefficients?
-        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); // change to brake if bad
-        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
         voltageComp = VOLTAGE_WHEN_LIFT_TUNED / voltageSensor.getVoltage();
@@ -84,7 +84,7 @@ public class Slides extends SubsystemBase{
     }
 
     public boolean atLowerLimit(){
-        return getLiftPosition() < 5;
+        return getLiftPosition() > LOWER_LIMIT;
     }
 
     public void setLeftPower (double power) {

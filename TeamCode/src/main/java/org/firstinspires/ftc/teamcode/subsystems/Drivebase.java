@@ -18,6 +18,7 @@ public class Drivebase {
     private double imuPrevPositionRad = 0.0;
 
     public DcMotorEx frontLeft, frontRight, backLeft, backRight;
+    private DcMotorEx[] motors;
 
 
     public Drivebase (HardwareMap hardwareMap) {
@@ -26,6 +27,11 @@ public class Drivebase {
         this.backLeft = hardwareMap.get(DcMotorEx.class,"leftRear"); // Drivebase
         this.backRight = hardwareMap.get(DcMotorEx.class,"rightRear"); // Drivebase
         this.imu = AHRS.getInstance(hardwareMap.get(NavxMicroNavigationSensor.class, "navx"), AHRS.DeviceDataType.kProcessedData);
+
+        motors = new DcMotorEx[]{frontLeft, frontRight, backLeft, backRight};
+        for (DcMotorEx motor : motors) {
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
 
         commonMotorSetup();
     }
@@ -44,7 +50,7 @@ public class Drivebase {
         rx = rx; // rx && turn left right angular
 
         // Calculate the robot's heading from the IMU
-        double botHeading = getCorrectedYaw();
+        double botHeading = -getCorrectedYaw();
 
         // botHeading is in Radians
         Vector2d botVector = new Vector2d(x, y).rotated(botHeading);

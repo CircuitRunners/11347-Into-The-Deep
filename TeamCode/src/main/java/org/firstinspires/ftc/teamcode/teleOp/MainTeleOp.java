@@ -1,24 +1,23 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
-import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
+import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
+import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
-import org.firstinspires.ftc.teamcode.subsystems.SDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.util.CrossBindings;
 
 @TeleOp
 public class MainTeleOp extends CommandOpMode {
@@ -30,8 +29,7 @@ public class MainTeleOp extends CommandOpMode {
     private Drivebase db;
 //    private Limelight limelight;
 
-//    private ManualLiftCommand manualLiftCommand;
-//    private ManualLiftResetCommand manualLiftResetCommand;
+    private ManualArmCommand manualArmCommand;
 
     private static final double DEBOUNCE_THRESHOLD = 0.05;
 
@@ -55,17 +53,35 @@ public class MainTeleOp extends CommandOpMode {
 
         // Start the Limelight
 //        limelight.startLimelight();
-        telemetry.addData(">", "Limelight Ready");
-        telemetry.update();
-
-//        manualLiftCommand = new ManualLiftCommand(lift, manipulator);
-//        manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
-
-//        lift.setDefaultCommand(new PerpetualCommand(manualLiftCommand));
-
-
-//        telemetry.addData(">", "Commands Ready");
+//        telemetry.addData(">", "Limelight Ready");
 //        telemetry.update();
+
+        manualArmCommand = new ManualArmCommand(arm, manipulator);
+
+        arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
+
+        new Trigger(() -> manipulator.getButton(CrossBindings.triangle))
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
+
+        new Trigger(() -> manipulator.getButton(CrossBindings.cross))
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB)
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
+
+        new Trigger(() -> manipulator.getButton(CrossBindings.square))
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
+
+        new Trigger(() -> manipulator.getButton(CrossBindings.circle))
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
+                        .withTimeout(1900)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
+
+        telemetry.addData(">", "Commands Ready");
+        telemetry.update();
 
         telemetry.addData(">", "Robot Ready To Start");
         telemetry.update();
@@ -84,10 +100,10 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         //Arm
-        arm.setPower(gamepad2.right_stick_x);
+//        arm.setPower(gamepad2.right_stick_x);
         telemetry.addData("Arm Encoder Pos >", arm.getArmPosition());
 
-        //Slide
+        //Slides
         lift.setLiftPower(gamepad2.left_stick_y);
 
         //Diffy
@@ -133,9 +149,5 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.addData("imuHeading", db.getCorrectedYaw());
         telemetry.addData("imuNONCO", db.imu.getYaw());
         telemetry.update();
-    }
-
-    public static boolean debounce(double input) {
-        return Math.abs(input) > DEBOUNCE_THRESHOLD;
     }
 }

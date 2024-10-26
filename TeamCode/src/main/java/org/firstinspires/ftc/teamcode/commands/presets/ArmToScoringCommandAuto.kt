@@ -4,12 +4,12 @@ import com.arcrobotics.ftclib.command.InstantCommand
 import com.arcrobotics.ftclib.command.ParallelCommandGroup
 import com.arcrobotics.ftclib.command.SequentialCommandGroup
 import com.arcrobotics.ftclib.command.WaitCommand
-import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand
-import org.firstinspires.ftc.teamcode.subsystems.Slides
-import org.firstinspires.ftc.teamcode.subsystems.Slides.SlidePositions
+import org.firstinspires.ftc.teamcode.commands.armcommands.ProfiledArmCommand
+import org.firstinspires.ftc.teamcode.subsystems.Arm
+import org.firstinspires.ftc.teamcode.subsystems.Arm.ArmPositions
+import org.firstinspires.ftc.teamcode.subsystems.Claw
 
-class MoveToScoringCommandAuto(lift: Slides, preset: Presets) : ParallelCommandGroup() {
-
+class ArmToScoringCommandAuto(arm: Arm, claw: Claw, preset: Presets) : ParallelCommandGroup() {
     enum class Presets {
         AUTO
     }
@@ -18,22 +18,20 @@ class MoveToScoringCommandAuto(lift: Slides, preset: Presets) : ParallelCommandG
         addCommands(
                 ParallelCommandGroup(
                         SequentialCommandGroup(
-                                // Change this ms to change when the arm comes up
                                 WaitCommand(800),
                                 InstantCommand({
 
                                 }),
                         ),
                         InstantCommand({
-
+                            claw.close()
                         }),
                         when (preset) {
                             Presets.AUTO ->
-                                ProfiledLiftCommand(lift, SlidePositions.AUTO.position, true)
-
+                                ProfiledArmCommand(arm, ArmPositions.AUTO.position, false)
                         }
                 )
         )
-        addRequirements(lift)
+        addRequirements(arm)
     }
 }
