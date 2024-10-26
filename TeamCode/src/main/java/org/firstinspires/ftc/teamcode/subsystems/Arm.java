@@ -13,7 +13,7 @@ public class Arm extends SubsystemBase {
         AUTO(320),
         BASKET_HIGH(415),
         HOVER_SUB(520),
-        GRAB_SUB(575);
+        GRAB_SUB(565);
 
         public int position;
 
@@ -101,7 +101,7 @@ public class Arm extends SubsystemBase {
     public double getArmVelocity(){
         return armMotor.getVelocity();
     }
-    public void resetLiftPosition(){
+    public void resetArmPosition(){
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

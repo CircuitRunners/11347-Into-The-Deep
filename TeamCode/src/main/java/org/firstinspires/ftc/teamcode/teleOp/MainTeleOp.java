@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.firstinspires.ftc.teamcode.util.CrossBindings;
 
 @TeleOp
 public class MainTeleOp extends CommandOpMode {
@@ -30,8 +29,6 @@ public class MainTeleOp extends CommandOpMode {
 //    private Limelight limelight;
 
     private ManualArmCommand manualArmCommand;
-
-    private static final double DEBOUNCE_THRESHOLD = 0.05;
 
     @Override
     public void initialize() {
@@ -60,24 +57,25 @@ public class MainTeleOp extends CommandOpMode {
 
         arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
 
-        new Trigger(() -> manipulator.getButton(CrossBindings.triangle))
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.Y))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(CrossBindings.cross))
+        //TODO: CRY TO AARUSH FOR HELP
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(CrossBindings.square))
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.X))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(CrossBindings.circle))
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         telemetry.addData(">", "Commands Ready");
@@ -100,17 +98,22 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         //Arm
+        if (gamepad2.right_stick_button) {
+            arm.resetArmPosition();
+        }
 //        arm.setPower(gamepad2.right_stick_x);
         telemetry.addData("Arm Encoder Pos >", arm.getArmPosition());
 
         //Slides
+        if (gamepad2.left_stick_button) {
+            lift.resetLiftPosition();
+        }
         lift.setLiftPower(gamepad2.left_stick_y);
 
         //Diffy
         while (gamepad2.dpad_left) {
             diffy.moveDiffy(0.5);
-        }
-        while (gamepad2.dpad_right) {
+        } while (gamepad2.dpad_right) {
             diffy.moveDiffy(-0.5);
         }
         diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
@@ -120,8 +123,7 @@ public class MainTeleOp extends CommandOpMode {
         //Claw
         if (gamepad2.left_bumper) {
             claw.close();
-        }
-        if (gamepad2.right_bumper) {
+        } if (gamepad2.right_bumper) {
             claw.open();
         }
 

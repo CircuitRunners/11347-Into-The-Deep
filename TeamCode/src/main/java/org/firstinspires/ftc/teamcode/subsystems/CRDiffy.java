@@ -20,6 +20,8 @@ public class CRDiffy extends SubsystemBase {
     public CRDiffy(HardwareMap hardwareMap) {
         leftDiffyServo = hardwareMap.get(CRServo.class, "leftDiffyServo");
         rightDiffyServo = hardwareMap.get(CRServo.class, "rightDiffyServo");
+
+        //TODO: Rename encoders (analog inputs) so that they make sense ⬇️⬇️⬇️⬇️
         leftAxon = hardwareMap.get(AnalogInput.class, "leftAxon");
         rightAxon = hardwareMap.get(AnalogInput.class, "rightAxon");
 
@@ -104,13 +106,11 @@ public class CRDiffy extends SubsystemBase {
         rightDiffyServo.setPower(power);
     }
     public void posDiffyFlip(){
-
         setLeftDiffyPosition(getLeftDiffyPose()/360+.5);
         setRightDiffyPosition(-getRightDiffyPose()/360+.5);
     }
 
     public void negDiffyFlip(){
-
         setLeftDiffyPosition(getLeftDiffyPose()/360-.5);
         setRightDiffyPosition(-getRightDiffyPose()/360-.5);
     }

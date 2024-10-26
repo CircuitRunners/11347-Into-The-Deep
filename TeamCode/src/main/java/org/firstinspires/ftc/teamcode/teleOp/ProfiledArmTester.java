@@ -35,22 +35,22 @@ public class ProfiledArmTester extends CommandOpMode {
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_LEFT))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_RIGHT))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
-                        .withTimeout(1900)
+                        .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         telemetry.addLine("Initialization Done");
