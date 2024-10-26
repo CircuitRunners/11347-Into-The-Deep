@@ -46,7 +46,7 @@ public class Slides extends SubsystemBase{
         rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         //reverse motor
-        rightSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Negate the gravity when stopped
         //TODO gravity PID coefficients?

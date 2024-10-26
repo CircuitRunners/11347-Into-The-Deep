@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import com.acmerobotics.roadrunner.ftc.SparkFunOTOSCorrected;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
@@ -79,43 +84,30 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         //Arm
-        arm.setPower(gamepad2.left_stick_x);
+        arm.setPower(gamepad2.right_stick_x);
+        telemetry.addData("Arm Encoder Pos >", arm.getArmPosition());
 
         //Slide
         lift.setLiftPower(gamepad2.left_stick_y);
 
         //Diffy
-        diffy.moveDiffy(gamepad2.right_stick_y);
-        if (debounce(gamepad2.left_trigger) || debounce(gamepad2.right_trigger)) {
-            double powerRight = gamepad1.left_trigger;
-            double powerLeft = gamepad1.right_trigger;
-            if (powerRight > powerLeft) {
-                diffy.rotateDiffy(powerRight);
-            } else if (powerLeft > powerRight) {
-                diffy.rotateDiffy(powerLeft);
-            }
-        } else {
-            diffy.rotateDiffy(0);
+        while (gamepad2.dpad_left) {
+            diffy.moveDiffy(0.5);
         }
+        while (gamepad2.dpad_right) {
+            diffy.moveDiffy(-0.5);
+        }
+        diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
         telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
         telemetry.addData("Right Axon", diffy.getRightDiffyPose());
 
         //Claw
-        if (gamepad2.square) {
-            claw.open();
-        }
-        if (gamepad2.triangle) {
+        if (gamepad2.left_bumper) {
             claw.close();
         }
-        if(gamepad2.dpad_up){
-            diffy.posDiffyFlip();
-            arm.setPosition((arm.getArmPosition()+0.5));
+        if (gamepad2.right_bumper) {
+            claw.open();
         }
-        if(gamepad2.dpad_down){
-            diffy.negDiffyFlip();
-            arm.setPosition((arm.getArmPosition()-0.5));
-        }
-
 
 //        LLResult result = limelight.getLatestResult();
 //

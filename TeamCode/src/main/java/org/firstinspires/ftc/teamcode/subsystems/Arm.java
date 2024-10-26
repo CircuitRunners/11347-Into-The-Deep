@@ -33,10 +33,11 @@ public class Arm extends SubsystemBase {
     private double voltageComp;
     private double VOLTAGE_WHEN_TUNED = 13.0;
 
-    private double kP = 0.1,  kI = 0.01, kD = 0.005;
+    private double kP = 0.1,  kI = 0, kD = 0;
 
-    private double leftIntegral = 0, leftPreviousError = 0;
-    private double rightIntegral = 0, rightPreviousError = 0;
+    private final static int UPPER_LIMIT = 670, MIDDLE_LIMIT = 290, LOWER_LIMIT = 35;
+
+    private final static int ANGLE_1 = 000;//Robot side
 
 
     public Arm(HardwareMap hardwareMap){
@@ -44,12 +45,12 @@ public class Arm extends SubsystemBase {
 
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//      armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        voltageSensor = hardwareMap.voltageSensor.iterator().next();
-        voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
+//        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+//        voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
     }
 
     @Override
@@ -58,44 +59,41 @@ public class Arm extends SubsystemBase {
     }
 
     public void setPower(double power) {
-        armMotor.setPower(power);
+        if (atMiddleLimit()) {
+            armMotor.setPower(power - 0.3);
+        } else if (!atMiddleLimit()) {
+            armMotor.setPower(power + 0.2); //320 mid pose Current angle - MIDDLE
+        }
     }
 
-    public void setPosition(double targetPosition){
-        double currentPos = getArmPosition();
-        double error = targetPosition - currentPos;
+    public boolean atUpperLimit(){
+        return getArmPosition() > UPPER_LIMIT;
+    }
+    public boolean atLowerLimit() {
+        return getArmPosition() < LOWER_LIMIT;
+    }
+    public boolean atMiddleLimit() {
+        boolean state = false;
+        if (getArmPosition() > MIDDLE_LIMIT) {
+            state = true;
+        } else if (getArmPosition() < MIDDLE_LIMIT) {
+            state = false;
+        }
 
-        // Proportional term
-        double pTerm = kP * error;
-
-        // Integral term
-        rightIntegral += error;
-        double iTerm = kI * rightIntegral;
-
-        // Derivative term
-        double derivative = error - rightPreviousError;
-        double dTerm = kD * derivative;
-
-        // PID output
-        double output = pTerm + iTerm + dTerm;
-
-        // Apply the PID output to the servo
-        setPower(output); // Adjust sign if necessary
-        rightPreviousError = error;
+        return state;
     }
 
     public void brake_power(){
         setPower(0);
     }
 
-    public double getArmPosition(){
+    public int getArmPosition(){
         return armMotor.getCurrentPosition();
     }
 
     public double getLiftVelocity(){
         return armMotor.getVelocity();
     }
-
     public void resetLiftPosition(){
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
