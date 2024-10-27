@@ -14,6 +14,7 @@ class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelComma
         REST,
         HOVER_SUB,
         GRAB_SUB,
+        AUTO,
         BASKET_HIGH,
         MID
     }
@@ -34,13 +35,15 @@ class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelComma
                             Presets.REST ->
                                 ProfiledArmCommand(arm, ArmPositions.REST.position, true)
                             Presets.HOVER_SUB ->
-                                ProfiledArmCommand(arm, ArmPositions.HOVER_SUB.position, false)
+                                ProfiledArmCommand(arm, ArmPositions.HOVER_SUB.position, true, true, false)
                             Presets.GRAB_SUB ->
-                                ProfiledArmCommand(arm, ArmPositions.GRAB_SUB.position, false)
+                                ProfiledArmCommand(arm, ArmPositions.GRAB_SUB.position, true, true, false)
                             Presets.BASKET_HIGH ->
-                                ProfiledArmCommand(arm, ArmPositions.BASKET_HIGH.position, false)
+                                ProfiledArmCommand(arm, ArmPositions.BASKET_HIGH.position, true, true, false)
                             Presets.MID ->
                                 ProfiledArmCommand(arm, ArmPositions.MID.position, true)
+                            Presets.AUTO ->
+                                ProfiledArmCommand(arm, ArmPositions.AUTO.position, true,true)
 
                         }
                 )

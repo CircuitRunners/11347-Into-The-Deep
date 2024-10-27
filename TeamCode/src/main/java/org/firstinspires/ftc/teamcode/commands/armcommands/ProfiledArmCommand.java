@@ -23,6 +23,8 @@ public class ProfiledArmCommand extends CommandBase {
     // The tolerance for getting to a certain position. Strict tries to get just a bit closer.
     private double ARM_POSITION_TOLERANCE = 15,
             ARM_POSITION_TOLERANCE_STRICT = 10;
+    private double ARM_POWER_INSIDE = 0.2,
+            ARM_POWER_OUTSIDE = -0.2;
 
     private double armPosition = 0, armVelocity = 0, controllerOutput = 0;
 
@@ -35,15 +37,22 @@ public class ProfiledArmCommand extends CommandBase {
     final double targetPosition;
 
     double setPointPos;
+    boolean isInside;
 
-    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd){
-        this(arm, targetPosition, holdAtEnd, false);
+    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd) {
+        this(arm, targetPosition, holdAtEnd, false, true);
     }
 
-    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict){
+    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict) {
+        this(arm, targetPosition, holdAtEnd, strict, true);
+    }
+
+    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict, boolean isInside) {
         addRequirements(arm);
 
         if (strict) this.ARM_POSITION_TOLERANCE = ARM_POSITION_TOLERANCE_STRICT;
+
+        if (!isInside) this.ARM_POWER_INSIDE = ARM_POWER_OUTSIDE;
 
         this.holdAtEnd = holdAtEnd;
         this.arm = arm;
@@ -111,7 +120,7 @@ public class ProfiledArmCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) arm.setPower(0.2);
-        else arm.brake_power(); // Assuming brake_power() is a method to stop the lift
+        if (holdAtEnd) arm.setPower(ARM_POWER_INSIDE); //TODO: CHECK FOR ISSUES
+        else arm.brake_power(isInside); // Assuming brake_power() is a method to stop the lift
     }
 }

@@ -57,19 +57,19 @@ public class MainTeleOp extends CommandOpMode {
 
         arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.Y))
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.Y)) //Triangle
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         //TODO: CRY TO AARUSH FOR HELP
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB)
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.X))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_UP))
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB) //HOVER_SUB
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
@@ -112,20 +112,25 @@ public class MainTeleOp extends CommandOpMode {
 
         //Diffy
         while (gamepad2.dpad_left) {
-            diffy.moveDiffy(0.5);
+            diffy.moveDiffy(0.4);
         } while (gamepad2.dpad_right) {
-            diffy.moveDiffy(-0.5);
+            diffy.moveDiffy(-0.4);
         }
         diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
         telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
         telemetry.addData("Right Axon", diffy.getRightDiffyPose());
 
         //Claw
+//        if (gamepad2.left_bumper) {
+//            claw.open();
+//        } if (gamepad2.right_bumper) {
+//            claw.close();
+//        }
+
         if (gamepad2.left_bumper) {
-            claw.close();
-        } if (gamepad2.right_bumper) {
-            claw.open();
+            claw.switchState();
         }
+        telemetry.addData("Is Open? >", claw.isOpen());
 
 //        LLResult result = limelight.getLatestResult();
 //

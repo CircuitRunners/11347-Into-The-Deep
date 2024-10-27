@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -10,7 +9,7 @@ public class Arm extends SubsystemBase {
     public enum ArmPositions{
         REST(5),
         MID(290),
-        AUTO(320),
+        AUTO(410),
         BASKET_HIGH(415),
         HOVER_SUB(520),
         GRAB_SUB(565);
@@ -36,7 +35,7 @@ public class Arm extends SubsystemBase {
 
     private final static int UPPER_LIMIT = 600, MIDDLE_LIMIT = 290, LOWER_LIMIT = 35;
 
-    private final static int ANGLE_1 = 000;//Robot side
+    private final static int UPPER_ONE = 495;//Robot side
 
 
     public Arm(HardwareMap hardwareMap){
@@ -60,7 +59,9 @@ public class Arm extends SubsystemBase {
         this.setPower(power, false);
     }
     public void setPower(double power, boolean transit) {
-        if (atMiddleLimit()) {
+        if (atMiddleLimit() && !atUpperOne()) {
+            armMotor.setPower(power - 0.3);
+        } else if (atMiddleLimit() && atUpperOne()) {
             armMotor.setPower(power - 0.3);
         } else if (!atMiddleLimit() && !atLowerLimit()) {
             armMotor.setPower(power + 0.2); //320 mid pose Current angle - MIDDLE
@@ -79,6 +80,9 @@ public class Arm extends SubsystemBase {
     public boolean atLowerLimit() {
         return getArmPosition() < LOWER_LIMIT;
     }
+    public boolean atUpperOne() {
+        return getArmPosition() < UPPER_ONE;
+    }
     public boolean atMiddleLimit() {
         boolean state = false;
         if (getArmPosition() > MIDDLE_LIMIT) {
@@ -92,6 +96,13 @@ public class Arm extends SubsystemBase {
 
     public void brake_power(){
         setPower(0);
+    }
+    public void brake_power(boolean state) {
+        if (state) {
+            setPower(0.2);
+        } else {
+            setPower(-0.2);
+        }
     }
 
     public int getArmPosition(){
