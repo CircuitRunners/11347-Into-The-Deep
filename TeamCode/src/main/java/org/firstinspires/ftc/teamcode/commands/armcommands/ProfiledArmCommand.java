@@ -39,6 +39,8 @@ public class ProfiledArmCommand extends CommandBase {
     double setPointPos;
     boolean isInside;
 
+    public double gravity;
+
     public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd) {
         this(arm, targetPosition, holdAtEnd, false, true);
     }
@@ -63,7 +65,7 @@ public class ProfiledArmCommand extends CommandBase {
         // Gravity feedforward term to counteract gravity
         armController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             // Feedforward Gravitational Below
-            double kG = 0.05;
+            double kG = gravity;
 
             return kG * arm.getVoltageComp();
         });
@@ -122,5 +124,9 @@ public class ProfiledArmCommand extends CommandBase {
     public void end(boolean interrupted){
         if (holdAtEnd) arm.setPower(ARM_POWER_INSIDE); //TODO: CHECK FOR ISSUES
         else arm.brake_power(isInside); // Assuming brake_power() is a method to stop the lift
+    }
+
+    public double getGravity() {
+        return gravity;
     }
 }

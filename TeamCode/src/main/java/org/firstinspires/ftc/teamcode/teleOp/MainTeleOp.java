@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
+import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -62,15 +63,13 @@ public class MainTeleOp extends CommandOpMode {
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        //TODO: CRY TO AARUSH FOR HELP
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B))
                 .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB) //HOVER_SUB
-                        .withTimeout(2500)
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A))
@@ -121,12 +120,6 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.addData("Right Axon", diffy.getRightDiffyPose());
 
         //Claw
-//        if (gamepad2.left_bumper) {
-//            claw.open();
-//        } if (gamepad2.right_bumper) {
-//            claw.close();
-//        }
-
         if (gamepad2.left_bumper) {
             claw.switchState();
         }

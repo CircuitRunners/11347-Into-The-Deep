@@ -35,4 +35,14 @@ public class Limelight extends SubsystemBase {
         }
         return false;
     }
+
+    //@ZanyeNair u need to add a function to determine if the block is in the correct orientation,
+    // and if its not then give commands to the diffy to rotate so its in the correct spot
+
+    //Also, make sure the code checks if the top length is greater or less than the side length to
+    //figure out if its rotated correctly
+    //     __            ____________
+    //    |  |          |            |
+    //    |  |    VS    |____________|
+    //    |__|
 }

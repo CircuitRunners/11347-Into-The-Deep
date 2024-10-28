@@ -12,9 +12,7 @@ public class Claw extends SubsystemBase {
 
     public enum ServoStates {
         OPEN(0.4),
-        CLOSE(0.65),
-        FULL_OPEN(1.0),   // Changed to a valid position in the 0-1 range
-        FULL_CLOSE(0.0);
+        CLOSE(0.65);
 
         private final double position;
 
@@ -48,9 +46,9 @@ public class Claw extends SubsystemBase {
     }
 
     public void switchState() {
-        // Only allow state switch if 5 milliseconds have passed
+        // Only allow state switch if 700 milliseconds have passed
         if (switchTimer.milliseconds() >= 700) {
-            if (currentState == ServoStates.OPEN || currentState == ServoStates.FULL_OPEN) {
+            if (currentState == ServoStates.OPEN) {
                 close();
             } else {
                 open();
@@ -60,7 +58,7 @@ public class Claw extends SubsystemBase {
     }
 
     public boolean isOpen() {
-        return currentState == ServoStates.OPEN || currentState == ServoStates.FULL_OPEN;
+        return currentState == ServoStates.OPEN;
     }
 
     public void clawPosition(double position) {
