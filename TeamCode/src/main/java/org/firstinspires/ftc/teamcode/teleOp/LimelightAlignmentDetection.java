@@ -44,9 +44,10 @@ public class LimelightAlignmentDetection extends LinearOpMode {
                 if (limelight.isTargetAligned(result)) {
                     telemetry.addData("Alignment", "Target is centered!");
                     claw.open();
+
                 } else {
                     telemetry.addData("Alignment", "Target is NOT centered!");
-                    claw.open();
+                    claw.open();//@concaveegg do we want to keep one of these closed
                 }
             } else {
                 telemetry.addData("Limelight", "No valid data");

@@ -9,6 +9,7 @@ public class Limelight extends SubsystemBase {
 
     private Limelight3A limelight;
     private double alignmentTolerance;
+    private Claw claw;
 
     public Limelight(HardwareMap hardwareMap, double tolerance) {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -34,6 +35,26 @@ public class Limelight extends SubsystemBase {
             return Math.abs(tx) <= alignmentTolerance && Math.abs(ty) <= alignmentTolerance;
         }
         return false;
+    }
+
+    public void aligningTarget(){//needs position of claw and orientaition of diffy
+        LLResult result = getLatestResult();
+        double tx = result.getTx();
+        double ty = result.getTy();
+
+
+        if(!isTargetAligned(result)){
+            //if tx > currentTx: return code to move claw right
+            //if tx < currentTx: return code to move claw left
+            //if ty > currentTx: return code to move claw up
+            //if ty < currentTx: return code to move claw dowm
+
+        }
+        //check whether the x coord range is greater than certain valuue:
+        //if it is then rotate diffy
+        //else: pass
+        //run code to close claw
+
     }
 
     //@ZanyeNair u need to add a function to determine if the block is in the correct orientation,
