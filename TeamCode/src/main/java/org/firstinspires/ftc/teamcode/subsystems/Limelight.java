@@ -57,6 +57,22 @@ public class Limelight extends SubsystemBase {
 
     }
 
+    // This method doesnt work, do something similar though to figure out the orientation (based on the side lengths) @ZayneNair
+//    public String getRectangleOrientation(LLResult result) {
+//        if (result != null && result.isValid()) {
+//            double tlong = result.getTlong();  // Longest side of the bounding box
+//            double tshort = result.getTshort(); // Shortest side of the bounding box
+//
+//            if (tlong > tshort) {
+//                return "Horizontal";
+//            } else {
+//                return "Vertical";
+//            }
+//        }
+//        return "No valid data";
+//    }
+
+
     //@ZanyeNair u need to add a function to determine if the block is in the correct orientation,
     // and if its not then give commands to the diffy to rotate so its in the correct spot
 

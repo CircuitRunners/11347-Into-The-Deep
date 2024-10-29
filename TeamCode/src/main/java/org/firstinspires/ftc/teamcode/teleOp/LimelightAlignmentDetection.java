@@ -17,7 +17,7 @@ public class LimelightAlignmentDetection extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // Initialize the Limelight subsystem with a tolerance of 5 degrees
+        // Initialize the Limelight subsystem with a tolerance of 5
         limelight = new Limelight(hardwareMap, 5.0);
         claw = new Claw(hardwareMap);
 
@@ -47,7 +47,7 @@ public class LimelightAlignmentDetection extends LinearOpMode {
 
                 } else {
                     telemetry.addData("Alignment", "Target is NOT centered!");
-                    claw.open();//@concaveegg do we want to keep one of these closed
+                    claw.open();//@concaveegg do we want to keep one of these closed -- @ZayneNair it doesnt really matter, i was just trying to test if the gobuilda servo worked or not
                 }
             } else {
                 telemetry.addData("Limelight", "No valid data");
