@@ -36,6 +36,7 @@ public class Arm extends SubsystemBase {
     private final static int UPPER_LIMIT = 600, MIDDLE_LIMIT = 290, LOWER_LIMIT = 35;
 
     private final static int UPPER_ONE = 495;//Robot side
+    private double difference;
 
 
     public Arm(HardwareMap hardwareMap){
@@ -60,7 +61,7 @@ public class Arm extends SubsystemBase {
     }
     public void setPower(double power, boolean transit) {
         if (atMiddleLimit() && !atUpperOne()) {
-            armMotor.setPower(power - 0.3);
+            armMotor.setPower(power - 0.3); //0.3
         } else if (atMiddleLimit() && atUpperOne()) {
             armMotor.setPower(power - 0.3);
         } else if (!atMiddleLimit() && !atLowerLimit()) {
@@ -68,6 +69,15 @@ public class Arm extends SubsystemBase {
         }
         if (!atMiddleLimit() && atLowerLimit()) {
             armMotor.setPower(power);
+        }
+    }
+
+    public void setPowerTesting(double power, double diff, boolean isTrue) {
+        if (isTrue) {
+            armMotor.setPower(power - diff);
+        }
+        else if (isTrue) {
+            armMotor.setPower(power + diff);
         }
     }
 
