@@ -35,7 +35,6 @@ public class TurnTuner extends OpMode {
 
     public static double ANGLE = 2 * Math.PI;
 
-
     /**
      * This initializes the PoseUpdater as well as the FTC Dashboard telemetry.
      */
