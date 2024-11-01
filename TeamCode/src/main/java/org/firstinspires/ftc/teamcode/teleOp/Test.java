@@ -3,35 +3,52 @@ package org.firstinspires.ftc.teamcode.teleOp;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
-@Disabled
 @TeleOp
 public class Test extends CommandOpMode {
-public Claw claw;
+
+//    DcMotorEx armMotor;
+    ElapsedTime timer;
+    double diff = 0;
+    Arm arm;
     @Override
     public void initialize() {
-         schedule(new BulkCacheCommand(hardwareMap));
-         //arm = new Arm(hardwareMap);
-         //ffy = new Diffy(hardwareMap);
-         //lift = new Slides(hardwareMap);
-         claw = new Claw(hardwareMap);
+        schedule(new BulkCacheCommand(hardwareMap));
+
+//        armMotor = hardwareMap.get(DcMotorEx.class, "armmotor");
+        timer = new ElapsedTime();
+        arm = new Arm(hardwareMap);
+
+//        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+//        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
     @Override
     public void run() {
         super.run();
-        telemetry.addData("Servo Position", claw.getPosition());
-        telemetry.update();
+        if (timer.milliseconds() >= 500) { // originally 700, need to test with 500
+            if (gamepad2.left_bumper) {
+                diff -= 0.01;
+            } else if (gamepad2.right_bumper) {
+                diff += 0.01;
+            }
+            timer.reset();
+        }
 
-        //temp claw stuff
-        if (gamepad2.square) {
-            claw.open();
-        }
-        if (gamepad2.triangle) {
-            claw.close();
-        }
-        claw.clawPosition(gamepad2.right_trigger);
+        arm.setPowerTesting(gamepad2.right_stick_x);
+
+//        armMotor.setPower(gamepad2.right_stick_x + diff);
+        telemetry.addData("Diff Value>", diff);
+        telemetry.addData("Arm Encoder>", arm.getArmPosition());
+        telemetry.addData("Interpolation>", arm.estimateArmPos());
+        telemetry.update();
     }
 }

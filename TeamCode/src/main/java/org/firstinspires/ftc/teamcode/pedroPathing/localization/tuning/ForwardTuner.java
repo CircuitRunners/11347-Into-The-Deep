@@ -32,7 +32,7 @@ public class ForwardTuner extends OpMode {
 
     private Telemetry telemetryA;
 
-    public static double DISTANCE = 96;
+    public static double DISTANCE = 70; //96
 
     /**
      * This initializes the PoseUpdater as well as the FTC Dashboard telemetry.

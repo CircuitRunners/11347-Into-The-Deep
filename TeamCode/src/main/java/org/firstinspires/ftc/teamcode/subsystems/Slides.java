@@ -10,10 +10,10 @@ public class Slides extends SubsystemBase{
     //TODO Rename References
     public enum SlidePositions {
         STAGE_0(0), // Ground
-        AUTO(-100), // Low Bar
+        AUTO(-200), // Low Bar
         STAGE_1(-1070), // Low Bucket
         STAGE_2(-2145), // High Bar
-        STAGE_3(-3160); // High Bucket
+        STAGE_3(-3130); // High Bucket
 
         public int position;
 
@@ -25,7 +25,7 @@ public class Slides extends SubsystemBase{
             return this.position;
         }
     }
-    private int UPPER_LIMIT = -3180, LOWER_LIMIT = -10;
+    private int UPPER_LIMIT = -3180, LOWER_LIMIT = -35;
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
 
@@ -62,7 +62,7 @@ public class Slides extends SubsystemBase{
         // happens every loop
     }
 
-    public void setLiftPower(double power){
+    public void setLiftPower(double power) {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
     }
@@ -76,15 +76,15 @@ public class Slides extends SubsystemBase{
     }
 
     public double getLiftVelocity(){
-        return leftSlideMotor.getVelocity();
+        return rightSlideMotor.getVelocity();
     }
 
     public boolean atUpperLimit(){
-        return getLiftPosition() > UPPER_LIMIT;
+        return getLiftPosition() < UPPER_LIMIT;
     }
 
     public boolean atLowerLimit(){
-        return getLiftPosition() > LOWER_LIMIT;
+        return getLiftPosition() < LOWER_LIMIT;
     }
 
     public void setLeftPower (double power) {

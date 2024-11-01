@@ -10,7 +10,7 @@ public class Arm extends SubsystemBase {
         REST(5),
         MID(290),
         AUTO(410),
-        BASKET_HIGH(415),
+        BASKET_HIGH(400),
         HOVER_SUB(520),
         GRAB_SUB(565);
 
@@ -33,11 +33,12 @@ public class Arm extends SubsystemBase {
 
     private double kP = 0.1,  kI = 0, kD = 0;
 
-    private final static int UPPER_LIMIT = 600, MIDDLE_LIMIT = 290, LOWER_LIMIT = 35;
+    private final static int UPPER_LIMIT = 600, MIDDLE_LIMIT = 290, LOWER_LIMIT_ONE = 45, LOWER_LIMIT_TWO = 35;
 
-    private final static int UPPER_ONE = 495;//Robot side
-    private double difference;
-
+    private final static int        UPPER_ONE = 390,            UPPER_TWO = 470,            UPPER_THREE = 540,          UPPER_FOUR = 610;           // OUTSIDE ROBOT
+    private final static double     UPPER_ONE_POWER = -0.24,    UPPER_TWO_POWER = -0.34,    UPPER_THREE_POWER = -0.45,  UPPER_FOUR_POWER = -0.50;   // OUTSIDE ROBOT
+    private final static int        LOWER_ONE = 50,             LOWER_TWO = 250,            LOWER_THREE = 290;          // INSIDE ROBOT
+    private final static double     LOWER_ONE_POWER = 0.45,     LOWER_TWO_POWER = 0.35,     LOWER_THREE_POWER = 0.14;   // INSIDE ROBOT
 
     public Arm(HardwareMap hardwareMap){
         armMotor = hardwareMap.get(DcMotorEx.class, "armmotor");
@@ -45,7 +46,7 @@ public class Arm extends SubsystemBase {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 //        voltageSensor = hardwareMap.voltageSensor.iterator().next();
 //        voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
@@ -56,10 +57,7 @@ public class Arm extends SubsystemBase {
         // happens every loop
     }
 
-    public void setPower(double power) {
-        this.setPower(power, false);
-    }
-    public void setPower(double power, boolean transit) {
+    public void setPowerTesting(double power) { //setPower
         if (atMiddleLimit() && !atUpperOne()) {
             armMotor.setPower(power - 0.3); //0.3
         } else if (atMiddleLimit() && atUpperOne()) {
@@ -72,27 +70,30 @@ public class Arm extends SubsystemBase {
         }
     }
 
-    public void setPowerTesting(double power, double diff, boolean isTrue) {
-        if (isTrue) {
-            armMotor.setPower(power - diff);
-        }
-        else if (isTrue) {
-            armMotor.setPower(power + diff);
-        }
+    public void setPower(double power) { //setPowerTesting
+        armMotor.setPower(power + estimateArmPos());
+    }
+
+    public void setPowerActual(double power) {
+        armMotor.setPower(power);
     }
 
     public boolean atUpperLimit(){
         return getArmPosition() > UPPER_LIMIT;
     }
-    public int getUpperLimit() {
-        return UPPER_LIMIT;
-    }
+
     public boolean atLowerLimit() {
-        return getArmPosition() < LOWER_LIMIT;
+        return getArmPosition() < LOWER_LIMIT_ONE;
     }
+
     public boolean atUpperOne() {
         return getArmPosition() < UPPER_ONE;
     }
+
+    public boolean atLowerOne() {
+        return getArmPosition() > LOWER_ONE;
+    }
+
     public boolean atMiddleLimit() {
         boolean state = false;
         if (getArmPosition() > MIDDLE_LIMIT) {
@@ -102,6 +103,47 @@ public class Arm extends SubsystemBase {
         }
 
         return state;
+    }
+
+    public double estimateArmPos() {
+        double armPosition = getArmPosition();
+
+        // No power if arm position is below LOWER_LIMIT
+        if (armPosition < LOWER_LIMIT_ONE) {
+            if (armPosition < LOWER_LIMIT_TWO) {
+                return 0;
+            } else {
+                return 0.15;
+            }
+        }
+
+        // Inside robot interpolation (positive power)
+        if (armPosition <= LOWER_ONE) {
+            return LOWER_ONE_POWER;
+        } else if (armPosition <= LOWER_TWO) {
+            return interpolate(armPosition, LOWER_ONE, LOWER_TWO, LOWER_ONE_POWER, LOWER_TWO_POWER);
+        } else if (armPosition <= LOWER_THREE) {
+            return interpolate(armPosition, LOWER_TWO, LOWER_THREE, LOWER_TWO_POWER, LOWER_THREE_POWER);
+        }
+
+        // Outside robot interpolation (negative power)
+        if (armPosition <= UPPER_ONE) {
+            return LOWER_THREE_POWER;
+        } else if (armPosition <= UPPER_TWO) {
+            return interpolate(armPosition, UPPER_ONE, UPPER_TWO, UPPER_ONE_POWER, UPPER_TWO_POWER);
+        } else if (armPosition <= UPPER_THREE) {
+            return interpolate(armPosition, UPPER_TWO, UPPER_THREE, UPPER_TWO_POWER, UPPER_THREE_POWER);
+        } else if (armPosition <= UPPER_FOUR) {
+            return interpolate(armPosition, UPPER_THREE, UPPER_FOUR, UPPER_THREE_POWER, UPPER_FOUR_POWER);
+        } else {
+            return UPPER_FOUR_POWER;
+        }
+    }
+
+    // Helper method for linear interpolation
+    private double interpolate(double position, int start, int end, double startPower, double endPower) {
+        double ratio = (position - start) / (double) (end - start);
+        return startPower + ratio * (endPower - startPower);
     }
 
     public void brake_power(){

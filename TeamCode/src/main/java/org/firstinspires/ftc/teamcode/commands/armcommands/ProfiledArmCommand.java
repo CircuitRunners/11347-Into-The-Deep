@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.armcommands;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
@@ -10,12 +11,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 
+@Config
 public class ProfiledArmCommand extends CommandBase {
     PIDFController armController;
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    PIDCoefficients coefficients = new PIDCoefficients(0.02, 0.0, 0.0); // Adjust PID coefficients as needed
+    PIDCoefficients coefficients = new PIDCoefficients(0.01, 0.0, 0.0001); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
     double kV = 0.0, kA = 0.0, kStatic = 0.00;
@@ -23,8 +25,8 @@ public class ProfiledArmCommand extends CommandBase {
     // The tolerance for getting to a certain position. Strict tries to get just a bit closer.
     private double ARM_POSITION_TOLERANCE = 15,
             ARM_POSITION_TOLERANCE_STRICT = 10;
-    private double ARM_POWER_INSIDE = 0.2,
-            ARM_POWER_OUTSIDE = -0.2;
+    private double ARM_POWER_INSIDE = 0.14,
+            ARM_POWER_OUTSIDE = -0.24;
 
     private double armPosition = 0, armVelocity = 0, controllerOutput = 0;
 
@@ -39,7 +41,7 @@ public class ProfiledArmCommand extends CommandBase {
     double setPointPos;
     boolean isInside;
 
-    public double gravity;
+    public double gravity = 0.05;
 
     public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd) {
         this(arm, targetPosition, holdAtEnd, false, true);
@@ -108,7 +110,7 @@ public class ProfiledArmCommand extends CommandBase {
         controllerOutput = armController.update(armPosition, armVelocity);
 
         // Update the lift power with the controller
-        arm.setPower(controllerOutput);
+        arm.setPowerActual(controllerOutput);
 
         // Additional SetPoint variables can be set here if needed
         setPointPos = state.getX();
@@ -122,7 +124,7 @@ public class ProfiledArmCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) arm.setPower(ARM_POWER_INSIDE); //TODO: CHECK FOR ISSUES
+        if (holdAtEnd) arm.setPowerActual(ARM_POWER_INSIDE); //TODO: CHECK FOR ISSUES ARM_POWER_INSIDE
         else arm.brake_power(isInside); // Assuming brake_power() is a method to stop the lift
     }
 

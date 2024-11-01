@@ -5,18 +5,15 @@ import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
-import org.firstinspires.ftc.teamcode.commands.presets.MoveToScoringCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
-import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 @TeleOp
@@ -102,6 +99,7 @@ public class MainTeleOp extends CommandOpMode {
         }
 //        arm.setPower(gamepad2.right_stick_x);
         telemetry.addData("Arm Encoder Pos >", arm.getArmPosition());
+        telemetry.addData("Interpolation>", arm.estimateArmPos());
 
         //Slides
         if (gamepad2.left_stick_button) {

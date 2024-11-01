@@ -52,7 +52,7 @@ public class ForwardVelocityTuner extends OpMode {
 
     private PoseUpdater poseUpdater;
 
-    public static double DISTANCE = 40;
+    public static double DISTANCE = 60;
     public static double RECORD_NUMBER = 10;
 
     private Telemetry telemetryA;
@@ -150,6 +150,8 @@ public class ForwardVelocityTuner extends OpMode {
             average /= (double) velocities.size();
 
             telemetryA.addData("forward velocity:", average);
+            telemetryA.addData("otos X:", poseUpdater.getPose().getX());
+            telemetryA.addData("otos Y:", poseUpdater.getPose().getY());
             telemetryA.update();
         }
     }

@@ -21,8 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 public class ProfiledArmTester extends CommandOpMode {
     private Arm arm;
     private Claw claw;
-    private ProfiledArmCommand pac;
-    private ElapsedTime switchTimer;
+    ElapsedTime timer;
     private ManualArmCommand manualArmCommand;
 
     @Override
@@ -32,6 +31,9 @@ public class ProfiledArmTester extends CommandOpMode {
 
         arm = new Arm(hardwareMap);
         claw = new Claw(hardwareMap);
+        timer = new ElapsedTime();
+
+        timer.reset();
 
         manualArmCommand = new ManualArmCommand(arm, manipulator);
 
@@ -67,16 +69,18 @@ public class ProfiledArmTester extends CommandOpMode {
         super.run();
 
         //stops from changing gravity by more than 0.01 per press
-        if (switchTimer.milliseconds() >= 500) { // originally 700, need to test with 500
+        if (timer.milliseconds() >= 500) { // originally 700, need to test with 500
             if (gamepad2.left_bumper) {
-                pac.gravity -= 0.01; // can be changed if its not enough
+
             } else if (gamepad2.right_bumper) {
-                pac.gravity += 0.01;
+
             }
-            switchTimer.reset();
+            timer.reset();
         }
 
-        telemetry.addData("Gravity Coefficent >", pac.getGravity());
+
+
+//        telemetry.addData("Gravity Coefficent >", );
         telemetry.addData("position >", arm.getArmPosition());
         telemetry.update();
     }

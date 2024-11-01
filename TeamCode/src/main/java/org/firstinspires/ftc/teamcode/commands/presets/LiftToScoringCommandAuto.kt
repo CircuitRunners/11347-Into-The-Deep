@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand
 import org.firstinspires.ftc.teamcode.subsystems.Slides
 import org.firstinspires.ftc.teamcode.subsystems.Slides.SlidePositions
 
-class MoveToScoringCommandAuto(lift: Slides, preset: Presets) : ParallelCommandGroup() {
+class LiftToScoringCommandAuto(lift: Slides, preset: Presets) : ParallelCommandGroup() {
 
     enum class Presets {
         AUTO

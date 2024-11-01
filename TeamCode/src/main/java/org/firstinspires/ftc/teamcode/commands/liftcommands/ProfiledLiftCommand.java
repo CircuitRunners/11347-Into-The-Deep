@@ -18,7 +18,7 @@ public class ProfiledLiftCommand extends CommandBase {
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    PIDCoefficients coefficients = new PIDCoefficients(0.02, 0.0, 0.0); // Adjust PID coefficients as needed
+    PIDCoefficients coefficients = new PIDCoefficients(0.03, 0.001, 0.0); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
     double kV = 0.0, kA = 0.0, kStatic = 0.00;
@@ -31,15 +31,17 @@ public class ProfiledLiftCommand extends CommandBase {
     private double liftVelocity = 0;
     private double controllerOutput = 0;
 
-    final double MOTION_PROFILE_MAX_VELOCITY = 2500,
-            MOTION_PROFILE_MAX_ACCEL = 3250,
+    final double MOTION_PROFILE_MAX_VELOCITY = 3000,
+            MOTION_PROFILE_MAX_ACCEL = 3750,
             MOTION_PROFILE_MAX_JERK = 0;
 
     final double GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE = 0.03,
             GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE = 0.05,
-            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = 0.10;
-    final double LIFT_FIRST_STAGE_POSITION_TICKS = 600,
-            LIFT_SECOND_STAGE_POSITION_TICKS = 1200;
+            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = 0.10,
+            GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE = 0.15;
+    final double LIFT_FIRST_STAGE_POSITION_TICKS = -870,
+            LIFT_SECOND_STAGE_POSITION_TICKS = -1966,
+            LIFT_THIRD_STAGE_POSITION_TICKS = -3070;
 
     boolean holdAtEnd;
     final Slides lift;
@@ -66,14 +68,16 @@ public class ProfiledLiftCommand extends CommandBase {
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             // Feedforward Gravitational Below
             double kG = 0;
-            if (liftPosition < LIFT_FIRST_STAGE_POSITION_TICKS) {
+            if (liftPosition > LIFT_FIRST_STAGE_POSITION_TICKS) {
                 kG = GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE;
             }
-            else if (liftPosition < LIFT_SECOND_STAGE_POSITION_TICKS) {
+            else if (liftPosition > LIFT_SECOND_STAGE_POSITION_TICKS) {
                 kG = GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE;
             }
-            else {
+            else if (liftPosition > LIFT_THIRD_STAGE_POSITION_TICKS) {
                 kG = GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE;
+            } else {
+                kG = GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE;
             }
 
             return kG * lift.getVoltageComp();
@@ -131,7 +135,7 @@ public class ProfiledLiftCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) lift.setLiftPower(0.078);
+        if (holdAtEnd) lift.setLiftPower(-0.078);
         else lift.brake_power(); // Assuming brake_power() is a method to stop the lift
     }
 }

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Slides
 
 class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelCommandGroup() {
     enum class Presets {
+        HOLD,
         REST,
         HOVER_SUB,
         GRAB_SUB,
@@ -34,6 +35,8 @@ class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelComma
                             claw.close()
                         }),
                         when (preset) {
+                            Presets.HOLD ->
+                                ProfiledArmCommand(arm, arm.armPosition, true)
                             Presets.REST ->
                                 ProfiledArmCommand(arm, ArmPositions.REST.position, true)
                             Presets.HOVER_SUB ->
@@ -50,6 +53,6 @@ class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelComma
                         }
                 )
         )
-        addRequirements(arm)
+        addRequirements(arm, claw)
     }
 }

@@ -94,7 +94,7 @@ public class NewArmTester extends CommandOpMode {
             }
         }
 
-        arm.setPowerTesting(gamepad2.left_stick_y, diff, isTrue);
+//        arm.setPowerTesting(gamepad2.left_stick_y, diff, isTrue);
 
 //        telemetry.addData("Gravity Coefficent >", pac.getGravity());
         telemetry.addData("Power Diff >", diff);
