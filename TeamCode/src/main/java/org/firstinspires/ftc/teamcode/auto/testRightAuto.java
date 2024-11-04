@@ -18,27 +18,78 @@ public class testRightAuto extends OpMode{
     private Timer pathTimer;
     private int pathState;
 
-    // Define key poses
+    // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPosition = new Pose(35, 62.5, Math.toRadians(0));
-    private Pose sample1Position = new Pose(60, 25, Math.toRadians(90));
-    private Point sample1ControlPoint1 = new Point(35.5, 36);
-    private Point sample1ControlPoint2 = new Point(63, 43);
-    private Pose sample1ClipPosition = new Pose(20, 25, Math.toRadians(90));
+    private Pose preloadPos = new Pose(35, 62.5, Math.toRadians(0));
+    private Pose sample1GrabPos = new Pose(60, 25, Math.toRadians(90));
+    private Point sample1GrabCP1 = new Point(35.5, 36);
+    private Point sample1GrabCP2 = new Point(63, 43);
+    private Pose sample1PlacePos = new Pose(20, 25, Math.toRadians(90));
+    private Pose sample2GrabPos = new Pose(60, 15, Math.toRadians(90));
+    private Point sample2GrabCP = new Point(62, 33);
+    private Pose sample2PlacePos = new Pose(20, 15, Math.toRadians(90));
+    private Pose sample3GrabPos = new Pose(45.5, 13, Math.toRadians(90));
+    private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
+    private Pose specimenGrabPos = new Pose(14, 37, Math.toRadians(45));
+    private Point specimen1GrabCP = new Point(35, 41);
+    private Pose specimen1PlacePos = new Pose(34, 65, Math.toRadians(0));
+    private Pose specimen2PlacePos = new Pose(34, 63, Math.toRadians(0));
+    private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
+    private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
-
-
-    private PathChain preload, sample1;
+    private PathChain preload, sample1, sample2, sample3Grab, sample3Place, specimen1Grab, specimen1Place, specimen2Grab, specimen2Place, specimen3Grab, specimen3Place, park;
     public void buildPaths() {
         preload = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPosition), new Point(preloadPosition)))
-                .setConstantHeadingInterpolation(preloadPosition.getHeading())
+                .addPath(new BezierLine(new Point(startPosition), new Point(preloadPos)))
+                .setConstantHeadingInterpolation(preloadPos.getHeading())
                 .build();
         sample1 = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(preloadPosition), new Point(sample1Position), sample1ControlPoint1, sample1ControlPoint2))
-                .setConstantHeadingInterpolation(sample1Position.getHeading())
-                .addPath(new BezierLine(new Point(sample1Position), new Point(sample1ClipPosition)))
-                .setConstantHeadingInterpolation(sample1ClipPosition.getHeading())
+                .addPath(new BezierCurve(new Point(preloadPos), new Point(sample1GrabPos), sample1GrabCP1, sample1GrabCP2))
+                .setConstantHeadingInterpolation(sample1GrabPos.getHeading())
+                .addPath(new BezierLine(new Point(sample1GrabPos), new Point(sample1PlacePos)))
+                .setConstantHeadingInterpolation(sample1PlacePos.getHeading())
+                .build();
+        sample2 = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(sample1PlacePos), new Point(sample2GrabPos), sample2GrabCP))
+                .setConstantHeadingInterpolation(sample2GrabPos.getHeading())
+                .addPath(new BezierLine(new Point(sample2GrabPos), new Point(sample2PlacePos)))
+                .setConstantHeadingInterpolation(sample2PlacePos.getHeading())
+                .build();
+        sample3Grab = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(sample2PlacePos), new Point(sample3GrabPos)))
+                .setConstantHeadingInterpolation(sample3GrabPos.getHeading())
+                .build();
+        sample3Place = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(sample3GrabPos), new Point(sample3PlacePos)))
+                .setConstantHeadingInterpolation(sample3PlacePos.getHeading())
+                .build();
+        specimen1Grab = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(sample3PlacePos), new Point(specimenGrabPos), specimen1GrabCP))
+                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
+                .build();
+        specimen1Place = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen1PlacePos)))
+                .setConstantHeadingInterpolation(specimen1PlacePos.getHeading())
+                .build();
+        specimen2Grab = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimen1PlacePos), new Point(specimenGrabPos)))
+                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
+                .build();
+        specimen2Place = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen2PlacePos)))
+                .setConstantHeadingInterpolation(specimen2PlacePos.getHeading())
+                .build();
+        specimen3Grab = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimen2PlacePos), new Point(specimenGrabPos)))
+                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
+                .build();
+        specimen3Place = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen3PlacePos)))
+                .setConstantHeadingInterpolation(specimen3PlacePos.getHeading())
+                .build();
+        park = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimen3PlacePos), new Point(parkPos)))
+                .setConstantHeadingInterpolation(parkPos.getHeading())
                 .build();
     }
 
@@ -61,6 +112,78 @@ public class testRightAuto extends OpMode{
                     setPathState(3);
                 }
                 break;
+            case 3:
+                if (!follower.isBusy()) {
+                    follower.followPath(sample2);
+                    setPathState(4);
+                }
+                break;
+            case 4:
+                if (!follower.isBusy()) {
+                    follower.followPath(sample3Grab);
+                    setPathState(5);
+                }
+                break;
+            case 5:
+                if (!follower.isBusy()) {
+                    //grab sample
+                    follower.followPath(sample3Place);
+                    setPathState(6);
+                }
+                break;
+            case 6:
+                if (!follower.isBusy()) {
+                    //place sample
+                    follower.followPath(specimen1Grab);
+                    setPathState(7);
+                }
+                break;
+            case 7:
+                if (!follower.isBusy()) {
+                    //grab specimen
+                    follower.followPath(specimen1Place);
+                    setPathState(8);
+                }
+                break;
+            case 8:
+                if (!follower.isBusy()) {
+                    //place specimen
+                    follower.followPath(specimen2Grab);
+                    setPathState(9);
+                }
+                break;
+            case 9:
+                if (!follower.isBusy()) {
+                    //grab specimen
+                    follower.followPath(specimen2Place);
+                    setPathState(10);
+                }
+                break;
+            case 10:
+                if (!follower.isBusy()) {
+                    //place Specimen
+                    follower.followPath(specimen3Grab);
+                    setPathState(11);
+                }
+                break;
+            case 11:
+                if (!follower.isBusy()) {
+                    //grab specimen
+                    follower.followPath(specimen3Place);
+                    setPathState(12);
+                }
+                break;
+            case 12:
+                if (!follower.isBusy()) {
+                    //place specimen
+                    follower.followPath(park);
+                    setPathState(13);
+                }
+                break;
+            case 13:
+                if (!follower.isBusy()) {
+                    setPathState(14);
+                }
             default:
                 requestOpModeStop();
                 break;
