@@ -65,6 +65,10 @@ public class Arm extends SubsystemBase {
 
         armRESTPos = new RunAction(this::armRESTPos);
         armMIDPos = new RunAction(this::armMIDPos);
+        armAUTOPos = new RunAction(this::armAUTOPos);
+        armBASKET_HIGHPos = new RunAction(this::armBASKET_HIGHPos);
+        armHOVER_SUBPos = new RunAction(this::armHOVER_SUBPos);
+        armGRAB_SUBPos = new RunAction(this::armGRAB_SUBPos);
 
 //        voltageSensor = hardwareMap.voltageSensor.iterator().next();
 //        voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
@@ -106,6 +110,22 @@ public class Arm extends SubsystemBase {
 
     public void armMIDPos() {
         armPIDTest(ArmPositions.MID.position);
+    }
+
+    public void armAUTOPos() {
+        armPIDTest(ArmPositions.AUTO.position);
+    }
+
+    public void armBASKET_HIGHPos() {
+        armPIDTest(ArmPositions.AUTO.position);
+    }
+
+    public void armHOVER_SUBPos() {
+        armPIDTest(ArmPositions.AUTO.position);
+    }
+
+    public void armGRAB_SUBPos() {
+        armPIDTest(ArmPositions.AUTO.position);
     }
 
     public void setPower(double power) { //setPowerTesting
