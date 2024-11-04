@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.support;
 
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
 public class Constants {
-    public static final double X_OFFSET = 0.0;
-    public static final double Y_OFFSET = 0.0;
-    public static final double H_OFFSET = 0.0;
-    public static final double X_INIT = 0.0;
-    public static final double Y_INIT = 0.0;
-    public static final double H_INIT = 0.0;
-    public static final double A_SCALER = 1.19620317288693352; // 1.1589716331808235, 1.1453018281895027, 1.1626722011574535, 1.219370113017999, 1.2947000888888889 || Tuned: 1.19620317288693352
-    public static final double L_SCALER = 1.1806721232409089; // 1.1777138467758237, 1.1777138467758237, 1.1865886761710793 || Tuned: 1.1806721232409089
+    public static double X_OFFSET = 0.0;
+    public static double Y_OFFSET = 0.0;
+    public static double H_OFFSET = 0.0;
+    public static double X_INIT = 0.0;
+    public static double Y_INIT = 0.0;
+    public static double H_INIT = 0.0;
+    public static double A_SCALER = 0.9854787550744248; // 1.1589716331808235, 1.1453018281895027, 1.1626722011574535, 1.219370113017999, 1.2947000888888889 || Tuned: 1.19620317288693352
+    public static double L_SCALER = 0.9794687628985508; // 1.1777138467758237, 1.1777138467758237, 1.1865886761710793 || Tuned: 1.1806721232409089
 
 }
 

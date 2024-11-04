@@ -30,8 +30,8 @@ public class FollowerConstants {
 
     // This section is for setting the actual drive vector for the front left wheel, if the robot
     // is facing a heading of 0 radians with the wheel centered at (0,0)
-    private static double xMovement = 61.985691138700631; // 61.912233783562385, 62.35542328401122, 63.86582304824865, 61.99643099715, 59.7985445805309 || Tuned: 61.985691138700631 || Default: 81.34056
-    private static double yMovement = 52.9389937811475548; // 52.84691363647644, 52.40521495172469, 52.55192463749286, 53.314989889627114, 53.57592579041667 || Tuned: 52.9389937811475548 || Default: 65.43028
+    private static double xMovement = 81.34056; // 60.617520819111576, 58.74611374581603, 60.226880730156, 60.30598867806962,  || Tuned: 61.985691138700631 || Default: 81.34056
+    private static double yMovement = 65.43028; //  || Tuned: 52.9389937811475548 || Default: 65.43028
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
     public static Vector frontLeftVector = MathFunctions.normalizeVector(new Vector(convertToPolar[0], convertToPolar[1]));
 
@@ -86,7 +86,7 @@ public class FollowerConstants {
     public static double mass = 10.6; //10.6 KG //10.65942
 
     // Centripetal force to power scaling
-    public static double centripetalScaling = 0.0005;
+    public static double centripetalScaling = 0.0006;
 
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
