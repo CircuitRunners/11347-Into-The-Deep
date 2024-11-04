@@ -11,12 +11,21 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
+import org.firstinspires.ftc.teamcode.commands.presets.testCommand;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.support.Actions;
+
 
 @Autonomous
 public class testRightAuto extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
+    private Claw claw;
+    private Arm arm;
+    private Slides lift;
 
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
@@ -102,6 +111,7 @@ public class testRightAuto extends OpMode{
             case 1:
                 if (!follower.isBusy()) {
                     //do stuff to place preloaded
+                    Actions.runBlocking(arm.armRESTPos); //TODO: Test
                     setPathState(2);
                 }
                 break;
