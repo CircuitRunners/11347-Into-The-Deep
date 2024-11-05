@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
-import org.firstinspires.ftc.teamcode.commands.presets.testCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -19,7 +18,7 @@ import org.firstinspires.ftc.teamcode.support.Actions;
 
 
 @Autonomous
-public class testRightAuto extends OpMode{
+public class rightAuto extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;

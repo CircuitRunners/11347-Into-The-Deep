@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.support.RunAction;
+
 public class Claw extends SubsystemBase {
     private Servo servo;
     private ServoStates currentState;
@@ -25,11 +27,15 @@ public class Claw extends SubsystemBase {
         }
     }
 
+    public RunAction openClaw, closeClaw;
     public Claw(HardwareMap h) {
         servo = h.get(Servo.class, "Claw Servo");
         currentState = ServoStates.CLOSE;  // Default initial state
         servo.setPosition(currentState.getPosition()); // Set initial position
         switchTimer.reset();  // Initialize the timer
+        openClaw = new RunAction(this::openClaw);
+        closeClaw = new RunAction(this::closeClaw);
+
     }
 
     public void open() {
@@ -39,6 +45,10 @@ public class Claw extends SubsystemBase {
     public void close() {
         setPosition(ServoStates.CLOSE);
     }
+
+    public void openClaw() { open(); }
+
+    public void closeClaw() { close(); }
 
     public void setPosition(ServoStates state) {
         currentState = state;
