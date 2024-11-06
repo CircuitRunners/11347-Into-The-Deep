@@ -16,7 +16,7 @@ public class SlidePIDTest extends LinearOpMode {
     DcMotor rightSlide;
     private Slides lift;
 
-    // PID controller for the lift system
+    // PID c ontroller for the lift system
     PID pid = new PID(
             0, 0, 0);
 
