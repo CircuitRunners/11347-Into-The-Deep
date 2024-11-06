@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.testCommand;
+import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -64,10 +65,18 @@ public class LiftTester extends CommandOpMode {
                         .withTimeout(3000)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A))
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A)) //Cross
                 .whenActive(new testCommand(lift, arm, claw)
                         .withTimeout(3500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
+
+        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) //Circle
+                .whenActive(new testDownCommand(lift, arm, claw)
+                        .withTimeout(3500)
+                        .interruptOn(() -> manualLiftCommand.isManualActive()));
+
+        telemetry.addData("position >", arm.getArmPosition());
+        telemetry.update();
     }
 
 

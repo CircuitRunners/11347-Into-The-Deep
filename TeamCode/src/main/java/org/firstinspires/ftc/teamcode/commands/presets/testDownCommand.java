@@ -12,16 +12,16 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
-public class testCommand extends ParallelCommandGroup {
+public class testDownCommand extends ParallelCommandGroup {
     private ManualArmCommand manualArmCommand;
-    public testCommand(Slides lift, Arm arm, Claw claw) {
+    public testDownCommand(Slides lift, Arm arm, Claw claw) {
         addCommands(
                 new SequentialCommandGroup(
                         new ParallelCommandGroup(
-                                new ProfiledLiftCommand(lift, Slides.SlidePositions.STAGE_3.position, true),
+                                new ProfiledLiftCommand(lift, Slides.SlidePositions.STAGE_0.position, true),
                                 new SequentialCommandGroup(
                                         new WaitCommand(300),
-                                        new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+                                        new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
                                 )
                         ),
                         new WaitCommand(800)

@@ -17,7 +17,7 @@ public class ProfiledArmCommand extends CommandBase {
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    PIDCoefficients coefficients = new PIDCoefficients(0.01, 0.0, 0.0001); // Adjust PID coefficients as needed
+    PIDCoefficients coefficients = new PIDCoefficients(0.022, 0.0, 0.0015); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
     double kV = 0.0, kA = 0.0, kStatic = 0.00;
@@ -74,7 +74,7 @@ public class ProfiledArmCommand extends CommandBase {
 
         // Prevent it from going down TOO fast
         // This is the same as the maximum amount of kG compensation subtracted from max negative value
-        armController.setOutputBounds(-0.87, 1.0);
+        armController.setOutputBounds(-1.0, 1.0);
     }
 
     @Override
@@ -117,15 +117,15 @@ public class ProfiledArmCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         // End if the lift position is within the tolerance
         return Math.abs(targetPosition - armPosition) <= ARM_POSITION_TOLERANCE;
     }
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) arm.setPowerActual(ARM_POWER_INSIDE); //TODO: CHECK FOR ISSUES ARM_POWER_INSIDE
-        else arm.brake_power(isInside); // Assuming brake_power() is a method to stop the lift
+        if (holdAtEnd) arm.setPowerActual(0); //TODO: CHECK FOR ISSUES ARM_POWER_INSIDE
+        else arm.brake_power(); // Assuming brake_power() is a method to stop the lift
     }
 
     public double getGravity() {

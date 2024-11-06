@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase {
         AUTO(410),
         BASKET_HIGH(400),
         HOVER_SUB(520),
-        GRAB_SUB(565);
+        GRAB_SUB(590);
 
         public int position;
 
@@ -31,10 +31,11 @@ public class Arm extends SubsystemBase {
 
     private PIDController controller;
 
-    private static double kP = 0.026;
+    private static double kP = 0.022;
     private static double kI = 0;
-    private static double kD = 0.001;
-    private static double f = 0.38;
+    private static double kD = 0.0015;
+    private static double f = 0.15;
+    private static double powerMultiplier = 0.5;
 
     private final double ticks_in_degree = 700 / 100.0;
 
@@ -53,7 +54,7 @@ public class Arm extends SubsystemBase {
 
     public RunAction armRESTPos, armMIDPos, armAUTOPos, armBASKET_HIGHPos, armHOVER_SUBPos, armGRAB_SUBPos;
 
-    public Arm(HardwareMap hardwareMap){
+    public Arm(HardwareMap hardwareMap) {
         armMotor = hardwareMap.get(DcMotorEx.class, "armmotor");
 
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -70,8 +71,8 @@ public class Arm extends SubsystemBase {
         armHOVER_SUBPos = new RunAction(this::armHOVER_SUBPos);
         armGRAB_SUBPos = new RunAction(this::armGRAB_SUBPos);
 
-//        voltageSensor = hardwareMap.voltageSensor.iterator().next();
-//        voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
     }
 
     @Override
@@ -101,7 +102,7 @@ public class Arm extends SubsystemBase {
 
         double power = pid + ff;
 
-        armMotor.setPower(power);
+        armMotor.setPower(power * powerMultiplier);
     }
 
     public void armRESTPos() {

@@ -44,7 +44,7 @@ class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelComma
                             Presets.GRAB_SUB ->
                                 ProfiledArmCommand(arm, ArmPositions.GRAB_SUB.position, true, true, false)
                             Presets.BASKET_HIGH ->
-                                ProfiledArmCommand(arm, ArmPositions.BASKET_HIGH.position, true, true, false)
+                                ProfiledArmCommand(arm, ArmPositions.BASKET_HIGH.position, true, false, false)
                             Presets.MID ->
                                 ProfiledArmCommand(arm, ArmPositions.MID.position, true)
                             Presets.AUTO ->
