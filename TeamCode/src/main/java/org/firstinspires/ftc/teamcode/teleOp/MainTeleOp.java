@@ -144,6 +144,7 @@ public class MainTeleOp extends CommandOpMode {
 //        limelight.stopLimelight();
 
         telemetry.addData("Lift Height", lift.getLiftPosition());
+        telemetry.addData("Arm Pos", arm.getArmPosition());
         telemetry.addData("imuHeading", db.getCorrectedYaw());
         telemetry.addData("imuNONCO", db.imu.getYaw());
         telemetry.update();
