@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 public class testCommand extends ParallelCommandGroup {
-    private ManualArmCommand manualArmCommand;
     public testCommand(Slides lift, Arm arm, Claw claw) {
         addCommands(
                 new SequentialCommandGroup(

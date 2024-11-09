@@ -29,16 +29,6 @@ public class Arm extends SubsystemBase {
         }
     }
 
-    private PIDController controller;
-
-    private static double kP = 0.022;
-    private static double kI = 0;
-    private static double kD = 0.0015;
-    private static double f = 0.15;
-    private static double powerMultiplier = 0.5;
-
-    private final double ticks_in_degree = 700 / 100.0;
-
     DcMotorEx armMotor;
 
     private VoltageSensor voltageSensor;
@@ -52,7 +42,7 @@ public class Arm extends SubsystemBase {
     private final static int        LOWER_ONE = 50,             LOWER_TWO = 250,            LOWER_THREE = 290;          // INSIDE ROBOT
     private final static double     LOWER_ONE_POWER = 0.45,     LOWER_TWO_POWER = 0.35,     LOWER_THREE_POWER = 0.14;   // INSIDE ROBOT
 
-    public RunAction armRESTPos, armMIDPos, armAUTOPos, armBASKET_HIGHPos, armHOVER_SUBPos, armGRAB_SUBPos;
+    public RunAction armRESTPos, armMIDPos, armAUTOPos;
 
     public Arm(HardwareMap hardwareMap) {
         armMotor = hardwareMap.get(DcMotorEx.class, "armmotor");
@@ -61,15 +51,6 @@ public class Arm extends SubsystemBase {
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-        controller = new PIDController(kP, kI, kD);
-
-        armRESTPos = new RunAction(this::armRESTPos);
-        armMIDPos = new RunAction(this::armMIDPos);
-        armAUTOPos = new RunAction(this::armAUTOPos);
-        armBASKET_HIGHPos = new RunAction(this::armBASKET_HIGHPos);
-        armHOVER_SUBPos = new RunAction(this::armHOVER_SUBPos);
-        armGRAB_SUBPos = new RunAction(this::armGRAB_SUBPos);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
         voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
@@ -91,42 +72,6 @@ public class Arm extends SubsystemBase {
         if (!atMiddleLimit() && atLowerLimit()) {
             armMotor.setPower(power);
         }
-    }
-
-    public void armPIDTest(int target) {
-        controller.setPID(kP, kI, kD);
-        int armPos = getArmPosition();
-        double pid = controller.calculate(armPos, target);
-
-        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
-
-        double power = pid + ff;
-
-        armMotor.setPower(power * powerMultiplier);
-    }
-
-    public void armRESTPos() {
-        armPIDTest(ArmPositions.REST.position);
-    }
-
-    public void armMIDPos() {
-        armPIDTest(ArmPositions.MID.position);
-    }
-
-    public void armAUTOPos() {
-        armPIDTest(ArmPositions.AUTO.position);
-    }
-
-    public void armBASKET_HIGHPos() {
-        armPIDTest(ArmPositions.AUTO.position);
-    }
-
-    public void armHOVER_SUBPos() {
-        armPIDTest(ArmPositions.AUTO.position);
-    }
-
-    public void armGRAB_SUBPos() {
-        armPIDTest(ArmPositions.AUTO.position);
     }
 
     public void setPower(double power) { //setPowerTesting

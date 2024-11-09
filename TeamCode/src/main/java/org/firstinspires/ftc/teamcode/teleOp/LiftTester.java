@@ -4,14 +4,18 @@ import android.annotation.SuppressLint;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
+import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
+import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.testCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
@@ -19,6 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
+@Disabled
 @TeleOp (name="Lift Tester")
 public class LiftTester extends CommandOpMode {
     private Slides lift;
@@ -26,6 +31,7 @@ public class LiftTester extends CommandOpMode {
     private Claw claw;
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
+    private ManualArmCommand manualArmCommand;
 
     @Override
     public void initialize(){
@@ -39,19 +45,35 @@ public class LiftTester extends CommandOpMode {
         claw = new Claw(hardwareMap);
 
         manualLiftCommand = new ManualLiftCommand(lift, manipulator);
+        manualArmCommand = new ManualArmCommand(arm, manipulator);
         manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
 
         lift.setDefaultCommand(new PerpetualCommand(manualLiftCommand));
+        arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
 
+        //LIFT
         new Trigger(() -> manipulator.getLeftY() > 0.4)
                 .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.HIGH)
                         .withTimeout(3500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 
+        //ARM
+        new Trigger(() -> manipulator.getLeftY() > 0.4)
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+                        .withTimeout(2500)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
+
+        //LIFT
         new Trigger(() -> manipulator.getLeftY() < -0.4)
                 .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.DOWN)
                         .withTimeout(2500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
+
+        //ARM
+        new Trigger(() -> manipulator.getLeftY() < -0.4)
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
+                        .withTimeout(2500)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.4)
@@ -68,7 +90,7 @@ public class LiftTester extends CommandOpMode {
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A)) //Cross
                 .whenActive(new testCommand(lift, arm, claw)
                         .withTimeout(3500)
-                        .interruptOn(() -> manualLiftCommand.isManualActive()));
+                        .interruptOn(() -> manualLiftCommand.isManualActive() || manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) //Circle
                 .whenActive(new testDownCommand(lift, arm, claw)

@@ -19,7 +19,7 @@ public class ManualArmCommand extends CommandBase {
     }
 
     public boolean isManualActive() {
-        return manipulator.getButton(GamepadKeys.Button.X);
+        return manipulator.getButton(GamepadKeys.Button.START);
     }
 
     @Override

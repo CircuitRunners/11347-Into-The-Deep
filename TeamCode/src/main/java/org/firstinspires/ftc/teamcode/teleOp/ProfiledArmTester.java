@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
+@Disabled
 @TeleOp
 public class ProfiledArmTester extends CommandOpMode {
     private Arm arm;
@@ -67,18 +69,6 @@ public class ProfiledArmTester extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-
-        //stops from changing gravity by more than 0.01 per press
-        if (timer.milliseconds() >= 500) { // originally 700, need to test with 500
-            if (gamepad2.left_bumper) {
-
-            } else if (gamepad2.right_bumper) {
-
-            }
-            timer.reset();
-        }
-
-
 
 //        telemetry.addData("Gravity Coefficent >", );
         telemetry.addData("position >", arm.getArmPosition());

@@ -44,14 +44,25 @@ public class ProfiledArmCommand extends CommandBase {
     public double gravity = 0.05;
 
     public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd) {
-        this(arm, targetPosition, holdAtEnd, false, true);
+        this(arm, targetPosition, holdAtEnd, false, true, 0);
     }
 
     public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict) {
-        this(arm, targetPosition, holdAtEnd, strict, true);
+        this(arm, targetPosition, holdAtEnd, strict, true, 0);
     }
 
     public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict, boolean isInside) {
+        this(arm, targetPosition, holdAtEnd, strict, isInside, 0);
+    }
+
+    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict, boolean isInside, int delay) {
+        // Add a delay before proceeding with initialization
+        try {
+            Thread.sleep(delay); // ms delay before proceeding
+        } catch (InterruptedException e) {
+            e.printStackTrace(); // Handle interruption
+        }
+
         addRequirements(arm);
 
         if (strict) this.ARM_POSITION_TOLERANCE = ARM_POSITION_TOLERANCE_STRICT;

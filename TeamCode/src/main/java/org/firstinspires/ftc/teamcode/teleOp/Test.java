@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
+@Disabled
 @TeleOp
 public class Test extends CommandOpMode {
 

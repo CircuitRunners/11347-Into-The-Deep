@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,13 +12,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.checkerframework.checker.signedness.qual.Constant;
 
+@Disabled
 @Config
 @TeleOp
 public class ArmPIDTestKooky extends OpMode {
     private PIDController controller;
 
-    public static double p = 0, i = 0, d = 0; // 0.022, 0, 0.0015
-    public static double f = 0; // 0.15
+    public static double p = 0.022, i = 0, d = 0.001; // 0.022, 0, 0.001
+    public static double f = 0.15; // 0.15
 
     public static int target = 0;
 
