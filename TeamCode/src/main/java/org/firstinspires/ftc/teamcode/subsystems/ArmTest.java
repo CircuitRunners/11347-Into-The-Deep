@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.support.ArmConstants.*;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.AnalogInput;
+
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.FeedForwardConstant;
@@ -24,12 +23,10 @@ public class ArmTest {
     }
 
     public DcMotorEx armMotor;
-    // public AnalogInput enc;
-
     public RunAction armLowBasket,armIntake,armSpecimen, armObservation, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimen;
 
     public double armAngle() {
-        return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
+        return (armMotor.getCurrentPosition() - armStart) / TICKS_PER_RAD - ARM_OFF;
     }
 
     private PIDFController armPID = new PIDFController(PID);
@@ -98,9 +95,15 @@ public class ArmTest {
 //    public void armSpecimenScore() {setArmTarget(ARM_SPECIMEN_SCORE);}
 //
 //    public void armClear() {setArmTarget(ARM_CLEAR);}
-    public void armUpright() {setArmTarget(-1.67);}
-    public void autoArmPreSpecimen() {setArmTarget(0.03);}
-    public void autoArmSpecimen() {setArmTarget(0.13);}
+    public void armUpright() {
+        setArmTarget(0);
+    }
+    public void autoArmPreSpecimen() {
+        setArmTarget(0);
+    }
+    public void autoArmSpecimen() {
+        setArmTarget(0);
+    }
 
     public void resetEncoder() {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

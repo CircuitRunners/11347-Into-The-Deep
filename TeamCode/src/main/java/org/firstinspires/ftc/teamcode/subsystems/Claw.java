@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -7,14 +8,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.support.RunAction;
 
+@Config
 public class Claw extends SubsystemBase {
     private Servo servo;
     private ServoStates currentState;
     private final ElapsedTime switchTimer = new ElapsedTime(); // Timer for switch delay
 
     public enum ServoStates {
-        OPEN(0.4),
-        CLOSE(0.65);
+        OPEN(0.45),
+        CLOSE(0);
 
         private final double position;
 
