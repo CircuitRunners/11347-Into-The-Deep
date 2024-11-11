@@ -18,10 +18,10 @@ public class testDownCommand extends ParallelCommandGroup {
         addCommands(
                 new SequentialCommandGroup(
                         new ParallelCommandGroup(
-                                new ProfiledLiftCommand(lift, Slides.SlidePositions.STAGE_0.position, true),
+                                new ProfiledLiftCommand(lift, Slides.SlidePositions.STAGE_0.position, false),
                                 new SequentialCommandGroup(
-                                        new WaitCommand(300),
-                                        new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
+                                        new WaitCommand(500),
+                                        new ProfiledArmCommand(arm, Arm.ArmPositions.REST.position, true, false, true, 3500)
                                 )
                         ),
                         new WaitCommand(800)

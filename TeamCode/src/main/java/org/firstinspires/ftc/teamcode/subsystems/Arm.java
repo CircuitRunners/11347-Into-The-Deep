@@ -14,9 +14,11 @@ public class Arm extends SubsystemBase {
         REST(5),
         MID(290),
         AUTO(410),
-        BASKET_HIGH(400),
-        HOVER_SUB(520),
-        GRAB_SUB(590);
+        BASKET_HIGH(200),
+        SPECIMEN(500),
+        TOPBAR(328),
+        HOVER_SUB(534),
+        GRAB_SUB(605);
 
         public int position;
 

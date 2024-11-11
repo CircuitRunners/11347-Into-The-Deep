@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.checkerframework.checker.signedness.qual.Constant;
 
-@Disabled
 @Config
 @TeleOp
 public class ArmPIDTestKooky extends OpMode {

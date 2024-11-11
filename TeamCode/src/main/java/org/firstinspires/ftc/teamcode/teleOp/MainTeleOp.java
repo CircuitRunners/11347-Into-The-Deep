@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
+import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -44,6 +45,7 @@ public class MainTeleOp extends CommandOpMode {
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 5.0);
+        claw.closeClaw();
         telemetry.addData(">", "Hardware Map Initialized");
         telemetry.update();
 
@@ -64,48 +66,53 @@ public class MainTeleOp extends CommandOpMode {
 
         //HIGH BASKET PRESETS
         //LIFT
-        new Trigger(() -> manipulator.getLeftY() > 0.4)
-                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.HIGH)
-                        .withTimeout(3500)
-                        .interruptOn(() -> manualLiftCommand.isManualActive()));
-        //ARM
-        new Trigger(() -> manipulator.getLeftY() > 0.4)
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
-                        .withTimeout(2500)
-                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//        new Trigger(() -> manipulator.getLeftY() > 0.4)
+//                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.HIGH)
+//                        .withTimeout(3500)
+//                        .interruptOn(() -> manualLiftCommand.isManualActive()));
+//        //ARM
+//        new Trigger(() -> manipulator.getLeftY() > 0.4)
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//
+//        //REST PRESETS
+//        new Trigger(() -> manipulator.getLeftY() < -0.4)
+//                .whenActive(new testDownCommand(lift, arm, claw)
+//                        .withTimeout(3500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive() || manualLiftCommand.isManualActive()));
+//
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.RIGHT_BUMPER))
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.SPECIMEN)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//
+//
+//        //ARM
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.Y)) // Triangle
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//        //ARM
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) // Circle
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//        //ARM
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A)) // Cross
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//        //ARM
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.X)) // Square
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
+//                        .withTimeout(2500)
+//                                .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        //REST PRESETS
-        //LIFT
-        new Trigger(() -> manipulator.getLeftY() < -0.4)
-                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.DOWN)
-                        .withTimeout(2500)
-                        .interruptOn(() -> manualLiftCommand.isManualActive()));
-        //ARM
-        new Trigger(() -> manipulator.getLeftY() < -0.4)
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
-                        .withTimeout(2500)
-                        .interruptOn(() -> manualArmCommand.isManualActive()));
-
-
-        //ARM
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.Y)) // Triangle
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
-                        .withTimeout(2500)
-                        .interruptOn(() -> manualArmCommand.isManualActive()));
-        //ARM
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) // Circle
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.TOPBAR)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
-        //ARM
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A)) // Cross
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
-                        .withTimeout(2500)
-                        .interruptOn(() -> manualArmCommand.isManualActive()));
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.X)) // Square
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
-                        .withTimeout(2500)
-                                .interruptOn(() -> manualArmCommand.isManualActive()));
 
 
         telemetry.addData(">", "Commands Ready");

@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 
-@Disabled //Incorrect
 @Autonomous(group="1")
 public class timebasedParkRight extends CommandOpMode {
 
@@ -48,14 +47,9 @@ public class timebasedParkRight extends CommandOpMode {
         }
 
         // Set the robot to drive forward for 2 seconds
-        if (timer.seconds() < 1.2) { //1.8
-            db.drive(-0.5, 0.3, 0); // Drive forward at half speed
-        } else if (timer.seconds() < 2.2){ //2.8
-            db.drive(0, 0 , -0.25); // Stop the drivebase after 2 seconds
-        } else if (timer.seconds() < 2.65) { //3.15
-            db.drive(0, -0.6, 0);
+        if (timer.seconds() < 1.5) { //1.8
+            db.drive(0, 0.5, 0); // Drive forward at half speed
         } else {
-            runArm = true;
             db.drive(0, 0, 0);
         }
         // Display the timer on the telemetry

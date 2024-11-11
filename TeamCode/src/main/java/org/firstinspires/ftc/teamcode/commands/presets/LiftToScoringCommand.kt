@@ -32,7 +32,7 @@ class LiftToScoringCommand(lift: Slides, preset: Presets) : ParallelCommandGroup
                 }),
                 when (preset) {
                     Presets.DOWN ->
-                        ProfiledLiftCommand(lift, SlidePositions.STAGE_0.position, true)
+                        ProfiledLiftCommand(lift, SlidePositions.STAGE_0.position, false)
                     Presets.AUTO ->
                         ProfiledLiftCommand(lift, SlidePositions.AUTO.position, true)
                     Presets.SHORT ->

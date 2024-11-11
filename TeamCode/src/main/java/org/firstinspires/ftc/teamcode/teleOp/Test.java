@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,13 +12,13 @@ import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 
-@Disabled
-@TeleOp
+@TeleOp(name="Arm Linear Interpolation Value Tester", group="0")
+@Config
 public class Test extends CommandOpMode {
 
 //    DcMotorEx armMotor;
     ElapsedTime timer;
-    double diff = 0;
+    public static double diff = 0;
     Arm arm;
     @Override
     public void initialize() {

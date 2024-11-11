@@ -25,7 +25,7 @@ public class Slides extends SubsystemBase{
             return this.position;
         }
     }
-    private int UPPER_LIMIT = -3180, LOWER_LIMIT = -35;
+    private int UPPER_LIMIT = -3180, LOWER_LIMIT = -50;
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
 
@@ -84,18 +84,18 @@ public class Slides extends SubsystemBase{
     }
 
     public boolean atLowerLimit(){
-        return getLiftPosition() < LOWER_LIMIT;
+        return getLiftPosition() > LOWER_LIMIT;
     }
 
-    public void setLeftPower (double power) {
+    public void setLeftPower(double power) {
         leftSlideMotor.setPower(power);
     }
 
-    public void setRightMotor (double power) {
+    public void setRightMotor(double power) {
         rightSlideMotor.setPower(power);
     }
 
-    public void resetLiftPosition(){
+    public void resetLiftPosition() {
         leftSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -103,7 +103,7 @@ public class Slides extends SubsystemBase{
         rightSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double getVoltageComp(){
+    public double getVoltageComp() {
         return voltageComp;
     }
 }

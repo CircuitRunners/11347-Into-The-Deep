@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.support.PID;
 
 @Disabled
 @TeleOp
+@Config
 public class SlidePIDTest extends LinearOpMode {
 
     DcMotor leftSlide;
@@ -17,7 +19,7 @@ public class SlidePIDTest extends LinearOpMode {
     private Slides lift;
 
     // PID controller for the lift system
-    PID pid = new PID(
+    public static PID pid = new PID(
             0, 0, 0);
 
     @Override

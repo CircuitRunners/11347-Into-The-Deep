@@ -24,6 +24,6 @@ public class ManualArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        arm.setPower(-manipulator.getRightX());
+        arm.setPower(-manipulator.getRightY());
     }
 }
