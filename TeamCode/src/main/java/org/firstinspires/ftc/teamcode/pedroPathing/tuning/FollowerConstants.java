@@ -4,15 +4,15 @@ import static org.firstinspires.ftc.teamcode.support.Constants.MASS_IN_KG;
 import static org.firstinspires.ftc.teamcode.support.Constants.X_MOVEMENT;
 import static org.firstinspires.ftc.teamcode.support.Constants.Y_MOVEMENT;
 import static org.firstinspires.ftc.teamcode.support.Constants.centripetalForceScaling;
-import static org.firstinspires.ftc.teamcode.support.Constants.cfkD;
-import static org.firstinspires.ftc.teamcode.support.Constants.cfkF;
-import static org.firstinspires.ftc.teamcode.support.Constants.cfkI;
-import static org.firstinspires.ftc.teamcode.support.Constants.cfkP;
-import static org.firstinspires.ftc.teamcode.support.Constants.cfkT;
-import static org.firstinspires.ftc.teamcode.support.Constants.ckD;
-import static org.firstinspires.ftc.teamcode.support.Constants.ckF;
-import static org.firstinspires.ftc.teamcode.support.Constants.ckI;
-import static org.firstinspires.ftc.teamcode.support.Constants.ckP;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveD;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveF;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveI;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveP;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveT;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalD;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalF;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalI;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalP;
 import static org.firstinspires.ftc.teamcode.support.Constants.forwardZeroPowerAccel;
 import static org.firstinspires.ftc.teamcode.support.Constants.lateralZeroPowerAccel;
 import static org.firstinspires.ftc.teamcode.support.Constants.zeroPowerAccelMultiplier;
@@ -55,10 +55,10 @@ public class FollowerConstants {
 
     // Translational PIDF coefficients (don't use integral)
     public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
-            ckP,
-            ckI,
-            ckD,
-            ckF);
+            translationalP,
+            translationalI,
+            translationalD,
+            translationalF);
 
     // Translational Integral
     public static CustomPIDFCoefficients translationalIntegral = new CustomPIDFCoefficients(
@@ -84,11 +84,11 @@ public class FollowerConstants {
 
     // Drive PIDF coefficients
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            cfkP,
-            cfkI,
-            cfkD,
-            cfkT,
-            cfkF);
+            driveP,
+            driveI,
+            driveD,
+            driveT,
+            driveF);
 
     // Feed forward constant added on to the drive PIDF
     public static double drivePIDFFeedForward = 0.01;
@@ -156,7 +156,7 @@ public class FollowerConstants {
     public static double holdPointTranslationalScaling = 0.45;
 
     // This is scales the heading error correction power when the Follower is holding a Point.
-    public static double holdPointHeadingScaling = 0.35;
+    public static double holdPointHeadingScaling = 0.45;
 
     // This is the number of times the velocity is recorded for averaging when approximating a first
     // and second derivative for on the fly centripetal correction. The velocity is calculated using

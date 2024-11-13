@@ -4,17 +4,17 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class Constants {
-    public static double X_OFFSET = 0.984252;
-    public static double Y_OFFSET = 0.629921;
-    public static double MASS_IN_KG = 10.6;
-    public static double X_MOVEMENT = 53.66840500469179; // ##.## || Tuned: ##.##
-    public static double Y_MOVEMENT = 40.309560390264195; // test values go here, 5 - 10 needed || Tuned: ##.##
-    public static double A_SCALER = 0.9828; // ##.## || Tuned: ##.##
-    public static double L_SCALER = 0.9744355912359927; // ##.## || Tuned: ##.##
-    public static double forwardZeroPowerAccel = -79.3685715955501;
-    public static double lateralZeroPowerAccel = -113.73477215002447;
-    public static double zeroPowerAccelMultiplier = 2;
-    public static double centripetalForceScaling = 0.0005;
-    public static double ckP = 0.26, ckI = 0, ckD = 0.02, ckF = 0,
-            cfkP = 0.025, cfkI = 0, cfkD = 0.00001, cfkT = 0.6, cfkF = 0;
+    public static double X_OFFSET = 0.984252;// Leave This
+    public static double Y_OFFSET = 0.629921; // Leave This
+    public static double MASS_IN_KG = 11.6; // Leave This MIGHT BE WRONG
+    public static double X_MOVEMENT = 61.0745917224; // ##.## || Tuned: ##.##
+    public static double Y_MOVEMENT = 46.819712548; // test values go here, 5 - 10 needed || Tuned: ##.##
+    public static double A_SCALER = 0.97546; // ##.## || Tuned: ##.##
+    public static double L_SCALER = 1.02870762962; // ##.## || Tuned: ##.##
+    public static double forwardZeroPowerAccel = -55.434400694;
+    public static double lateralZeroPowerAccel = -95.2948464538; //MIGHT BE WRONG BUT I GIVE UP
+    public static double zeroPowerAccelMultiplier = 4;// everthing above is tuned, zero power is not
+    public static double centripetalForceScaling = 0.0007;
+    public static double translationalP = 0.26, translationalI = 0, translationalD = 0.02, translationalF = 0,
+            driveP = 0.005, driveI = 0, driveD = 0.0005, driveT = 0.6, driveF = 0; // Might need to be changed
 }
