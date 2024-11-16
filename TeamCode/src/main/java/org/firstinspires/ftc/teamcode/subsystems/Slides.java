@@ -25,7 +25,7 @@ public class Slides extends SubsystemBase{
             return this.position;
         }
     }
-    private int UPPER_LIMIT = -3180, LOWER_LIMIT = -50;
+    private int UPPER_LIMIT = -2200, LOWER_LIMIT = -50; //-3180 was Upper Limit, 2200 is temporary
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
 
