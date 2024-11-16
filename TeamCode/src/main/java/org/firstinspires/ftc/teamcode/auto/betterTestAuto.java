@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
@@ -11,6 +13,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.support.Actions;
@@ -20,7 +23,9 @@ import org.firstinspires.ftc.teamcode.support.SleepCommand;
 @Autonomous
 public class betterTestAuto extends OpMode {
 //Auto to test tuning accuracy
+    public ArmCorrected arm;
     private Follower follower;
+    public Telemetry telemetry;
     private Timer pathTimer;
     private int pathState;
 
@@ -31,7 +36,18 @@ public class betterTestAuto extends OpMode {
     private Pose pos3 = new Pose(33, 33, Math.toRadians(90));
     private Pose pos4 = new Pose(33, 111, Math.toRadians(0));
 
+    public betterTestAuto(HardwareMap hardwareMap, Telemetry telemetry, Follower follower) {
+        arm = new ArmCorrected(hardwareMap, telemetry);
 
+        this.follower = follower;
+        this.telemetry = telemetry;
+
+        buildPaths();
+
+        follower.setStartingPose(startPosition);
+
+        init();
+    }
 
     private PathChain line1, line2, line3, line4, line5, line6;
     public void buildPaths() {
@@ -66,6 +82,7 @@ public class betterTestAuto extends OpMode {
         switch (pathState) {
             case 0:
                 follower.followPath(line1);
+                Actions.runBlocking(arm.toTopBar);
                 setPathState(1);
                 break;
             case 1:
@@ -182,8 +199,4 @@ public class betterTestAuto extends OpMode {
         pathTimer.resetTimer();
         setPathState(0);
     }
-
-
-
-
 }
