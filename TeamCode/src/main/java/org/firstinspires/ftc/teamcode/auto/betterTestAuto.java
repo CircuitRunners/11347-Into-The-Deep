@@ -31,7 +31,7 @@ public class betterTestAuto extends OpMode {
 
     // Define key poses
     private Pose startPosition = new Pose(10, 111, Math.toRadians(0));
-    private Pose pos1 = new Pose(111, 111, Math.toRadians(-90));
+    private Pose pos1 = new Pose(60, 111, Math.toRadians(-90));
     private Pose pos2 = new Pose(111, 30, Math.toRadians(180));
     private Pose pos3 = new Pose(33, 33, Math.toRadians(90));
     private Pose pos4 = new Pose(33, 111, Math.toRadians(0));
@@ -83,14 +83,14 @@ public class betterTestAuto extends OpMode {
             case 0:
                 follower.followPath(line1);
                 Actions.runBlocking(arm.toTopBar);
-                setPathState(1);
+//                setPathState(1);
                 break;
-            case 1:
-                if (!follower.isBusy()) {
-                    follower.followPath(line2);
-                    setPathState(2);
-                }
-                break;
+//            case 1:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line2);
+//                    setPathState(2);
+//                }
+//                break;
 //            case 2:
 //                if (!follower.isBusy()) {
 //                    follower.followPath(line3);
