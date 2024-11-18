@@ -91,77 +91,77 @@ public class betterTestAuto extends OpMode {
                     setPathState(2);
                 }
                 break;
-            case 2:
-                if (!follower.isBusy()) {
-                    follower.followPath(line3);
-                    setPathState(3);
-                }
-                break;
-            case 3:
-                if (!follower.isBusy()) {
-                    follower.followPath(line4);
-                    setPathState(4);
-                }
-                break;
-            case 4:
-                if (!follower.isBusy()) {
-                    follower.followPath(line5);
-                    setPathState(5);
-                }
-                break;
-            case 5:
-                if (!follower.isBusy()) {
-                    follower.followPath(line2);
-                    setPathState(6);
-                }
-                break;
-            case 6:
-                if (!follower.isBusy()) {
-                    follower.followPath(line3);
-                    setPathState(7);
-                }
-                break;
-            case 7:
-                if (!follower.isBusy()) {
-                    follower.followPath(line4);
-                    setPathState(8);
-                }
-                break;
-            case 8:
-                if (!follower.isBusy()) {
-                    follower.followPath(line5);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if (!follower.isBusy()) {
-                    follower.followPath(line2);
-                    setPathState(10);
-                }
-                break;
-            case 10:
-                if (!follower.isBusy()) {
-                    follower.followPath(line3);
-                    setPathState(11);
-                }
-                break;
-            case 11:
-                if (!follower.isBusy()) {
-                    follower.followPath(line4);
-                    setPathState(12);
-                }
-                break;
-            case 12:
-                if (!follower.isBusy()) {
-                    follower.followPath(line5);
-                    setPathState(13);
-                }
-                break;
-            case 13:
-                if (!follower.isBusy()) {
-                    follower.followPath(line6);
-                    setPathState(14);
-                }
+//            case 2:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line3);
+//                    setPathState(3);
+//                }
+//                break;
+//            case 3:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line4);
+//                    setPathState(4);
+//                }
+//                break;
+//            case 4:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line5);
+//                    setPathState(5);
+//                }
+//                break;
+//            case 5:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line2);
+//                    setPathState(6);
+//                }
+//                break;
+//            case 6:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line3);
+//                    setPathState(7);
+//                }
+//                break;
+//            case 7:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line4);
+//                    setPathState(8);
+//                }
+//                break;
+//            case 8:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line5);
+//                    setPathState(9);
+//                }
+//                break;
+//            case 9:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line2);
+//                    setPathState(10);
+//                }
+//                break;
+//            case 10:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line3);
+//                    setPathState(11);
+//                }
+//                break;
+//            case 11:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line4);
+//                    setPathState(12);
+//                }
+//                break;
+//            case 12:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line5);
+//                    setPathState(13);
+//                }
+//                break;
+//            case 13:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(line6);
+//                    setPathState(14);
+//                }
             default:
                 requestOpModeStop();
                 break;
