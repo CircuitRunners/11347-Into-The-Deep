@@ -30,7 +30,7 @@ public class betterTestAuto extends OpMode {
     private int pathState;
 
     // Define key poses
-    private Pose startPosition = new Pose(10, 111, Math.toRadians(-90));
+    private Pose startPosition = new Pose(10, 111, Math.toRadians(0));
     private Pose pos1 = new Pose(111, 111, Math.toRadians(-90));
     private Pose pos2 = new Pose(111, 30, Math.toRadians(180));
     private Pose pos3 = new Pose(33, 33, Math.toRadians(90));
