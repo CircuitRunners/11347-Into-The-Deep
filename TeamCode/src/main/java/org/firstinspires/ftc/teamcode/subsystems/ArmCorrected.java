@@ -41,8 +41,8 @@ public class ArmCorrected {
     public PIDController ArmPID;
 
     public static int target;
-    public static double p = 0.0, i = 0, d = 0;
-    public static double f = 0.005;
+    public static double p = 0.015, i = 0, d = 0.0008;
+    public static double f = 0.07;
 
     public ArmCorrected(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
