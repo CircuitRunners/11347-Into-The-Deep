@@ -40,7 +40,7 @@ public class ArmCorrected {
     private DcMotorEx armMotor;
     public PIDController ArmPID;
 
-    public static int target;
+    public static int target = 0;
     public static double p = 0.015, i = 0, d = 0.0008;
     public static double f = 0.07;
 
@@ -60,11 +60,11 @@ public class ArmCorrected {
     }
 
     public void toTopBar() {
-        setTarget(ArmPositions.TOPBAR.getPosition());
+        setTarget(ArmPositions.TOPBAR.position);
     }
 
     public void toGrabPos() {
-        setTarget(ArmPositions.SPECIMEN.getPosition());
+        setTarget(ArmPositions.SPECIMEN.position);
     }
 
     public void updatePIDF() {

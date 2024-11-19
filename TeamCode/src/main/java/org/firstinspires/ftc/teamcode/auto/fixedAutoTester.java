@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrectedTwoPointOh;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.support.Actions;
@@ -18,11 +20,13 @@ import org.firstinspires.ftc.teamcode.support.SleepCommand;
 
 
 @Autonomous
-public class betterTestAuto extends OpMode {
+public class fixedAutoTester extends OpMode {
     //Auto to test tuning accuracy
+    public ArmCorrectedTwoPointOh arm;
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
+    boolean IsRaised = false;
 
     // Define key poses
     private Pose startPosition = new Pose(10, 111, Math.toRadians(0));
@@ -77,6 +81,8 @@ public class betterTestAuto extends OpMode {
             case 2:
                 if (!follower.isBusy()) {
                     follower.followPath(line3);
+                    Actions.runBlocking(arm.toTopBar);
+                    IsRaised = true;
                     setPathState(3);
                 }
                 break;
@@ -160,9 +166,11 @@ public class betterTestAuto extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        arm.update();
         autonomousPathUpdate();
 
         telemetry.addData("path state", pathState);
+        telemetry.addData("Is Arm Being Bad? >>", !IsRaised);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
@@ -174,7 +182,12 @@ public class betterTestAuto extends OpMode {
         pathTimer = new Timer();
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
+
+        arm = new ArmCorrectedTwoPointOh(hardwareMap);
+
         buildPaths();
+        telemetry.addLine("Code running");
+        telemetry.update();
     }
 
     @Override
@@ -182,8 +195,4 @@ public class betterTestAuto extends OpMode {
         pathTimer.resetTimer();
         setPathState(0);
     }
-
-
-
-
 }
