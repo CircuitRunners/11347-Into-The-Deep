@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -25,7 +25,7 @@ public class rightAuto extends OpMode{
     private Timer pathTimer;
     private int pathState;
     private Claw claw;
-    private Arm arm;
+    private ArmCorrected arm;
     private Slides lift;
     private CRDiffy diffy;
 
@@ -113,7 +113,7 @@ public class rightAuto extends OpMode{
             case 1:
                 if (!follower.isBusy()) {
                     //do stuff to place preloaded. This probably doesn't work
-                    Actions.runBlocking(arm.armAUTOPos);
+                    Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.openClaw);
                     setPathState(2);
@@ -122,7 +122,7 @@ public class rightAuto extends OpMode{
             case 2:
                 if (!follower.isBusy()) {
                     //move arm back to rest
-                    Actions.runBlocking(arm.armRESTPos);
+                    Actions.runBlocking(arm.toTopBar);
                     follower.followPath(sample1);
                     setPathState(3);
                 }
@@ -143,7 +143,7 @@ public class rightAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //grab sample
                     //need to move diffy
-                    Actions.runBlocking(claw.closeClaw);
+                    //Actions.runBlocking(claw.closeClaw);
                     //maybe angle diffy up some
                     follower.followPath(sample3Place);
                     setPathState(6);
@@ -152,7 +152,7 @@ public class rightAuto extends OpMode{
             case 6:
                 if (!follower.isBusy()) {
                     //place sample
-                    Actions.runBlocking(claw.openClaw);
+                    //Actions.runBlocking(claw.openClaw);
                     follower.followPath(specimen1Grab);
                     setPathState(7);
                 }
@@ -161,7 +161,7 @@ public class rightAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //grab specimen
                     //need to move diffy
-                    Actions.runBlocking(claw.closeClaw);
+                    //Actions.runBlocking(claw.closeClaw);
                     follower.followPath(specimen1Place);
                     setPathState(8);
                 }
@@ -169,10 +169,10 @@ public class rightAuto extends OpMode{
             case 8:
                 if (!follower.isBusy()) {
                     //place specimen. this probably doesn't work
-                    Actions.runBlocking(arm.armAUTOPos);
+                    Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.armRESTPos);
+                    Actions.runBlocking(arm.toTopBar);
                     follower.followPath(specimen2Grab);
                     setPathState(9);
                 }
@@ -180,7 +180,7 @@ public class rightAuto extends OpMode{
             case 9:
                 if (!follower.isBusy()) {
                     //grab specimen
-                    Actions.runBlocking(claw.closeClaw);
+                    //Actions.runBlocking(claw.closeClaw);
                     follower.followPath(specimen2Place);
                     setPathState(10);
                 }
@@ -188,10 +188,10 @@ public class rightAuto extends OpMode{
             case 10:
                 if (!follower.isBusy()) {
                     //place Specimen. probably still doesn't work
-                    Actions.runBlocking(arm.armAUTOPos);
+                    Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.armRESTPos);
+                    //Actions.runBlocking(claw.openClaw);
+                    Actions.runBlocking(arm.toTopBar);
                     follower.followPath(specimen3Grab);
                     setPathState(11);
                 }
@@ -199,7 +199,7 @@ public class rightAuto extends OpMode{
             case 11:
                 if (!follower.isBusy()) {
                     //grab specimen
-                    Actions.runBlocking(claw.closeClaw);
+                    //Actions.runBlocking(claw.closeClaw);
                     follower.followPath(specimen3Place);
                     setPathState(12);
                 }
@@ -207,10 +207,10 @@ public class rightAuto extends OpMode{
             case 12:
                 if (!follower.isBusy()) {
                     //place specimen. probably doesn't work again
-                    Actions.runBlocking(arm.armAUTOPos);
+                    Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.armRESTPos);
+                    //Actions.runBlocking(claw.openClaw);
+                    Actions.runBlocking(arm.toTopBar);
                     follower.followPath(park);
                     setPathState(13);
                 }
@@ -253,7 +253,7 @@ public class rightAuto extends OpMode{
         follower.setStartingPose(startPosition);
         claw = new Claw(hardwareMap);
         lift = new Slides(hardwareMap);
-        arm = new Arm(hardwareMap);
+        arm = new ArmCorrected(hardwareMap, telemetry);
         diffy = new CRDiffy(hardwareMap);
         buildPaths();
     }

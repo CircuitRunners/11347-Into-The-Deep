@@ -48,9 +48,13 @@ public class Claw extends SubsystemBase {
         setPosition(ServoStates.CLOSE);
     }
 
-    public void openClaw() { open(); }
+    public void openClaw() {
+        setPosition(ServoStates.OPEN);
+    }
 
-    public void closeClaw() { close(); }
+    public void closeClaw() {
+        setPosition(ServoStates.CLOSE);
+    }
 
     public void setPosition(ServoStates state) {
         currentState = state;
