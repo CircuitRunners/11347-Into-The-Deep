@@ -48,7 +48,7 @@ public class rightAuto extends OpMode{
     private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
     private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
-    private PathChain preload, sample1, sample2, sample3Grab, sample3Place, specimen1Grab, specimen1Place, specimen2Grab, specimen2Place, specimen3Grab, specimen3Place, park;
+    private PathChain preload, sample1, sample2, sample3Grab, sample3Place, specimen1Grab, specimen1Place, specimen2Grab, specimen2Place, specimen3Grab, specimen3Place, park, specimen1GrabFromSample2;
     public void buildPaths() {
         preload = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPosition), new Point(preloadPos)))
@@ -102,6 +102,10 @@ public class rightAuto extends OpMode{
                 .addPath(new BezierLine(new Point(specimen3PlacePos), new Point(parkPos)))
                 .setConstantHeadingInterpolation(parkPos.getHeading())
                 .build();
+        specimen1GrabFromSample2 = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(sample2), new Point(specimenGrabPos), specimen1GrabCP))
+                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
+                .build();
     }
 
     public void autonomousPathUpdate() {
@@ -122,7 +126,7 @@ public class rightAuto extends OpMode{
             case 2:
                 if (!follower.isBusy()) {
                     //move arm back to rest
-                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample1);
                     setPathState(3);
                 }
@@ -130,7 +134,7 @@ public class rightAuto extends OpMode{
             case 3:
                 if (!follower.isBusy()) {
                     follower.followPath(sample2);
-                    setPathState(4);
+                    setPathState(6);//Skipping sample 3 for now
                 }
                 break;
             case 4:
@@ -172,7 +176,7 @@ public class rightAuto extends OpMode{
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
                     //Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(arm.toRestPos);
                     follower.followPath(specimen2Grab);
                     setPathState(9);
                 }
@@ -191,9 +195,9 @@ public class rightAuto extends OpMode{
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
                     //Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.toTopBar);
-                    follower.followPath(specimen3Grab);
-                    setPathState(11);
+                    Actions.runBlocking(arm.toRestPos);
+                    //follower.followPath(specimen3Grab);
+                    setPathState(12);//Skipping specimen 3
                 }
                 break;
             case 11:
@@ -206,11 +210,11 @@ public class rightAuto extends OpMode{
                 break;
             case 12:
                 if (!follower.isBusy()) {
-                    //place specimen. probably doesn't work again
-                    Actions.runBlocking(arm.toTopBar);
-                    Actions.runBlocking(new SleepCommand(1));
-                    //Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.toTopBar);
+                    // //place specimen. probably doesn't work again
+                    // Actions.runBlocking(arm.toTopBar);
+                    // Actions.runBlocking(new SleepCommand(1));
+                    // //Actions.runBlocking(claw.openClaw);
+                    // Actions.runBlocking(arm.toTopBar);
                     follower.followPath(park);
                     setPathState(13);
                 }
