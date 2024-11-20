@@ -40,7 +40,7 @@ public class ArmCorrectedTwoPointOh {
 
     public DcMotorEx armMotor;
 
-    public RunAction toTopBar, toGrabPos, toRestPos;
+    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos;
 
     public ArmCorrectedTwoPointOh(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -54,6 +54,7 @@ public class ArmCorrectedTwoPointOh {
         toTopBar = new RunAction(this::toTopBar);
         toGrabPos = new RunAction(this::toGrabPos);
         toRestPos = new RunAction(this::toRestPos);
+        toBasketPos = new RunAction(this::toBasketPos);
 
     }
 
@@ -96,6 +97,9 @@ public class ArmCorrectedTwoPointOh {
     }
     public void toRestPos() {
         setArmTarget(ArmPositions.REST.position);
+    }
+    public void toBasketPos() {
+        setArmTarget(ArmPositions.BASKET_HIGH.position);
     }
 
     public void resetArmPosition() {
