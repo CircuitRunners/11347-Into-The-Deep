@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
-import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrectedTwoPointOh;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -25,7 +25,7 @@ public class rightAuto extends OpMode{
     private Timer pathTimer;
     private int pathState;
     private Claw claw;
-    private ArmCorrected arm;
+    private ArmCorrectedTwoPointOh arm;
     private Slides lift;
     private CRDiffy diffy;
 
@@ -115,7 +115,7 @@ public class rightAuto extends OpMode{
                     //do stuff to place preloaded. This probably doesn't work
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
+                    //Actions.runBlocking(claw.openClaw);
                     setPathState(2);
                 }
                 break;
@@ -171,7 +171,7 @@ public class rightAuto extends OpMode{
                     //place specimen. this probably doesn't work
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
+                    //Actions.runBlocking(claw.openClaw);
                     Actions.runBlocking(arm.toTopBar);
                     follower.followPath(specimen2Grab);
                     setPathState(9);
@@ -253,7 +253,7 @@ public class rightAuto extends OpMode{
         follower.setStartingPose(startPosition);
         claw = new Claw(hardwareMap);
         lift = new Slides(hardwareMap);
-        arm = new ArmCorrected(hardwareMap, telemetry);
+        arm = new ArmCorrectedTwoPointOh(hardwareMap);
         diffy = new CRDiffy(hardwareMap);
         buildPaths();
     }
