@@ -11,6 +11,14 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrectedTwoPointOh;
+import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.support.Actions;
+import org.firstinspires.ftc.teamcode.support.SleepCommand;
+
+
 
 @Autonomous
 public class leftAuto extends OpMode{

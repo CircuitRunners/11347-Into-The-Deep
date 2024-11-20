@@ -162,7 +162,6 @@ public class fixedAutoTester extends OpMode {
         pathState = pState;
         pathTimer.resetTimer();
     }
-
     @Override
     public void loop() {
         follower.update();

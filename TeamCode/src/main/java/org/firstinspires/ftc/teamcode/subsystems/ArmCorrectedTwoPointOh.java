@@ -17,7 +17,7 @@ public class ArmCorrectedTwoPointOh {
         AUTO(410),
         BASKET_HIGH(1000),
         SPECIMEN(500),
-        TOPBAR(328),
+        TOPBAR(1000),
         HOVER_SUB(534),
         GRAB_SUB(2000);
 
@@ -33,8 +33,10 @@ public class ArmCorrectedTwoPointOh {
     }
 
     private PIDController controller;
-    public static double p = 0.015, i = 0, d = 0.0008;
-    public static double f = 0.07;
+    public static double p = 0.022, i = 0, d = 0.001; // 0.022, 0, 0.001
+    public static double f = 0.15; // 0.15
+//    public static double p = 0.015, i = 0, d = 0.0008;
+//    public static double f = 0.07;
 
     public static int target = 0;
 

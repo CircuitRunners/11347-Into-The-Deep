@@ -25,16 +25,18 @@ public class rightAuto extends OpMode{
     private Timer pathTimer;
     private int pathState;
     private Claw claw;
-    private ArmCorrectedTwoPointOh arm;
-    private Slides lift;
-    private CRDiffy diffy;
+    //    boolean IsRaised = false;
+    public ArmCorrectedTwoPointOh arm;
+//    private Slides lift;
+//    private CRDiffy diffy;
 
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
     private Pose preloadPos = new Pose(35, 62.5, Math.toRadians(0));
-    private Pose sample1GrabPos = new Pose(60, 25, Math.toRadians(90));
-    private Point sample1GrabCP1 = new Point(35.5, 36);
-    private Point sample1GrabCP2 = new Point(63, 43);
+    private Pose sample1GrabPos = new Pose(60, 25, Math.toRadians(0));//90
+    private Point sample1GrabCP1 = new Point(34, 13.5);
+
+    private Point sample1GrabCP2 = new Point(59, 49);
     private Pose sample1PlacePos = new Pose(20, 25, Math.toRadians(90));
     private Pose sample2GrabPos = new Pose(60, 15, Math.toRadians(90));
     private Point sample2GrabCP = new Point(62, 33);
@@ -55,7 +57,7 @@ public class rightAuto extends OpMode{
                 .setConstantHeadingInterpolation(preloadPos.getHeading())
                 .build();
         sample1 = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(preloadPos), new Point(sample1GrabPos), sample1GrabCP1, sample1GrabCP2))
+                .addPath(new BezierCurve(new Point(preloadPos), sample1GrabCP1, sample1GrabCP2,new Point(sample1GrabPos)))
                 .setConstantHeadingInterpolation(sample1GrabPos.getHeading())
                 .addPath(new BezierLine(new Point(sample1GrabPos), new Point(sample1PlacePos)))
                 .setConstantHeadingInterpolation(sample1PlacePos.getHeading())
@@ -103,22 +105,28 @@ public class rightAuto extends OpMode{
                 .setConstantHeadingInterpolation(parkPos.getHeading())
                 .build();
         specimen1GrabFromSample2 = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(sample2), new Point(specimenGrabPos), specimen1GrabCP))
+                .addPath(new BezierCurve(new Point(sample2PlacePos), new Point(specimenGrabPos), specimen1GrabCP))
                 .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
                 .build();
     }
 
     public void autonomousPathUpdate() {
         switch (pathState) {
+            case -1:
+                Actions.runBlocking(arm.toTopBar);
+                setPathState(0);
+                break;
             case 0:
-                follower.followPath(preload);
-                setPathState(1);
+                if (!follower.isBusy()) {
+                    follower.followPath(preload);
+                    setPathState(1);
+                }
                 break;
             case 1:
                 if (!follower.isBusy()) {
                     //do stuff to place preloaded. This probably doesn't work
-                    Actions.runBlocking(arm.toTopBar);
-                    Actions.runBlocking(new SleepCommand(1));
+//                    Actions.runBlocking(new SleepCommand(1));
+//                    Actions.runBlocking(arm.toTopBar);
                     //Actions.runBlocking(claw.openClaw);
                     setPathState(2);
                 }
@@ -241,9 +249,13 @@ public class rightAuto extends OpMode{
     @Override
     public void loop() {
         follower.update();
+        arm.update();
         autonomousPathUpdate();
 
-        telemetry.addData("path state", pathState);
+
+
+//        telemetry.addData("path state", pathState);
+//        telemetry.addData("Is Arm Being Bad? >>", !IsRaised);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
@@ -256,16 +268,19 @@ public class rightAuto extends OpMode{
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
         claw = new Claw(hardwareMap);
-        lift = new Slides(hardwareMap);
+//        lift = new Slides(hardwareMap);
         arm = new ArmCorrectedTwoPointOh(hardwareMap);
-        diffy = new CRDiffy(hardwareMap);
+//        diffy = new CRDiffy(hardwareMap);
         buildPaths();
+
+        telemetry.addLine("Code running");
+        telemetry.update();
     }
 
     @Override
     public void start() {
         pathTimer.resetTimer();
-        setPathState(0);
+        setPathState(-1);
     }
 
 
