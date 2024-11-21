@@ -39,13 +39,13 @@ public class rightAuto extends OpMode{
     private Pose sample1GrabPos = new Pose(64, 25, Math.toRadians(0));//90
     private Point sample1GrabCP1 = new Point(34, 12.5);
     private Point sample1GrabCP2 = new Point(59, 48);
-    private Pose sample1PlacePos = new Pose(20, 25, Math.toRadians(90));
-    private Pose sample2GrabPos = new Pose(60, 15, Math.toRadians(90));
+    private Pose sample1PlacePos = new Pose(20, 25);//, Math.toRadians(90)
+    private Pose sample2GrabPos = new Pose(60, 15);//, Math.toRadians(90)
     private Point sample2GrabCP = new Point(62, 33);
-    private Pose sample2PlacePos = new Pose(20, 15, Math.toRadians(90));
-    private Pose sample3GrabPos = new Pose(45.5, 13, Math.toRadians(90));
+    private Pose sample2PlacePos = new Pose(20, 15);//, Math.toRadians(90)
+    private Pose sample3GrabPos = new Pose(45.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(20, 43, Math.toRadians(225));
+    private Pose specimenGrabPos = new Pose(20, 43); //, Math.toRadians(225)
     //private Point specimen1GrabCP = new Point(35, 41);
     private Pose specimen1PlacePos = new Pose(34, 65, Math.toRadians(0));
     private Pose specimen2PlacePos = new Pose(34, 63, Math.toRadians(0));
@@ -175,6 +175,8 @@ public class rightAuto extends OpMode{
             case 6:
                 if (!follower.isBusy()) {
                     //place sample
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(arm.toGrabPos);
                     //Actions.runBlocking(claw.openClaw);
                     //follower.followPath(specimen1GrabFromSample2);
                     follower.followPath(specimen1GrabStraight);
