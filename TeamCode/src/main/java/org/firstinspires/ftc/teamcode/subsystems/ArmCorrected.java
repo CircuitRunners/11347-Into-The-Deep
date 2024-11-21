@@ -90,8 +90,10 @@ public class ArmCorrected {
         setArmTarget(target + a * 5);
     }
 
+    public static int TestingVar = 1000;
     public void toTopBar() {
-        setArmTarget(ArmPositions.BASKET_HIGH.position);
+//        setArmTarget(ArmPositions.TOPBAR.position);
+        setArmTarget(TestingVar);
     }
     public void toGrabPos() {
         setArmTarget(ArmPositions.GRAB_SUB.position);
