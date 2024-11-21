@@ -88,11 +88,11 @@ public class MainTeleOpTest extends CommandOpMode {
         }
 
         // Diffy control
-        if (gamepad2.dpad_left) {
-            diffy.moveDiffy(0.4);
-        } else if (gamepad2.dpad_right) {
-            diffy.moveDiffy(-0.4);
-        }
+//        if (gamepad2.dpad_left) {
+//            diffy.moveDiffy(0.4);
+//        } else if (gamepad2.dpad_right) {
+//            diffy.moveDiffy(-0.4);
+//        }
         diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
 
         // Claw control
