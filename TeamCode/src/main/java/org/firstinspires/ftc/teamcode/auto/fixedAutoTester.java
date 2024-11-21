@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -22,7 +24,7 @@ import org.firstinspires.ftc.teamcode.support.SleepCommand;
 @Autonomous
 public class fixedAutoTester extends OpMode {
     //Auto to test tuning accuracy
-    public ArmCorrectedTwoPointOh arm;
+    public ArmCorrected arm;
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
@@ -181,8 +183,9 @@ public class fixedAutoTester extends OpMode {
         pathTimer = new Timer();
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        arm = new ArmCorrectedTwoPointOh(hardwareMap);
+        arm = new ArmCorrected(hardwareMap);
 
         buildPaths();
         telemetry.addLine("Code running");

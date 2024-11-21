@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -11,6 +13,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrectedTwoPointOh;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -26,7 +29,7 @@ public class rightAuto extends OpMode{
     private int pathState;
     private Claw claw;
     //    boolean IsRaised = false;
-    public ArmCorrectedTwoPointOh arm;
+    public ArmCorrected arm;
 //    private Slides lift;
 //    private CRDiffy diffy;
 
@@ -133,8 +136,8 @@ public class rightAuto extends OpMode{
             case 1:
                 if (!follower.isBusy()) {
                     //do stuff to place preloaded. This probably doesn't work
-//                    Actions.runBlocking(new SleepCommand(1));
-//                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(arm.toTopBar);
                     //Actions.runBlocking(claw.openClaw);
                     setPathState(2);
                 }
@@ -279,7 +282,8 @@ public class rightAuto extends OpMode{
         follower.setStartingPose(startPosition);
         claw = new Claw(hardwareMap);
 //        lift = new Slides(hardwareMap);
-        arm = new ArmCorrectedTwoPointOh(hardwareMap);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        arm = new ArmCorrected(hardwareMap);
 //        diffy = new CRDiffy(hardwareMap);
         buildPaths();
 

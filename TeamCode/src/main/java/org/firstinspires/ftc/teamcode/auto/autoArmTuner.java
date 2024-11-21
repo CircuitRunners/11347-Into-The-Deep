@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -82,8 +84,9 @@ public class autoArmTuner extends OpMode {
                 if (!follower.isBusy()) {
 //                    follower.followPath(line3);
                     Actions.runBlocking(arm.toTopBar);
+                    follower.holdPoint(startPosition);
                     IsRaised = true;
-                    setPathState(3);
+//                    setPathState(3);
                 }
                 break;
             case 3:
@@ -170,6 +173,7 @@ public class autoArmTuner extends OpMode {
 
         telemetry.addData("path state", pathState);
         telemetry.addData("Is Arm Being Bad? >>", !IsRaised);
+        telemetry.addData("Arm Pos", arm.getCurrentPosition());
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
@@ -181,6 +185,7 @@ public class autoArmTuner extends OpMode {
         pathTimer = new Timer();
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         arm = new ArmCorrected(hardwareMap);
 
