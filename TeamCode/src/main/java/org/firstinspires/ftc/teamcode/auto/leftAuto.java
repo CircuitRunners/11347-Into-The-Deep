@@ -29,19 +29,19 @@ public class leftAuto extends OpMode{
     private Claw claw;
     private ArmCorrectedTwoPointOh arm;
     private Slides lift;
-    private CRDiffy diffy;
+    //private CRDiffy diffy;
 
     // Define key poses
-    private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPos = new Pose(35, 78, Math.toRadians(0));
-    private Pose sample1Pos = new Pose(34, 121, Math.toRadians(0));
-    private Point sample1CP = new Point(15, 105);
-    private Pose placePos = new Pose(18.5, 124, Math.toRadians(-225));
-    private Pose sample2Pos = new Pose(34, 131.5, Math.toRadians(0));
-    private Pose sample3Pos = new Pose(45.5, 132, Math.toRadians(90));
-    private Point sample3CP = new Point(46, 117);
-    private Pose parkPos = new Pose(60, 96, Math.toRadians(-90));
-
+    private Pose startPosition = new Pose(10.5, 81, Math.toRadians(0));
+    private Pose preloadPos = new Pose(35, 81, Math.toRadians(0));
+    private Pose sample1Pos = new Pose(25, 121, Math.toRadians(0));
+    //private Point sample1CP = new Point(15, 105);
+    private Pose placePos = new Pose(20, 122, Math.toRadians(135));
+    private Pose sample2Pos = new Pose(25, 131.5, Math.toRadians(0));
+    private Pose sample3Pos = new Pose(45.5, 125, Math.toRadians(90));
+    //private Point sample3CP = new Point(46, 117);
+    private Pose parkPos = new Pose(63, 98, Math.toRadians(270));
+    private Point parkCP = new Point(62, 129);
 
 
 
@@ -53,32 +53,32 @@ public class leftAuto extends OpMode{
                 .setConstantHeadingInterpolation(preloadPos.getHeading())
                 .build();
         sample1Grab = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(preloadPos), new Point(sample1Pos), sample1CP))
+                .addPath(new BezierLine(new Point(preloadPos), new Point(sample1Pos)))
                 .setConstantHeadingInterpolation(sample1Pos.getHeading())
                 .build();
         sample1Place = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(sample1Pos), new Point(placePos)))
-                .setConstantHeadingInterpolation(placePos.getHeading())
+                .setLinearHeadingInterpolation(sample1Pos.getHeading(), placePos.getHeading())
                 .build();
         sample2Grab = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(placePos), new Point(sample2Pos)))
-                .setConstantHeadingInterpolation(sample2Pos.getHeading())
+                .setLinearHeadingInterpolation(placePos.getHeading(), sample2Pos.getHeading())
                 .build();
         sample2Place = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(sample2Pos), new Point(placePos)))
-                .setConstantHeadingInterpolation(placePos.getHeading())
+                .setLinearHeadingInterpolation(sample2Pos.getHeading(), placePos.getHeading())
                 .build();
         sample3Grab = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(placePos), new Point(sample3Pos), sample3CP))
-                .setConstantHeadingInterpolation(sample3Pos.getHeading())
+                .addPath(new BezierLine(new Point(placePos), new Point(sample3Pos)))
+                .setLinearHeadingInterpolation(placePos.getHeading(), sample3Pos.getHeading())
                 .build();
         sample3Place = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(sample3Pos), new Point(placePos)))
-                .setConstantHeadingInterpolation(placePos.getHeading())
+                .setLinearHeadingInterpolation(sample3Pos.getHeading(), placePos.getHeading())
                 .build();
         park = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(placePos), new Point(parkPos)))
-                .setConstantHeadingInterpolation(parkPos.getHeading())
+                .addPath(new BezierCurve(new Point(placePos), parkCP, new Point(parkPos)))
+                .setLinearHeadingInterpolation(placePos.getHeading(), parkPos.getHeading())
                 .build();
 
     }
@@ -196,7 +196,7 @@ public class leftAuto extends OpMode{
         claw = new Claw(hardwareMap);
         lift = new Slides(hardwareMap);
         arm = new ArmCorrectedTwoPointOh(hardwareMap);
-        diffy = new CRDiffy(hardwareMap);
+        //diffy = new CRDiffy(hardwareMap);
         buildPaths();
     }
 
