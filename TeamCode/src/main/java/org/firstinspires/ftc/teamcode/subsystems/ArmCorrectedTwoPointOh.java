@@ -57,16 +57,25 @@ public class ArmCorrectedTwoPointOh {
         toGrabPos = new RunAction(this::toGrabPos);
         toRestPos = new RunAction(this::toRestPos);
         toBasketPos = new RunAction(this::toBasketPos);
-
     }
 
     public void update() {
         controller.setPID(p, i, d);
         double armPos = getCurrentPosition();
+        double error = target - armPos;
+
+        // Deadband to avoid oscillation
+        if (Math.abs(error) < 5) { // Deadband of ±5 encoder counts
+            double ff = Math.sin(Math.toRadians(target)) * f;
+            armMotor.setPower(ff); // Only apply feedforward to hold position
+            return;
+        }
+
+        // Compute PID + Feedforward normally
         double pid = controller.calculate(armPos, target);
         double ff = Math.sin(Math.toRadians(target)) * f;
 
-        double power = pid + ff;
+        double power = Math.max(-1, Math.min(1, pid + ff));
 
         armMotor.setPower(power);
     }
