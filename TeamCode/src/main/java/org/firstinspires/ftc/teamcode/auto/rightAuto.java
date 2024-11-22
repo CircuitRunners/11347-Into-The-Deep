@@ -28,6 +28,7 @@ public class rightAuto extends OpMode{
     private Timer pathTimer;
     private int pathState;
     private Claw claw;
+    private int PathPos = 0;
     //    boolean IsRaised = false;
     public ArmCorrected arm;
 //    private Slides lift;
@@ -129,12 +130,14 @@ public class rightAuto extends OpMode{
                 break;
             case 0:
                 if (!follower.isBusy()) {
+                    PathPos = 0;
                     follower.followPath(preload);
                     setPathState(1);
                 }
                 break;
             case 1:
                 if (!follower.isBusy()) {
+                    PathPos = 1;
                     //do stuff to place preloaded. This probably doesn't work
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(arm.toTopBar);
@@ -144,26 +147,31 @@ public class rightAuto extends OpMode{
                 break;
             case 2:
                 if (!follower.isBusy()) {
+                    PathPos = 2;
                     //move arm back to rest
                     Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample1);
                     setPathState(3);
+
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
+                    PathPos = 3;
                     follower.followPath(sample2);
                     setPathState(6);//Skipping sample 3 for now
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
+                    PathPos = 4;
                     follower.followPath(sample3Grab);
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
+                    PathPos = 5;
                     //grab sample
                     //need to move diffy
                     //Actions.runBlocking(claw.closeClaw);
@@ -174,6 +182,7 @@ public class rightAuto extends OpMode{
                 break;
             case 6:
                 if (!follower.isBusy()) {
+                    PathPos = 6;
                     //place sample
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(arm.toGrabPos);
@@ -185,15 +194,18 @@ public class rightAuto extends OpMode{
                 break;
             case 7:
                 if (!follower.isBusy()) {
+                    PathPos = 7;
                     //grab specimen
                     //need to move diffy
                     //Actions.runBlocking(claw.closeClaw);
                     follower.followPath(specimen1Place);
                     setPathState(8);
+                    
                 }
                 break;
             case 8:
                 if (!follower.isBusy()) {
+                    PathPos = 8;
                     //place specimen. this probably doesn't work
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
@@ -205,6 +217,7 @@ public class rightAuto extends OpMode{
                 break;
             case 9:
                 if (!follower.isBusy()) {
+                    PathPos = 9;
                     //grab specimen
                     //Actions.runBlocking(claw.closeClaw);
                     follower.followPath(specimen2Place);
@@ -213,6 +226,7 @@ public class rightAuto extends OpMode{
                 break;
             case 10:
                 if (!follower.isBusy()) {
+                    PathPos = 10;
                     //place Specimen. probably still doesn't work
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
@@ -224,6 +238,7 @@ public class rightAuto extends OpMode{
                 break;
             case 11:
                 if (!follower.isBusy()) {
+                    PathPos = 11;
                     //grab specimen
                     //Actions.runBlocking(claw.closeClaw);
                     follower.followPath(specimen3Place);
@@ -232,6 +247,7 @@ public class rightAuto extends OpMode{
                 break;
             case 12:
                 if (!follower.isBusy()) {
+                    PathPos = 12;
                     // //place specimen. probably doesn't work again
                     // Actions.runBlocking(arm.toTopBar);
                     // Actions.runBlocking(new SleepCommand(1));
@@ -244,6 +260,7 @@ public class rightAuto extends OpMode{
                 break;
             case 13:
                 if (!follower.isBusy()) {
+                    PathPos = 13;
                     setPathState(14);
                 }
             default:
@@ -270,6 +287,7 @@ public class rightAuto extends OpMode{
 
 
         telemetry.addData("path state", pathState);
+        telemetry.addData("bobot path: ", PathPos);
 //        telemetry.addData("Is Arm Being Bad? >>", !IsRaised);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
