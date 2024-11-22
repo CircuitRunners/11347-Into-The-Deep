@@ -45,7 +45,7 @@ public class rightAuto extends OpMode{
     private Pose sample2PlacePos = new Pose(20, 15);//, Math.toRadians(90)
     private Pose sample3GrabPos = new Pose(45.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(20, 43); //, Math.toRadians(225)
+    private Pose specimenGrabPos = new Pose(9, 37); //, Math.toRadians(225)
     //private Point specimen1GrabCP = new Point(35, 41);
     private Pose specimen1PlacePos = new Pose(34, 65, Math.toRadians(0));
     private Pose specimen2PlacePos = new Pose(34, 63, Math.toRadians(0));
@@ -176,11 +176,13 @@ public class rightAuto extends OpMode{
             case 6:
                 if (!follower.isBusy()) {
                     //place sample
-                    Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(arm.toGrabPos);
+
                     //Actions.runBlocking(claw.openClaw);
                     //follower.followPath(specimen1GrabFromSample2);
                     follower.followPath(specimen1GrabStraight);
+                    Actions.runBlocking(arm.toGrabPos);
+                    Actions.runBlocking(new SleepCommand(1));
+
                     setPathState(7);
                 }
                 break;
@@ -194,60 +196,60 @@ public class rightAuto extends OpMode{
                     
                 }
                 break;
-            case 8:
-                if (!follower.isBusy()) {
-                    //place specimen. this probably doesn't work
-                    Actions.runBlocking(arm.toTopBar);
-                    Actions.runBlocking(new SleepCommand(1));
-                    //Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.toRestPos);
-                    follower.followPath(specimen2Grab);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if (!follower.isBusy()) {
-                    //grab specimen
-                    //Actions.runBlocking(claw.closeClaw);
-                    follower.followPath(specimen2Place);
-                    setPathState(10);
-                }
-                break;
-            case 10:
-                if (!follower.isBusy()) {
-                    //place Specimen. probably still doesn't work
-                    Actions.runBlocking(arm.toTopBar);
-                    Actions.runBlocking(new SleepCommand(1));
-                    //Actions.runBlocking(claw.openClaw);
-                    Actions.runBlocking(arm.toRestPos);
-                    //follower.followPath(specimen3Grab);
-                    setPathState(12);//Skipping specimen 3
-                }
-                break;
-            case 11:
-                if (!follower.isBusy()) {
-                    //grab specimen
-                    //Actions.runBlocking(claw.closeClaw);
-                    follower.followPath(specimen3Place);
-                    setPathState(12);
-                }
-                break;
-            case 12:
-                if (!follower.isBusy()) {
-                    // //place specimen. probably doesn't work again
-                    // Actions.runBlocking(arm.toTopBar);
-                    // Actions.runBlocking(new SleepCommand(1));
-                    // //Actions.runBlocking(claw.openClaw);
-                    // Actions.runBlocking(arm.toTopBar);
-                    //follower.followPath(park);
-                    follower.followPath(parkFromSample2);
-                    setPathState(13);
-                }
-                break;
-            case 13:
-                if (!follower.isBusy()) {
-                    setPathState(14);
-                }
+//            case 8:
+//                if (!follower.isBusy()) {
+//                    //place specimen. this probably doesn't work
+//                    Actions.runBlocking(arm.toTopBar);
+//                    Actions.runBlocking(new SleepCommand(1));
+//                    //Actions.runBlocking(claw.openClaw);
+//                    Actions.runBlocking(arm.toRestPos);
+//                    follower.followPath(specimen2Grab);
+//                    setPathState(9);
+//                }
+//                break;
+//            case 9:
+//                if (!follower.isBusy()) {
+//                    //grab specimen
+//                    //Actions.runBlocking(claw.closeClaw);
+//                    follower.followPath(specimen2Place);
+//                    setPathState(10);
+//                }
+//                break;
+//            case 10:
+//                if (!follower.isBusy()) {
+//                    //place Specimen. probably still doesn't work
+//                    Actions.runBlocking(arm.toTopBar);
+//                    Actions.runBlocking(new SleepCommand(1));
+//                    //Actions.runBlocking(claw.openClaw);
+//                    Actions.runBlocking(arm.toRestPos);
+//                    //follower.followPath(specimen3Grab);
+//                    setPathState(12);//Skipping specimen 3
+//                }
+//                break;
+//            case 11:
+//                if (!follower.isBusy()) {
+//                    //grab specimen
+//                    //Actions.runBlocking(claw.closeClaw);
+//                    follower.followPath(specimen3Place);
+//                    setPathState(12);
+//                }
+//                break;
+//            case 12:
+//                if (!follower.isBusy()) {
+//                    // //place specimen. probably doesn't work again
+//                    // Actions.runBlocking(arm.toTopBar);
+//                    // Actions.runBlocking(new SleepCommand(1));
+//                    // //Actions.runBlocking(claw.openClaw);
+//                    // Actions.runBlocking(arm.toTopBar);
+//                    //follower.followPath(park);
+//                    follower.followPath(parkFromSample2);
+//                    setPathState(13);
+//                }
+//                break;
+//            case 13:
+//                if (!follower.isBusy()) {
+//                    setPathState(14);
+//                }
             default:
                 requestOpModeStop();
                 break;

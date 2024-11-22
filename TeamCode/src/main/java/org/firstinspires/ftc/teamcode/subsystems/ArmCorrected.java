@@ -16,7 +16,7 @@ public class ArmCorrected {
         MID(290),
         AUTO(410),
         BASKET_HIGH(1000),
-        SPECIMEN(200),
+        SPECIMEN(400),
         TOPBAR(1800),
         HOVER_SUB(534),
         GRAB_SUB(2000);
@@ -98,7 +98,7 @@ public class ArmCorrected {
         //setArmTarget(TestingVar);
     }
     public void toGrabPos() {
-        setArmTarget(ArmPositions.GRAB_SUB.position);
+        setArmTarget(ArmPositions.SPECIMEN.position);
     }
     public void toRestPos() {
         setArmTarget(ArmPositions.REST.position);
