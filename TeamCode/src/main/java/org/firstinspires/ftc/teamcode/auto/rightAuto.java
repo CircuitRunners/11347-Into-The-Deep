@@ -269,7 +269,7 @@ public class rightAuto extends OpMode{
 
 
 
-//        telemetry.addData("path state", pathState);
+        telemetry.addData("path state", pathState);
 //        telemetry.addData("Is Arm Being Bad? >>", !IsRaised);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
@@ -289,7 +289,7 @@ public class rightAuto extends OpMode{
 //        diffy = new CRDiffy(hardwareMap);
         buildPaths();
 
-        telemetry.addLine("Code running");
+        telemetry.addLine("Initialized");
         telemetry.update();
     }
 

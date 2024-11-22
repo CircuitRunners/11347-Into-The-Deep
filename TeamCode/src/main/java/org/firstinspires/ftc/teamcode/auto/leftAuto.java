@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrectedTwoPointOh;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -27,7 +28,7 @@ public class leftAuto extends OpMode{
     private Timer pathTimer;
     private int pathState;
     private Claw claw;
-    private ArmCorrectedTwoPointOh arm;
+    private ArmCorrected arm;
     private Slides lift;
     //private CRDiffy diffy;
 
@@ -195,9 +196,12 @@ public class leftAuto extends OpMode{
         follower.setStartingPose(startPosition);
         claw = new Claw(hardwareMap);
         lift = new Slides(hardwareMap);
-        arm = new ArmCorrectedTwoPointOh(hardwareMap);
+        arm = new ArmCorrected(hardwareMap);
         //diffy = new CRDiffy(hardwareMap);
         buildPaths();
+
+        telemetry.addLine("Initialized");
+        telemetry.update();
     }
 
     @Override
