@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
@@ -25,7 +26,7 @@ public class MainTeleOp extends CommandOpMode {
     //arm stuff
     private Arm arm;
     private Slides lift;
-    private CRDiffy diffy;
+    private Diffy diffy;
     private Claw claw;
     private Drivebase db;
 //    private Limelight limelight;
@@ -40,7 +41,7 @@ public class MainTeleOp extends CommandOpMode {
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
         arm = new Arm(hardwareMap);
-        diffy = new CRDiffy(hardwareMap);
+        diffy = new Diffy(hardwareMap);
         lift = new Slides(hardwareMap);
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
@@ -149,14 +150,18 @@ public class MainTeleOp extends CommandOpMode {
 //        lift.setLiftPower(gamepad2.left_stick_y);
 
         //Diffy
-        while (gamepad2.dpad_left) {
-            diffy.moveDiffy(0.4);
-        } while (gamepad2.dpad_right) {
-            diffy.moveDiffy(-0.4);
+//        while (gamepad2.dpad_left) {
+//            diffy.moveDiffy(0.4);
+//        } while (gamepad2.dpad_right) {
+//            diffy.moveDiffy(-0.4);
+//        }
+//        diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
+//        telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
+//        telemetry.addData("Right Axon", diffy.getRightDiffyPose());
+
+        if (gamepad2.right_bumper) {
+            diffy.CenterDiffy();
         }
-        diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
-        telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
-        telemetry.addData("Right Axon", diffy.getRightDiffyPose());
 
         //Claw
         if (gamepad2.left_bumper) {
