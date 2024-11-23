@@ -45,8 +45,8 @@ public class rightAuto extends OpMode{
     private Pose sample2PlacePos = new Pose(20, 15);//, Math.toRadians(90)
     private Pose sample3GrabPos = new Pose(45.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(9, 37); //, Math.toRadians(225)
-    //private Point specimen1GrabCP = new Point(35, 41);
+    private Pose specimenGrabPos = new Pose(11, 34); //, Math.toRadians(225)
+    private Point specimen1GrabCP = new Point(45, 34);
     private Pose specimen1PlacePos = new Pose(34, 65, Math.toRadians(0));
     private Pose specimen2PlacePos = new Pose(34, 63, Math.toRadians(0));
     //private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
@@ -82,14 +82,14 @@ public class rightAuto extends OpMode{
 //                .addPath(new BezierCurve(new Point(sample3PlacePos), specimen1GrabCP, new Point(specimenGrabPos)))
 //                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
 //                .build();
-//        specimen1GrabFromSample2 = follower.pathBuilder()
-//                .addPath(new BezierCurve(new Point(sample2PlacePos), specimen1GrabCP, new Point(specimenGrabPos)))
-//                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
-//                .build();
-        specimen1GrabStraight = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(sample2PlacePos), new Point(specimenGrabPos)))
-                .setLinearHeadingInterpolation(sample2PlacePos.getHeading(), specimenGrabPos.getHeading())
+        specimen1GrabFromSample2 = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(sample2PlacePos), specimen1GrabCP, new Point(specimenGrabPos)))
+                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
                 .build();
+//        specimen1GrabStraight = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(sample2PlacePos), new Point(specimenGrabPos)))
+//                .setLinearHeadingInterpolation(sample2PlacePos.getHeading(), specimenGrabPos.getHeading())
+//                .build();
         specimen1Place = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen1PlacePos)))
                 .setLinearHeadingInterpolation(specimenGrabPos.getHeading(), specimen1PlacePos.getHeading())
@@ -179,7 +179,7 @@ public class rightAuto extends OpMode{
 
                     //Actions.runBlocking(claw.openClaw);
                     //follower.followPath(specimen1GrabFromSample2);
-                    follower.followPath(specimen1GrabStraight);
+                    follower.followPath(specimen1GrabFromSample2);
                     Actions.runBlocking(arm.toGrabPos);
                     Actions.runBlocking(new SleepCommand(1));
 
