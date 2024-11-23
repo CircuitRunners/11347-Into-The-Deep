@@ -37,7 +37,7 @@ public class rightAuto extends OpMode{
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
     private Pose preloadPos = new Pose(34, 62.5, Math.toRadians(0));
     private Pose sample1GrabPos = new Pose(64, 25, Math.toRadians(0));//90
-    private Point sample1GrabCP1 = new Point(33.5, 12.5);
+    private Point sample1GrabCP1 = new Point(34, 12.5);
     private Point sample1GrabCP2 = new Point(59, 48);
     private Pose sample1PlacePos = new Pose(20, 25);//, Math.toRadians(90)
     private Pose sample2GrabPos = new Pose(60, 15);//, Math.toRadians(90)
