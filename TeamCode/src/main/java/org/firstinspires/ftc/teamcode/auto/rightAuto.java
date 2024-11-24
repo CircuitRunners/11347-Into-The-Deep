@@ -14,11 +14,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
-import org.firstinspires.ftc.teamcode.subsystems.ArmCorrectedTwoPointOh;
-import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.support.Actions;
 import org.firstinspires.ftc.teamcode.support.SleepCommand;
 
@@ -36,7 +33,7 @@ public class rightAuto extends OpMode{
 
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPos = new Pose(34, 62.5, Math.toRadians(0));
+    private Pose preloadPos = new Pose(32, 62.5, Math.toRadians(0));
     private Pose sample1GrabPos = new Pose(64, 25, Math.toRadians(0));//90
     private Point sample1GrabCP1 = new Point(34, 12.5);
     private Point sample1GrabCP2 = new Point(59, 48);
@@ -122,8 +119,7 @@ public class rightAuto extends OpMode{
 
     }
 
-    public void autonomousPathUpdate() {
-        switch (pathState) {
+    public void autonomousPathUpdate() {        switch (pathState) {
             case -1:
                 Actions.runBlocking(arm.toTopBar);
                 setPathState(0);
@@ -131,21 +127,24 @@ public class rightAuto extends OpMode{
             case 0:
                 if (!follower.isBusy()) {
                     follower.followPath(preload);
+
                     setPathState(1);
                 }
+                
                 break;
             case 1:
                 if (!follower.isBusy()) {
                     //do stuff to place preloaded. This probably doesn't work
+                    Actions.runBlocking(diffy.centerDiffy);
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(arm.toTopBar);
-                    Actions.runBlocking(claw.openClaw);
                     setPathState(2);
                 }
                 break;
             case 2:
                 if (!follower.isBusy()) {
                     //move arm back to rest
+                    Actions.runBlocking(claw.open);
                     Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample1);
                     setPathState(3);
@@ -168,7 +167,7 @@ public class rightAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //grab sample
                     //need to move diffy
-                    Actions.runBlocking(claw.closeClaw);
+                    Actions.runBlocking(claw.close);
                     //maybe angle diffy up some
                     follower.followPath(sample3Place);
                     setPathState(6);
@@ -177,7 +176,7 @@ public class rightAuto extends OpMode{
             case 6:
                 if (!follower.isBusy()) {
                     //place sample
-                    Actions.runBlocking(claw.openClaw);
+                    Actions.runBlocking(claw.open);
                     follower.followPath(specimen1GrabFromSample2);
                     Actions.runBlocking(arm.toSpecimenPos);
                     Actions.runBlocking(new SleepCommand(1));
@@ -190,7 +189,7 @@ public class rightAuto extends OpMode{
                     //grab specimen
                     //need to move diffy
                     diffy.centerDiffy();
-                    Actions.runBlocking(claw.closeClaw);
+                    Actions.runBlocking(claw.close);
                     follower.followPath(specimen1Place);
                     setPathState(8);
                     
@@ -272,11 +271,7 @@ public class rightAuto extends OpMode{
         follower.update();
         arm.update();
         autonomousPathUpdate();
-
-
-
-        telemetry.addData("path state", pathState);
-//        telemetry.addData("Is Arm Being Bad? >>", !IsRaised);
+        telemetry.addData("Current Path #:", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
@@ -289,12 +284,12 @@ public class rightAuto extends OpMode{
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
         claw = new Claw(hardwareMap);
-//        lift = new Slides(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         arm = new ArmCorrected(hardwareMap);
         diffy = new Diffy(hardwareMap);
-        buildPaths();
+        claw.close();
 
+        buildPaths();
         telemetry.addLine("Initialized");
         telemetry.update();
     }
@@ -304,8 +299,4 @@ public class rightAuto extends OpMode{
         pathTimer.resetTimer();
         setPathState(-1);
     }
-
-
-
-
 }

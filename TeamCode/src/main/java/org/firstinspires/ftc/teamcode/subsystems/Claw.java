@@ -29,14 +29,14 @@ public class Claw extends SubsystemBase {
         }
     }
 
-    public RunAction openClaw, closeClaw;
+    public RunAction open, close;
     public Claw(HardwareMap h) {
         servo = h.get(Servo.class, "Claw Servo");
         currentState = ServoStates.CLOSE;  // Default initial state
         servo.setPosition(currentState.getPosition()); // Set initial position
         switchTimer.reset();  // Initialize the timer
-        openClaw = new RunAction(this::openClaw);
-        closeClaw = new RunAction(this::closeClaw);
+        open = new RunAction(this::open);
+        close = new RunAction(this::close);
 
     }
 
@@ -45,14 +45,6 @@ public class Claw extends SubsystemBase {
     }
 
     public void close() {
-        setPosition(ServoStates.CLOSE);
-    }
-
-    public void openClaw() {
-        setPosition(ServoStates.OPEN);
-    }
-
-    public void closeClaw() {
         setPosition(ServoStates.CLOSE);
     }
 

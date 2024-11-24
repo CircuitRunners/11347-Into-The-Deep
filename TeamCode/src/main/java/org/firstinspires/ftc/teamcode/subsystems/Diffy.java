@@ -60,8 +60,7 @@ public class Diffy extends SubsystemBase {
         setPosition(ServoStates.END);
     }
 
-    public static double testL = 0.500;
-    public static double testR = 0.500;
+    public static double testL = 0.500, testR = 0.500;
     public void manualRotate() {
         leftDiffyServo.setPosition(testL);
         rightDiffyServo.setPosition(testR);

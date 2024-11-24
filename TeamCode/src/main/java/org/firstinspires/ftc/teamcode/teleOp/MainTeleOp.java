@@ -44,7 +44,7 @@ public class MainTeleOp extends CommandOpMode {
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 5.0);
-        claw.closeClaw();
+        claw.close();
         telemetry.addData(">", "Hardware Map Initialized");
         telemetry.update();
 

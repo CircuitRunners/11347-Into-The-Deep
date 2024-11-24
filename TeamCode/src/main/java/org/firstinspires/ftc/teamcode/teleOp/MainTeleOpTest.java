@@ -36,7 +36,7 @@ public class MainTeleOpTest extends CommandOpMode {
         db = new Drivebase(hardwareMap);
 
         // Initialize the claw in a closed state
-        claw.closeClaw();
+        claw.close();
         telemetry.addData(">", "Hardware Map Initialized");
         telemetry.update();
 

@@ -12,8 +12,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
-import org.firstinspires.ftc.teamcode.subsystems.ArmCorrectedTwoPointOh;
-import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -96,7 +94,7 @@ public class leftAuto extends OpMode{
                     //Need to place preload
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
+                    Actions.runBlocking(claw.open);
                     Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample1Grab);
                     setPathState(2);
@@ -106,7 +104,7 @@ public class leftAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //grab sample
                     Actions.runBlocking(arm.toGrabPos);
-                    Actions.runBlocking(claw.closeClaw);
+                    Actions.runBlocking(claw.close);
                     follower.followPath(sample1Place);
                     setPathState(3);
                 }
@@ -117,7 +115,7 @@ public class leftAuto extends OpMode{
                     Actions.runBlocking(arm.toBasketPos);
                     Actions.runBlocking(diffy.endDiffy);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
+                    Actions.runBlocking(claw.open);
                     follower.followPath(sample2Grab);
                     setPathState(4);
                 }
@@ -128,7 +126,7 @@ public class leftAuto extends OpMode{
                     Actions.runBlocking(arm.toGrabPos);
                     Actions.runBlocking(diffy.startDiffy);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.closeClaw);
+                    Actions.runBlocking(claw.close);
                     follower.followPath(sample2Place);
                     setPathState(5);
                 }
@@ -139,7 +137,7 @@ public class leftAuto extends OpMode{
                     Actions.runBlocking(arm.toBasketPos);
                     Actions.runBlocking(diffy.endDiffy);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
+                    Actions.runBlocking(claw.open);
                     ///follower.followPath(sample3Grab);
                     setPathState(8);//Skipping sample 3 for now
                 }
@@ -148,7 +146,7 @@ public class leftAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //grab sample
                     Actions.runBlocking(arm.toGrabPos);
-                    Actions.runBlocking(claw.closeClaw);
+                    Actions.runBlocking(claw.close);
                     follower.followPath(sample3Place);
                     setPathState(7);
                 }
@@ -158,7 +156,7 @@ public class leftAuto extends OpMode{
                     //place sample
                     Actions.runBlocking(arm.toBasketPos);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.openClaw);
+                    Actions.runBlocking(claw.open);
                     follower.followPath(park);
                     setPathState(8);
                 }
@@ -168,7 +166,7 @@ public class leftAuto extends OpMode{
                     //place sample
                     Actions.runBlocking(diffy.startDiffy);
                     Actions.runBlocking(arm.toRestPos);
-                    Actions.runBlocking(claw.closeClaw);
+                    Actions.runBlocking(claw.close);
                     follower.followPath(park);
                     setPathState(9);
                 }
