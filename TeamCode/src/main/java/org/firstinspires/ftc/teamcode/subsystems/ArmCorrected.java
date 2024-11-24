@@ -44,7 +44,7 @@ public class ArmCorrected {
 
     public DcMotorEx armMotor;
 
-    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos;
+    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos, toSpecimenPos;
 
     public ArmCorrected(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -59,6 +59,7 @@ public class ArmCorrected {
         toGrabPos = new RunAction(this::toGrabPos);
         toRestPos = new RunAction(this::toRestPos);
         toBasketPos = new RunAction(this::toBasketPos);
+        toSpecimenPos = new RunAction(this::toSpecimenPos);
     }
 
     public void update() {
@@ -106,6 +107,10 @@ public class ArmCorrected {
     public void toBasketPos() {
         setArmTarget(ArmPositions.BASKET_HIGH.position);
     }
+    public void toSpecimenPos() {
+        setArmTarget(ArmPositions.SPECIMEN.position);
+    }
+
 
     public void resetArmPosition() {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
