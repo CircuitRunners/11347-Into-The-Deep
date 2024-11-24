@@ -10,12 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
-import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
-import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
-import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
@@ -28,6 +24,7 @@ public class MainTeleOp extends CommandOpMode {
     private Slides lift;
     private Diffy diffy;
     private Claw claw;
+    private Diffy.ServoStates currentState;
     private Drivebase db;
 //    private Limelight limelight;
 
@@ -42,6 +39,7 @@ public class MainTeleOp extends CommandOpMode {
 
         arm = new Arm(hardwareMap);
         diffy = new Diffy(hardwareMap);
+        currentState = Diffy.ServoStates.START;
         lift = new Slides(hardwareMap);
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
@@ -123,6 +121,9 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.update();
     }
 
+    boolean previousButtonState = false;
+    private boolean toggleDirectionForward = true;
+
     @Override
     public void run() {
         super.run();
@@ -159,9 +160,14 @@ public class MainTeleOp extends CommandOpMode {
 //        telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
 //        telemetry.addData("Right Axon", diffy.getRightDiffyPose());
 
-        if (gamepad2.right_bumper) {
-            diffy.CenterDiffy();
+        boolean currentButtonState = gamepad2.right_bumper;
+
+        if (currentButtonState && !previousButtonState) {
+            toggleDiffyPosition();
         }
+        previousButtonState = currentButtonState;
+
+        telemetry.addData("Diffy Pos:", diffy.currentPosition());
 
         //Claw
         if (gamepad2.left_bumper) {
@@ -194,5 +200,36 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.addData("imuHeading", db.getCorrectedYaw());
         telemetry.addData("imuNONCO", db.imu.getYaw());
         telemetry.update();
+    }
+
+    public void toggleDiffyPosition() {
+        if (toggleDirectionForward) {
+            switch (currentState) {
+                case START:
+                    diffy.startDiffy();
+                    currentState = Diffy.ServoStates.CENTER;
+                    break;
+
+                case CENTER:
+                    diffy.centerDiffy();
+                    currentState = Diffy.ServoStates.END;
+                    break;
+
+                case END:
+                    diffy.endDiffy();
+                    currentState = Diffy.ServoStates.CENTER;
+                    toggleDirectionForward = false;
+                    break;
+            }
+        } else {
+            switch (currentState) {
+                case CENTER:
+                    diffy.startDiffy();
+                    currentState = Diffy.ServoStates.START;
+                    toggleDirectionForward = true;
+                    break;
+            }
+        }
+
     }
 }
