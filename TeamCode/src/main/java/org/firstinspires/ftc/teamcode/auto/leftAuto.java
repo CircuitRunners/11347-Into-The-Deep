@@ -33,7 +33,7 @@ public class leftAuto extends OpMode{
 
     // Define key poses
     private Pose startPosition = new Pose(10.5, 81, Math.toRadians(0));
-    private Pose preloadPos = new Pose(34, 81, Math.toRadians(0));
+    private Pose preloadPos = new Pose(31, 81, Math.toRadians(0));
     private Pose sample1Pos = new Pose(25, 121, Math.toRadians(0));
     //private Point sample1CP = new Point(15, 105);
     private Pose placePos = new Pose(20, 122, Math.toRadians(135));
@@ -86,15 +86,18 @@ public class leftAuto extends OpMode{
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
+                Actions.runBlocking(arm.toTopBar);
                 follower.followPath(preload);
                 setPathState(1);
                 break;
             case 1:
                 if (!follower.isBusy()) {
                     //Need to place preload
-                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(diffy.centerDiffy);
                     Actions.runBlocking(new SleepCommand(1));
+
                     Actions.runBlocking(claw.open);
+                    Actions.runBlocking(diffy.startDiffy);
                     Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample1Grab);
                     setPathState(2);
@@ -104,7 +107,9 @@ public class leftAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //grab sample
                     Actions.runBlocking(arm.toGrabPos);
+                    Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.close);
+                    Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample1Place);
                     setPathState(3);
                 }
@@ -112,70 +117,76 @@ public class leftAuto extends OpMode{
             case 3:
                 if (!follower.isBusy()) {
                     //place sample in bucket
+                    //Move slides up
                     Actions.runBlocking(arm.toBasketPos);
-                    Actions.runBlocking(diffy.endDiffy);
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.open);
-                    follower.followPath(sample2Grab);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    //grab sample
-                    Actions.runBlocking(arm.toGrabPos);
-                    Actions.runBlocking(diffy.startDiffy);
-                    Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.close);
-                    follower.followPath(sample2Place);
+                    Actions.runBlocking(arm.toRestPos);
+                    //move slides down
+                    follower.followPath(sample2Grab);
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-                    //place sample in bucket
-                    Actions.runBlocking(arm.toBasketPos);
-                    Actions.runBlocking(diffy.endDiffy);
+                    //grab sample
+                    Actions.runBlocking(arm.toGrabPos);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.open);
-                    ///follower.followPath(sample3Grab);
-                    setPathState(8);//Skipping sample 3 for now
+                    Actions.runBlocking(claw.close);
+                    Actions.runBlocking(arm.toRestPos);
+                    follower.followPath(sample2Place);
+                    setPathState(6);
                 }
                 break;
             case 6:
+                if (!follower.isBusy()) {
+                    //place sample in bucket
+                    Actions.runBlocking(arm.toBasketPos);
+                    //move slides up
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(claw.open);
+                    //follower.followPath(sample3Grab);
+                    setPathState(9);//Skipping sample 3 for now
+                }
+                break;
+            case 7:
                 if (!follower.isBusy()) {
                     //grab sample
                     Actions.runBlocking(arm.toGrabPos);
                     Actions.runBlocking(claw.close);
                     follower.followPath(sample3Place);
-                    setPathState(7);
-                }
-                break;
-            case 7:
-                if (!follower.isBusy()) {
-                    //place sample
-                    Actions.runBlocking(arm.toBasketPos);
-                    Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.open);
-                    follower.followPath(park);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if (!follower.isBusy()) {
                     //place sample
-                    Actions.runBlocking(diffy.startDiffy);
-                    Actions.runBlocking(arm.toRestPos);
-                    Actions.runBlocking(claw.close);
+                    Actions.runBlocking(arm.toBasketPos);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(claw.open);
                     follower.followPath(park);
                     setPathState(9);
                 }
                 break;
             case 9:
                 if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.toRestPos);
+                    //move slides down
+                    Actions.runBlocking(claw.close);
+                    follower.followPath(park);
+                    setPathState(10);
+                }
+                break;
+            case 10:
+                if (!follower.isBusy()) {
                     //touch bar
                     Actions.runBlocking(arm.toTopBar);
-                    setPathState(9);
+                    setPathState(11);
                 }
                 break;
             default:
