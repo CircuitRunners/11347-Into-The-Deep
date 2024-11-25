@@ -32,21 +32,21 @@ public class rightAuto extends OpMode{
     private Diffy diffy;
 
     // These are estimates and probably not great
-    private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPos = new Pose(32, 62.5, Math.toRadians(0));
-    private Pose sample1GrabPos = new Pose(64, 25, Math.toRadians(0));//90
-    private Point sample1GrabCP1 = new Point(34, 12.5);
-    private Point sample1GrabCP2 = new Point(59, 48);
-    private Pose sample1PlacePos = new Pose(20, 25);//, Math.toRadians(90)
-    private Pose sample2GrabPos = new Pose(60, 15);//, Math.toRadians(90)
-    private Point sample2GrabCP = new Point(62, 33);
-    private Pose sample2PlacePos = new Pose(20, 15);//, Math.toRadians(90)
-    private Pose sample3GrabPos = new Pose(45.5, 13);//, Math.toRadians(90)
+    private Pose startPosition = new Pose(10.5, 64, Math.toRadians(0));
+    private Pose preloadPos = new Pose(28, 64, Math.toRadians(0));
+    private Pose sample1GrabPos = new Pose(56, 40, Math.toRadians(0));//90
+    private Point sample1GrabCP1 = new Point(30, 22.5);
+    private Point sample1GrabCP2 = new Point(55, 56);
+    private Pose sample1PlacePos = new Pose(10, 31);//, Math.toRadians(90)
+    private Pose sample2GrabPos = new Pose(56, 35.5);//, Math.toRadians(90)
+    private Point sample2GrabCP = new Point(58, 50);
+    private Pose sample2PlacePos = new Pose(8, 35.5);//, Math.toRadians(90)
+    private Pose sample3GrabPos = new Pose(41.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(12.4, 34); //, Math.toRadians(225)
-    private Point specimen1GrabCP = new Point(45, 34);
-    private Pose specimen1PlacePos = new Pose(34, 65, Math.toRadians(0));
-    private Pose specimen2PlacePos = new Pose(34, 63, Math.toRadians(0));
+    private Pose specimenGrabPos = new Pose(5,45); //, Math.toRadians(225)
+    private Point specimen1GrabCP = new Point(41, 34);
+    private Pose specimen1PlacePos = new Pose(22, 70, Math.toRadians(0));
+    private Pose specimen2PlacePos = new Pose(22, 72, Math.toRadians(0));
     //private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
     private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
@@ -68,26 +68,26 @@ public class rightAuto extends OpMode{
                 .addPath(new BezierLine(new Point(sample2GrabPos), new Point(sample2PlacePos)))
                 .setConstantHeadingInterpolation(sample2PlacePos.getHeading())
                 .build();
-//        sample3Grab = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(sample2PlacePos), new Point(sample3GrabPos)))
-//                .setConstantHeadingInterpolation(sample3GrabPos.getHeading())
-//                .build();
-//        sample3Place = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(sample3GrabPos), new Point(sample3PlacePos)))
-//                .setConstantHeadingInterpolation(sample3PlacePos.getHeading())
-//                .build();
-//        specimen1Grab = follower.pathBuilder()
-//                .addPath(new BezierCurve(new Point(sample3PlacePos), specimen1GrabCP, new Point(specimenGrabPos)))
-//                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
-//                .build();
+        sample3Grab = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(sample2PlacePos), new Point(sample3GrabPos)))
+                .setConstantHeadingInterpolation(sample3GrabPos.getHeading())
+                .build();
+        sample3Place = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(sample3GrabPos), new Point(sample3PlacePos)))
+                .setConstantHeadingInterpolation(sample3PlacePos.getHeading())
+                .build();
+        specimen1Grab = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(sample3PlacePos), specimen1GrabCP, new Point(specimenGrabPos)))
+                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
+                .build();
         specimen1GrabFromSample2 = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(sample2PlacePos), specimen1GrabCP, new Point(specimenGrabPos)))
                 .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
                 .build();
-//        specimen1GrabStraight = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(sample2PlacePos), new Point(specimenGrabPos)))
-//                .setLinearHeadingInterpolation(sample2PlacePos.getHeading(), specimenGrabPos.getHeading())
-//                .build();
+        specimen1GrabStraight = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(sample2PlacePos), new Point(specimenGrabPos)))
+                .setLinearHeadingInterpolation(sample2PlacePos.getHeading(), specimenGrabPos.getHeading())
+                .build();
         specimen1Place = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen1PlacePos)))
                 .setLinearHeadingInterpolation(specimenGrabPos.getHeading(), specimen1PlacePos.getHeading())
@@ -100,10 +100,10 @@ public class rightAuto extends OpMode{
                 .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen2PlacePos)))
                 .setLinearHeadingInterpolation(specimenGrabPos.getHeading(), specimen2PlacePos.getHeading())
                 .build();
-//        specimen3Grab = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(specimen2PlacePos), new Point(specimenGrabPos)))
-//                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
-//                .build();
+        specimen3Grab = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimen2PlacePos), new Point(specimenGrabPos)))
+                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
+                .build();
 //        specimen3Place = follower.pathBuilder()
 //                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen3PlacePos)))
 //                .setConstantHeadingInterpolation(specimen3PlacePos.getHeading())
@@ -119,7 +119,8 @@ public class rightAuto extends OpMode{
 
     }
 
-    public void autonomousPathUpdate() {        switch (pathState) {
+    public void autonomousPathUpdate() {
+        switch (pathState) {
             case -1:
                 Actions.runBlocking(arm.toTopBar);
                 setPathState(0);
@@ -127,7 +128,6 @@ public class rightAuto extends OpMode{
             case 0:
                 if (!follower.isBusy()) {
                     follower.followPath(preload);
-
                     setPathState(1);
                 }
                 
@@ -148,12 +148,12 @@ public class rightAuto extends OpMode{
                     Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample1);
                     setPathState(3);
-
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
                     follower.followPath(sample2);
+                    Actions.runBlocking(arm.resetArmPosition);
                     setPathState(6);//Skipping sample 3 for now
                 }
                 break;
@@ -195,18 +195,25 @@ public class rightAuto extends OpMode{
                     
                 }
                 break;
-//            case 8:
-//                if (!follower.isBusy()) {
-//                    //place specimen. this probably doesn't work
-//                    Actions.runBlocking(arm.toTopBar);
-//                    Actions.runBlocking(new SleepCommand(1));
-//                    Actions.runBlocking(claw.openClaw);
+            case 8:
+                if (!follower.isBusy()) {
+                    //place specimen. this probably doesn't work
 //                    Actions.runBlocking(arm.toRestPos);
-//                    follower.followPath(specimen2Grab);
-//                    setPathState(9);
-//                }
-//                break;
-//            case 9:
+
+                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(claw.open);
+                    setPathState(9);
+                }
+                break;
+            case 9:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.toRestPos);
+                    Actions.runBlocking(new SleepCommand(1));
+                    follower.followPath(specimen2Grab);
+                    setPathState(10);
+                }
+                break;
+//            case 10:
 //                if (!follower.isBusy()) {
 //                    //grab specimen
 //                    Actions.runBlocking(arm.toSpecimenPos);
@@ -272,6 +279,7 @@ public class rightAuto extends OpMode{
         arm.update();
         autonomousPathUpdate();
         telemetry.addData("Current Path #:", pathState);
+        telemetry.addData("Arm Position:", arm.getCurrentPosition());
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));

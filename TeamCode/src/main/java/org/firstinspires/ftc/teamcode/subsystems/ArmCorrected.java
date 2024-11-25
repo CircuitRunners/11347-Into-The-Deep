@@ -35,7 +35,7 @@ public class ArmCorrected {
     private PIDController controller;
 //    public static double p = 0.022, i = 0, d = 0.001; // 0.022, 0, 0.001
 //    public static double f = 0.15; // 0.15
-    public static double p = 0.005, i = 0, d = 0.000;
+    public static double p = 0.006, i = 0, d = 0.0003;
     public static double f = 0.00;
 //    public static double p = 0.015, i = 0, d = 0.0008;
 //    public static double f = 0.07;
@@ -44,7 +44,7 @@ public class ArmCorrected {
 
     public DcMotorEx armMotor;
 
-    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos, toSpecimenPos;
+    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition;
 
     public ArmCorrected(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -60,6 +60,7 @@ public class ArmCorrected {
         toRestPos = new RunAction(this::toRestPos);
         toBasketPos = new RunAction(this::toBasketPos);
         toSpecimenPos = new RunAction(this::toSpecimenPos);
+        resetArmPosition = new RunAction(this::resetArmPosition);
     }
 
     public void update() {
