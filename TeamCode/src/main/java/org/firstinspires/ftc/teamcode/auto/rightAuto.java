@@ -40,13 +40,13 @@ public class rightAuto extends OpMode{
     private Pose sample1PlacePos = new Pose(10, 31);//, Math.toRadians(90)
     private Pose sample2GrabPos = new Pose(56, 35.5);//, Math.toRadians(90)
     private Point sample2GrabCP = new Point(58, 50);
-    private Pose sample2PlacePos = new Pose(8, 35.5);//, Math.toRadians(90)
+    private Pose sample2PlacePos = new Pose(10, 35.5);//, Math.toRadians(90)
     private Pose sample3GrabPos = new Pose(41.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(5,45); //, Math.toRadians(225)
+    private Pose specimenGrabPos = new Pose(8,45); //, Math.toRadians(225)
     private Point specimen1GrabCP = new Point(41, 34);
-    private Pose specimen1PlacePos = new Pose(22, 70, Math.toRadians(0));
-    private Pose specimen2PlacePos = new Pose(22, 72, Math.toRadians(0));
+    private Pose specimen1PlacePos = new Pose(26, 70, Math.toRadians(0));
+    private Pose specimen2PlacePos = new Pose(26, 72, Math.toRadians(0));
     //private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
     private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
@@ -201,28 +201,28 @@ public class rightAuto extends OpMode{
 //                    Actions.runBlocking(arm.toRestPos);
 
                     Actions.runBlocking(arm.toTopBar);
-                    Actions.runBlocking(claw.open);
+                    //Actions.runBlocking(claw.open);
                     setPathState(9);
                 }
                 break;
             case 9:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(arm.toRestPos);
+                    //Actions.runBlocking(arm.toRestPos);
                     Actions.runBlocking(new SleepCommand(1));
                     follower.followPath(specimen2Grab);
                     setPathState(10);
                 }
                 break;
-//            case 10:
-//                if (!follower.isBusy()) {
-//                    //grab specimen
-//                    Actions.runBlocking(arm.toSpecimenPos);
-//                    Actions.runBlocking(diffy.centerDiffy);
-//                    Actions.runBlocking(claw.closeClaw);
-//                    follower.followPath(specimen2Place);
-//                    setPathState(10);
-//                }
-//                break;
+            case 10:
+                if (!follower.isBusy()) {
+                    //grab specimen
+                    Actions.runBlocking(arm.toSpecimenPos);
+                    Actions.runBlocking(diffy.centerDiffy);
+                    Actions.runBlocking(claw.close);
+                    follower.followPath(specimen2Place);
+                    //setPathState(11);
+                }
+                break;
 //            case 10:
 //                if (!follower.isBusy()) {
 //                    //place Specimen. probably still doesn't work
