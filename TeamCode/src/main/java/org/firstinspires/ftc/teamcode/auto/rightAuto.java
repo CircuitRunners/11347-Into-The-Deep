@@ -200,8 +200,8 @@ public class rightAuto extends OpMode{
                     //place specimen. this probably doesn't work
 //                    Actions.runBlocking(arm.toRestPos);
 
-                    Actions.runBlocking(arm.toTopBar);
-                    //Actions.runBlocking(claw.open);
+                    Actions.runBlocking(arm.armAuto);
+                    Actions.runBlocking(claw.open);
                     setPathState(9);
                 }
                 break;

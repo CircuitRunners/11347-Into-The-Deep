@@ -14,7 +14,7 @@ public class ArmCorrected {
     public enum ArmPositions{
         REST(5),
         MID(290),
-        AUTO(410),
+        AUTO(1400),
         BASKET_HIGH(1000),
         SPECIMEN(400),
         TOPBAR(1800),
@@ -33,7 +33,7 @@ public class ArmCorrected {
     }
 
     private PIDController controller;
-//    public static double p = 0.022, i = 0, d = 0.001; // 0.022, 0, 0.001
+    //    public static double p = 0.022, i = 0, d = 0.001; // 0.022, 0, 0.001
 //    public static double f = 0.15; // 0.15
     public static double p = 0.006, i = 0, d = 0.0003;
     public static double f = 0.00;
@@ -44,7 +44,7 @@ public class ArmCorrected {
 
     public DcMotorEx armMotor;
 
-    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition;
+    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition, armAuto;
 
     public ArmCorrected(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -61,6 +61,7 @@ public class ArmCorrected {
         toBasketPos = new RunAction(this::toBasketPos);
         toSpecimenPos = new RunAction(this::toSpecimenPos);
         resetArmPosition = new RunAction(this::resetArmPosition);
+        armAuto = new RunAction(this::armAuto);
     }
 
     public void update() {
@@ -94,7 +95,7 @@ public class ArmCorrected {
         setArmTarget(target + a * 5);
     }
 
-//    public static int TestingVar = 1000;
+    //    public static int TestingVar = 1000;
     public void toTopBar() {
         setArmTarget(ArmPositions.TOPBAR.position);
         //setArmTarget(TestingVar);
@@ -110,6 +111,9 @@ public class ArmCorrected {
     }
     public void toSpecimenPos() {
         setArmTarget(ArmPositions.SPECIMEN.position);
+    }
+    public void armAuto() {
+        setArmTarget(ArmPositions.AUTO.position);
     }
 
 
