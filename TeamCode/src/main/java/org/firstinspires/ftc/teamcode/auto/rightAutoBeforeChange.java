@@ -34,19 +34,19 @@ public class rightAutoBeforeChange extends OpMode{
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
     private Pose preloadPos = new Pose(31, 62.5, Math.toRadians(0));
-    private Pose sample1GrabPos = new Pose(64, 25, Math.toRadians(0));//90
+    private Pose sample1GrabPos = new Pose(64, 26, Math.toRadians(0));//90 //25
     private Point sample1GrabCP1 = new Point(34, 12.5);
-    private Point sample1GrabCP2 = new Point(59, 48);
-    private Pose sample1PlacePos = new Pose(17, 25);//, Math.toRadians(90)
-    private Pose sample2GrabPos = new Pose(60, 15);//, Math.toRadians(90)
-    private Point sample2GrabCP = new Point(62, 33);
-    private Pose sample2PlacePos = new Pose(17, 15);//, Math.toRadians(90)
+    private Point sample1GrabCP2 = new Point(59, 50);//48
+    private Pose sample1PlacePos = new Pose(13, 26);//, Math.toRadians(90)
+    private Pose sample2GrabPos = new Pose(60, 18);//, Math.toRadians(90)
+    private Point sample2GrabCP = new Point(62, 35);
+    private Pose sample2PlacePos = new Pose(12, 18);//, Math.toRadians(90)
     private Pose sample3GrabPos = new Pose(41.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(12.4,34); //, Math.toRadians(225)
+    private Pose specimenGrabPos = new Pose(9,34); //, Math.toRadians(225)
     private Point specimen1GrabCP = new Point(45, 34);
-    private Pose specimen1PlacePos = new Pose(31, 64, Math.toRadians(0));
-    private Pose specimen2PlacePos = new Pose(31, 65.5, Math.toRadians(0));
+    private Pose specimen1PlacePos = new Pose(28, 61, Math.toRadians(0));
+    private Pose specimen2PlacePos = new Pose(27, 62, Math.toRadians(0));
     //private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
     private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
@@ -191,6 +191,8 @@ public class rightAutoBeforeChange extends OpMode{
                     diffy.centerDiffy();
                     Actions.runBlocking(claw.close);
                     Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(claw.open);
                     follower.followPath(specimen1Place);
                     //Actions.runBlocking(arm.armAuto);
 
@@ -223,6 +225,8 @@ public class rightAutoBeforeChange extends OpMode{
                     Actions.runBlocking(diffy.centerDiffy);
                     Actions.runBlocking(claw.close);
                     Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(claw.open);
                     follower.followPath(specimen2Place);
                     setPathState(11);
                 }
@@ -243,21 +247,21 @@ public class rightAutoBeforeChange extends OpMode{
                     //grab specimen
                     Actions.runBlocking(arm.toRestPos);
                     //follower.followPath(specimen3Place); meow
+                    setPathState(13);
+                }
+                break;
+            case 13:
+                if (!follower.isBusy()) {
+                    // //place specimen. probably doesn't work again
+                    // Actions.runBlocking(arm.toTopBar);
+                    // Actions.runBlocking(new SleepCommand(1));
+                    // Actions.runBlocking(claw.openClaw);
+                    // Actions.runBlocking(arm.toTopBar);
+                    //follower.followPath(park);
+                    follower.followPath(parkFromSample2);
                     //setPathState(13);
                 }
                 break;
-//            case 12:
-//                if (!follower.isBusy()) {
-//                    // //place specimen. probably doesn't work again
-//                    // Actions.runBlocking(arm.toTopBar);
-//                    // Actions.runBlocking(new SleepCommand(1));
-//                    // Actions.runBlocking(claw.openClaw);
-//                    // Actions.runBlocking(arm.toTopBar);
-//                    //follower.followPath(park);
-//                    follower.followPath(parkFromSample2);
-//                    setPathState(13);
-//                }
-//                break;
 //            case 13:
 //                if (!follower.isBusy()) {
 //                    setPathState(14);
