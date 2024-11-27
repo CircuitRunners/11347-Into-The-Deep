@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.subsystems.SlidesPID;
 import org.firstinspires.ftc.teamcode.support.Actions;
 import org.firstinspires.ftc.teamcode.support.SleepCommand;
 
@@ -28,16 +29,16 @@ public class leftAuto extends OpMode{
     private int pathState;
     private Claw claw;
     private ArmCorrected arm;
-    private Slides lift;
+    private SlidesPID lift;
     private Diffy diffy;
 
     // Define key poses
     private Pose startPosition = new Pose(10.5, 81, Math.toRadians(0));
     private Pose preloadPos = new Pose(31, 81, Math.toRadians(0));
-    private Pose sample1Pos = new Pose(25, 121, Math.toRadians(0));
+    private Pose sample1Pos = new Pose(26, 118, Math.toRadians(0));
     //private Point sample1CP = new Point(15, 105);
-    private Pose placePos = new Pose(20, 122, Math.toRadians(135));
-    private Pose sample2Pos = new Pose(25, 131.5, Math.toRadians(0));
+    private Pose placePos = new Pose(20, 122, Math.toRadians(135));//14.5, 128, -45
+    private Pose sample2Pos = new Pose(26, 127, Math.toRadians(0));
     private Pose sample3Pos = new Pose(45.5, 125, Math.toRadians(90));
     //private Point sample3CP = new Point(46, 117);
     private Pose parkPos = new Pose(63, 98, Math.toRadians(270));
@@ -85,31 +86,36 @@ public class leftAuto extends OpMode{
 
     public void autonomousPathUpdate() {
         switch (pathState) {
-            case 0:
+            case -1:
                 Actions.runBlocking(arm.toTopBar);
                 follower.followPath(preload);
-                setPathState(1);
+                setPathState(0);
                 break;
-            case 1:
+            case 0:
                 if (!follower.isBusy()) {
                     //Need to place preload
                     Actions.runBlocking(diffy.centerDiffy);
+                    Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
 
-                    Actions.runBlocking(claw.open);
-                    Actions.runBlocking(diffy.startDiffy);
-                    Actions.runBlocking(arm.toRestPos);
+                    setPathState(1);
+                }
+                break;
+            case 1:
+                if (!follower.isBusy()) {
                     follower.followPath(sample1Grab);
+
                     setPathState(2);
                 }
                 break;
             case 2:
                 if (!follower.isBusy()) {
                     //grab sample
-                    Actions.runBlocking(arm.toGrabPos);
+                    //Actions.runBlocking(arm.toGrabPos);
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.close);
-                    Actions.runBlocking(arm.toRestPos);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(arm.toGrabPos);
                     follower.followPath(sample1Place);
                     setPathState(3);
                 }
@@ -117,15 +123,16 @@ public class leftAuto extends OpMode{
             case 3:
                 if (!follower.isBusy()) {
                     //place sample in bucket
-                    //Move slides up
-                    Actions.runBlocking(arm.toBasketPos);
-                    Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.open);
+                    Actions.runBlocking(lift.scoring);
+
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.toBasketPos);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(claw.open);
                     Actions.runBlocking(arm.toRestPos);
                     //move slides down
                     follower.followPath(sample2Grab);
@@ -219,18 +226,20 @@ public class leftAuto extends OpMode{
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
         claw = new Claw(hardwareMap);
-        lift = new Slides(hardwareMap);
+        lift = new SlidesPID(hardwareMap);
         arm = new ArmCorrected(hardwareMap);
         diffy = new Diffy(hardwareMap);
         buildPaths();
-
         telemetry.addLine("Initialized");
+        telemetry.addData("test", lift.getLiftPosition());
         telemetry.update();
     }
 
     @Override
     public void start() {
         pathTimer.resetTimer();
+        //lift.setLiftPower(1);
+        //lift.setLiftTarget(SlidesPID.SlidePositions.STAGE_2.getPosition());
         setPathState(0);
     }
 

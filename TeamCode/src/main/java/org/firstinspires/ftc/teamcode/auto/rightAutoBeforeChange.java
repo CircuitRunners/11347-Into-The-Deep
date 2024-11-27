@@ -33,7 +33,7 @@ public class rightAutoBeforeChange extends OpMode{
 
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPos = new Pose(31, 62.5, Math.toRadians(0));
+    private Pose preloadPos = new Pose(32, 62.5, Math.toRadians(0));
     private Pose sample1GrabPos = new Pose(64, 26, Math.toRadians(0));//90 //25
     private Point sample1GrabCP1 = new Point(34, 12.5);
     private Point sample1GrabCP2 = new Point(59, 50);//48
@@ -43,10 +43,10 @@ public class rightAutoBeforeChange extends OpMode{
     private Pose sample2PlacePos = new Pose(12, 18);//, Math.toRadians(90)
     private Pose sample3GrabPos = new Pose(41.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(9,34); //, Math.toRadians(225)
+    private Pose specimenGrabPos = new Pose(12,34); //, Math.toRadians(225)
     private Point specimen1GrabCP = new Point(45, 34);
-    private Pose specimen1PlacePos = new Pose(28, 61, Math.toRadians(0));
-    private Pose specimen2PlacePos = new Pose(27, 62, Math.toRadians(0));
+    private Pose specimen1PlacePos = new Pose(32, 61, Math.toRadians(0));
+    private Pose specimen2PlacePos = new Pose(32, 62, Math.toRadians(0));
     //private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
     private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
@@ -192,7 +192,7 @@ public class rightAutoBeforeChange extends OpMode{
                     Actions.runBlocking(claw.close);
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.open);
+                    Actions.runBlocking(diffy.startDiffy);
                     follower.followPath(specimen1Place);
                     //Actions.runBlocking(arm.armAuto);
 
@@ -205,7 +205,8 @@ public class rightAutoBeforeChange extends OpMode{
                     //place specimen. this probably doesn't work
 //                    Actions.runBlocking(arm.toRestPos);
 
-
+                    Actions.runBlocking(diffy.centerDiffy);
+                    Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.open);
                     setPathState(9);
                 }
@@ -213,7 +214,7 @@ public class rightAutoBeforeChange extends OpMode{
             case 9:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.toSpecimenPos);
-                    Actions.runBlocking(new SleepCommand(1));
+                    //Actions.runBlocking(new SleepCommand(1));
                     follower.followPath(specimen2Grab);
                     setPathState(10);
                 }
@@ -226,7 +227,7 @@ public class rightAutoBeforeChange extends OpMode{
                     Actions.runBlocking(claw.close);
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.open);
+                    Actions.runBlocking(diffy.startDiffy);
                     follower.followPath(specimen2Place);
                     setPathState(11);
                 }
@@ -234,7 +235,7 @@ public class rightAutoBeforeChange extends OpMode{
             case 11:
                 if (!follower.isBusy()) {
                     //place Specimen. probably still doesn't work
-
+                    Actions.runBlocking(diffy.centerDiffy);
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.open);
                     //Actions.runBlocking(arm.toRestPos);
