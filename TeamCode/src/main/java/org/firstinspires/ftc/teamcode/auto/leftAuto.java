@@ -86,37 +86,45 @@ public class leftAuto extends OpMode{
 
     public void autonomousPathUpdate() {
         switch (pathState) {
-            case -1:
+            case -2:
                 Actions.runBlocking(arm.toTopBar);
                 follower.followPath(preload);
-                setPathState(0);
+                setPathState(-1);
                 break;
-            case 0:
+            case -1:
                 if (!follower.isBusy()) {
                     //Need to place preload
                     Actions.runBlocking(diffy.centerDiffy);
                     Actions.runBlocking(arm.toTopBar);
                     Actions.runBlocking(new SleepCommand(1));
-
-                    setPathState(1);
+                    Actions.runBlocking(arm.toRestPos);
+                    setPathState(0);
+                }
+                break;
+            case 0:
+                if (!follower.isBusy()) {
+                    //Actions.runBlocking(arm.toRestPos);
+                    Actions.runBlocking(new SleepCommand(1));
+                    follower.followPath(sample1Grab);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(arm.toGrabPos);
+                    setPathState(2);
                 }
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    follower.followPath(sample1Grab);
-
+                    Actions.runBlocking(arm.toGrabPos);
                     setPathState(2);
                 }
                 break;
             case 2:
                 if (!follower.isBusy()) {
                     //grab sample
-                    //Actions.runBlocking(arm.toGrabPos);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.close);
-                    Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(arm.toGrabPos);
                     follower.followPath(sample1Place);
+                    //Actions.runBlocking(arm.toGrabPos);
+
+                    Actions.runBlocking(arm.toTopBar);
                     setPathState(3);
                 }
                 break;
@@ -124,44 +132,54 @@ public class leftAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //place sample in bucket
                     Actions.runBlocking(lift.scoring);
-
+                    //Actions.runBlocking(new SleepCommand(8));
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(arm.toBasketPos);
+                    Actions.runBlocking(new SleepCommand(3));
+                    Actions.runBlocking(lift.rest);
                     Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.open);
                     Actions.runBlocking(arm.toRestPos);
                     //move slides down
                     follower.followPath(sample2Grab);
+                    Actions.runBlocking(arm.toGrabPos);
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
                     //grab sample
-                    Actions.runBlocking(arm.toGrabPos);
+
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.close);
-                    Actions.runBlocking(arm.toRestPos);
+                    //Actions.runBlocking(claw.close);
+                    //Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample2Place);
+                    Actions.runBlocking(arm.toTopBar);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
                     //place sample in bucket
-                    Actions.runBlocking(arm.toBasketPos);
+                    Actions.runBlocking(lift.scoring);
+                    //Actions.runBlocking(new SleepCommand(8));
+                    setPathState(7);
+                }
+                break;
+            case 7:
+                if (!follower.isBusy()) {
+                    //place sample in bucket
+                    Actions.runBlocking(new SleepCommand(3));
+                    Actions.runBlocking(lift.rest);
                     //move slides up
-                    Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(claw.open);
                     //follower.followPath(sample3Grab);
                     setPathState(9);//Skipping sample 3 for now
                 }
                 break;
-            case 7:
+            case 79:
                 if (!follower.isBusy()) {
                     //grab sample
                     Actions.runBlocking(arm.toGrabPos);
@@ -193,7 +211,7 @@ public class leftAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //touch bar
                     Actions.runBlocking(arm.toTopBar);
-                    setPathState(11);
+                    //setPathState(11);
                 }
                 break;
             default:
@@ -212,6 +230,8 @@ public class leftAuto extends OpMode{
     public void loop() {
         follower.update();
         autonomousPathUpdate();
+        arm.update();
+        lift.update();
 
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
@@ -240,7 +260,7 @@ public class leftAuto extends OpMode{
         pathTimer.resetTimer();
         //lift.setLiftPower(1);
         //lift.setLiftTarget(SlidesPID.SlidePositions.STAGE_2.getPosition());
-        setPathState(0);
+        setPathState(-2);
     }
 
 

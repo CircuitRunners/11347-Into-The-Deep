@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.support.RunAction;
 public class SlidesPID{
     //TODO Rename References
     public enum SlidePositions {
-        STAGE_0(0), // Ground
+        STAGE_0(-30), // Ground
         AUTO(-200), // Low Bar
         STAGE_1(-1070), // Low Bucket
         STAGE_2(-2200), // High Bar
@@ -39,7 +39,7 @@ public class SlidesPID{
     private VoltageSensor voltageSensor;
     private double voltageComp;
     private double VOLTAGE_WHEN_LIFT_TUNED = 13.0;
-    public RunAction scoring;
+    public RunAction scoring, rest;
     public SlidesPID(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
         //target = getLiftPosition();
@@ -65,6 +65,7 @@ public class SlidesPID{
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
         voltageComp = VOLTAGE_WHEN_LIFT_TUNED / voltageSensor.getVoltage();
         scoring = new RunAction(this::scoring);
+        rest = new RunAction(this::rest);
     }
 
     public void update() {
@@ -114,6 +115,7 @@ public class SlidesPID{
         rightSlideMotor.setPower(power);
     }
     public void scoring() {setLiftTarget(SlidePositions.STAGE_2.getPosition());}
+    public void rest() {setLiftTarget(SlidePositions.STAGE_0.getPosition());}
 
     public void resetLiftPosition() {
         leftSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
