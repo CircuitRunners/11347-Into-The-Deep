@@ -107,13 +107,13 @@ public class leftAuto extends OpMode{
                     Actions.runBlocking(new SleepCommand(1));
                     follower.followPath(sample1Grab);
                     Actions.runBlocking(new SleepCommand(1));
-                    Actions.runBlocking(arm.toGrabPos);
+                    Actions.runBlocking(arm.toGrabSample);
                     setPathState(2);
                 }
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(arm.toGrabPos);
+                    Actions.runBlocking(arm.toGrabSample);
                     setPathState(2);
                 }
                 break;
@@ -124,7 +124,7 @@ public class leftAuto extends OpMode{
                     follower.followPath(sample1Place);
                     //Actions.runBlocking(arm.toGrabPos);
 
-                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(arm.toBasketPos);
                     setPathState(3);
                 }
                 break;
@@ -145,7 +145,7 @@ public class leftAuto extends OpMode{
                     Actions.runBlocking(arm.toRestPos);
                     //move slides down
                     follower.followPath(sample2Grab);
-                    Actions.runBlocking(arm.toGrabPos);
+                    Actions.runBlocking(arm.toGrabSample);
                     setPathState(5);
                 }
                 break;
@@ -157,7 +157,7 @@ public class leftAuto extends OpMode{
                     //Actions.runBlocking(claw.close);
                     //Actions.runBlocking(arm.toRestPos);
                     follower.followPath(sample2Place);
-                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(arm.toBasketPos);
                     setPathState(6);
                 }
                 break;
@@ -182,7 +182,7 @@ public class leftAuto extends OpMode{
             case 79:
                 if (!follower.isBusy()) {
                     //grab sample
-                    Actions.runBlocking(arm.toGrabPos);
+                    Actions.runBlocking(arm.toGrabSample);
                     Actions.runBlocking(claw.close);
                     follower.followPath(sample3Place);
                     setPathState(8);
@@ -210,7 +210,7 @@ public class leftAuto extends OpMode{
             case 10:
                 if (!follower.isBusy()) {
                     //touch bar
-                    Actions.runBlocking(arm.toTopBar);
+                    Actions.runBlocking(arm.toBasketPos);
                     //setPathState(11);
                 }
                 break;

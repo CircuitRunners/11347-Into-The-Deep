@@ -15,11 +15,12 @@ public class ArmCorrected {
         REST(5),
         MID(290),
         AUTO(1400),
-        BASKET_HIGH(1000),
+        BASKET_HIGH(1900),
         SPECIMEN(400),
         TOPBAR(1800),
         HOVER_SUB(534),
-        GRAB_SUB(2000);
+        GRAB_SUB(2000),
+        GRAB_SAMPLE(3250);
 
         public int position;
 
@@ -40,7 +41,7 @@ public class ArmCorrected {
 
     public DcMotorEx armMotor;
 
-    public RunAction toTopBar, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition, armAuto;
+    public RunAction toTopBar, toGrabSample, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition, armAuto;
 
     public ArmCorrected(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -58,6 +59,7 @@ public class ArmCorrected {
         toSpecimenPos = new RunAction(this::toSpecimenPos);
         resetArmPosition = new RunAction(this::resetArmPosition);
         armAuto = new RunAction(this::armAuto);
+        toGrabSample = new RunAction(this::grabSample);
     }
 
     public void update() {
@@ -111,6 +113,7 @@ public class ArmCorrected {
     public void armAuto() {
         setArmTarget(ArmPositions.AUTO.position);
     }
+    public void grabSample() {setArmTarget(ArmPositions.AUTO.position);}
 
 
     public void resetArmPosition() {
