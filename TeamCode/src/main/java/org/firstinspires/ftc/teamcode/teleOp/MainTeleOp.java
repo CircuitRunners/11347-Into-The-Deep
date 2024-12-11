@@ -159,13 +159,15 @@ public class MainTeleOp extends CommandOpMode {
 //        diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
 //        telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
 //        telemetry.addData("Right Axon", diffy.getRightDiffyPose());
-
+//
         boolean currentButtonState = gamepad2.right_bumper;
-
+//
         if (currentButtonState && !previousButtonState) {
             toggleDiffyPosition();
         }
         previousButtonState = currentButtonState;
+
+//        diffy.manualRotate();
 
         telemetry.addData("Diffy Pos:", diffy.currentPosition());
 
