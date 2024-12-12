@@ -9,12 +9,13 @@ import org.firstinspires.ftc.teamcode.commands.armcommands.ProfiledArmCommand
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand
 import org.firstinspires.ftc.teamcode.subsystems.Arm
 import org.firstinspires.ftc.teamcode.subsystems.Arm.ArmPositions
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected
 import org.firstinspires.ftc.teamcode.subsystems.Claw
 import org.firstinspires.ftc.teamcode.subsystems.Slides
 
-class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelCommandGroup() {
+class ArmToScoringCommand(arm: ArmCorrected, claw: Claw, preset: Presets) : ParallelCommandGroup() {
     enum class Presets {
-        HOLD,
+//        HOLD,
         REST,
         HOVER_SUB,
         GRAB_SUB,
@@ -28,8 +29,8 @@ class ArmToScoringCommand(arm: Arm, claw: Claw, preset: Presets) : ParallelComma
     init {
         addCommands(
             when (preset) {
-                Presets.HOLD ->
-                    ProfiledArmCommand(arm, arm.armPosition, true)
+//                Presets.HOLD ->
+//                    ProfiledArmCommand(arm, arm.armPosition, true)
                 Presets.REST ->
                     ProfiledArmCommand(arm, ArmPositions.REST.position, true, false, true, 3500)
                 Presets.HOVER_SUB ->

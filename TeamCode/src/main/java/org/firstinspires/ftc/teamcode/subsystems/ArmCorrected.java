@@ -1,16 +1,18 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.support.RunAction;
 
 @Config
-public class ArmCorrected {
+public class ArmCorrected extends SubsystemBase {
     public enum ArmPositions{
         REST(5),
         MID(290),
@@ -41,6 +43,10 @@ public class ArmCorrected {
 
     public DcMotorEx armMotor;
 
+    private VoltageSensor voltageSensor;
+    private double voltageComp;
+    private double VOLTAGE_WHEN_TUNED = 13.0;
+
     public RunAction toTopBar, toGrabSample, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition, armAuto;
 
     public ArmCorrected(HardwareMap hardwareMap) {
@@ -60,6 +66,9 @@ public class ArmCorrected {
         resetArmPosition = new RunAction(this::resetArmPosition);
         armAuto = new RunAction(this::armAuto);
         toGrabSample = new RunAction(this::grabSample);
+
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        voltageComp = VOLTAGE_WHEN_TUNED / voltageSensor.getVoltage();
     }
 
     public void update() {
@@ -89,8 +98,8 @@ public class ArmCorrected {
         return target;
     }
 
-    public void manual(int a) {
-        setArmTarget(target + a * 5);
+    public void manual(double a) {
+        setArmTarget(target + ((int) a) * 5);
     }
 
     //    public static int TestingVar = 1000;
@@ -119,5 +128,17 @@ public class ArmCorrected {
     public void resetArmPosition() {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public double getArmVelocity(){
+        return armMotor.getVelocity();
+    }
+
+    public double getVoltageComp(){
+        return voltageComp;
+    }
+
+    public void brake(){
+        armMotor.setPower(0);
     }
 }

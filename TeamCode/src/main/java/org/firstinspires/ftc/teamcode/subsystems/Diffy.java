@@ -75,6 +75,27 @@ public class Diffy extends SubsystemBase {
         rightDiffyServo.setPosition(rightPosition()+offset);
     }
 
+    //TODO: TEST AND CHANGE BELOW
+    public void moveDiffyP() {
+        leftDiffyServo.setPosition(leftDiffyServo.getPosition() + 0.01);
+        rightDiffyServo.setPosition(rightDiffyServo.getPosition() + 0.01);
+    }
+
+    public void moveDiffyN() {
+        leftDiffyServo.setPosition(leftDiffyServo.getPosition() - 0.01);
+        rightDiffyServo.setPosition(rightDiffyServo.getPosition() - 0.01);
+    }
+
+    public void rotateDiffyL() {
+        leftDiffyServo.setPosition(leftDiffyServo.getPosition() + 0.01);
+        rightDiffyServo.setPosition(rightDiffyServo.getPosition() - 0.01);
+    }
+
+    public void rotateDiffyR() {
+        leftDiffyServo.setPosition(leftDiffyServo.getPosition() - 0.01);
+        rightDiffyServo.setPosition(rightDiffyServo.getPosition() + 0.01);
+    }
+
     public void setPosition(ServoStates state) {
         currentState = state;
 

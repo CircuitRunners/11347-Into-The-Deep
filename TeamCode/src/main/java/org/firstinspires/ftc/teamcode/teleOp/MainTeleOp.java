@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
@@ -20,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Slides;
 @TeleOp
 public class MainTeleOp extends CommandOpMode {
     //arm stuff
-    private Arm arm;
+    private ArmCorrected arm;
     private Slides lift;
     private Diffy diffy;
     private Claw claw;
@@ -37,7 +38,7 @@ public class MainTeleOp extends CommandOpMode {
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
-        arm = new Arm(hardwareMap);
+        arm = new ArmCorrected(hardwareMap);
         diffy = new Diffy(hardwareMap);
         currentState = Diffy.ServoStates.START;
         lift = new Slides(hardwareMap);
@@ -141,72 +142,44 @@ public class MainTeleOp extends CommandOpMode {
             arm.resetArmPosition();
         }
 //        arm.setPower(gamepad2.right_stick_x);
-        telemetry.addData("Arm Encoder Pos >", arm.getArmPosition());
-        telemetry.addData("Interpolation>", arm.estimateArmPos());
 
         //Slides
         if (gamepad2.left_stick_button) {
             lift.resetLiftPosition();
         }
-//        lift.setLiftPower(gamepad2.left_stick_y);
+        lift.setLiftPower(gamepad2.left_stick_y);
+        
 
-        //Diffy
-//        while (gamepad2.dpad_left) {
-//            diffy.moveDiffy(0.4);
-//        } while (gamepad2.dpad_right) {
-//            diffy.moveDiffy(-0.4);
-//        }
-//        diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
-//        telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
-//        telemetry.addData("Right Axon", diffy.getRightDiffyPose());
-//
+        while (gamepad2.dpad_left) {
+            diffy.moveDiffyP();
+        } while (gamepad2.dpad_right) {
+            diffy.moveDiffyN();
+        }
+
+        while (gamepad2.left_trigger > 0.1) {
+            diffy.rotateDiffyL();
+        }
+        while (gamepad2.right_trigger > 0.1) {
+            diffy.rotateDiffyR();
+        }
 
         boolean currentButtonState = gamepad2.right_bumper;
-//
         if (currentButtonState && !previousButtonState) {
             toggleDiffyPosition();
         }
         previousButtonState = currentButtonState;
 
-        //This stuff might not work
-        diffy.manualRotate(diffy.leftPosition()+(gamepad2.left_trigger-gamepad2.right_trigger)*.01);//Probably need to tune value
-        while (gamepad2.dpad_left) {
-            diffy.manualSpin(0.01);
-        } while (gamepad2.dpad_right) {
-            diffy.manualSpin(-0.01);
-        }
 
-        telemetry.addData("Diffy Left Pos:", diffy.leftPosition());
-        telemetry.addData("Diffy Right Pos:", diffy.rightPosition());
 
         //Claw
         if (gamepad2.left_bumper) {
             claw.switchState();
         }
+
         telemetry.addData("Is Open? >", claw.isOpen());
-
-//        LLResult result = limelight.getLatestResult();
-//
-//        if (result != null && result.isValid()) {
-//            double tx = result.getTx();  // Horizontal offset
-//            double ty = result.getTy();  // Vertical offset
-//
-//            telemetry.addData("tx", tx);
-//            telemetry.addData("ty", ty);
-//
-//            if (limelight.isTargetAligned(result)) {
-//                telemetry.addData("Alignment", "Target is centered!");
-//            } else {
-//                telemetry.addData("Alignment", "Target is NOT centered!");
-//            }
-//        } else {
-//            telemetry.addData("Limelight", "No valid data");
-//        }
-//        // Stop Limelight
-//        limelight.stopLimelight();
-
         telemetry.addData("Lift Height", lift.getLiftPosition());
-        telemetry.addData("Arm Pos", arm.getArmPosition());
+        telemetry.addData("Arm Pos", arm.getCurrentPosition());
+        telemetry.addData("Arm Target", arm.getArmTarget());
         telemetry.addData("imuHeading", db.getCorrectedYaw());
         telemetry.addData("imuNONCO", db.imu.getYaw());
         telemetry.update();

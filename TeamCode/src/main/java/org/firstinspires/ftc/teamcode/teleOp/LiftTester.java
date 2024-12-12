@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.testCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
@@ -27,7 +28,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Slides;
 @TeleOp (name="Lift Tester")
 public class LiftTester extends CommandOpMode {
     private Slides lift;
-    private Arm arm;
+    private ArmCorrected arm;
     private Claw claw;
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
@@ -41,7 +42,7 @@ public class LiftTester extends CommandOpMode {
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
         lift = new Slides(hardwareMap);
-        arm = new Arm(hardwareMap);
+        arm = new ArmCorrected(hardwareMap);
         claw = new Claw(hardwareMap);
 
         manualLiftCommand = new ManualLiftCommand(lift, manipulator);
@@ -87,17 +88,17 @@ public class LiftTester extends CommandOpMode {
                         .withTimeout(3000)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A)) //Cross
-                .whenActive(new testCommand(lift, arm, claw)
-                        .withTimeout(3500)
-                        .interruptOn(() -> manualLiftCommand.isManualActive() || manualArmCommand.isManualActive()));
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A)) //Cross
+//                .whenActive(new testCommand(lift, arm, claw)
+//                        .withTimeout(3500)
+//                        .interruptOn(() -> manualLiftCommand.isManualActive() || manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) //Circle
                 .whenActive(new testDownCommand(lift, arm, claw)
                         .withTimeout(3500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 
-        telemetry.addData("position >", arm.getArmPosition());
+        telemetry.addData("position >", arm.getCurrentPosition());
         telemetry.update();
     }
 
@@ -123,7 +124,7 @@ public class LiftTester extends CommandOpMode {
 
 //        arm.setPowerActual(0.5);
 
-        telemetry.addData("position >", arm.getArmPosition());
+        telemetry.addData("position >", arm.getCurrentPosition());
         telemetry.update();
     }
 }
