@@ -160,6 +160,7 @@ public class MainTeleOp extends CommandOpMode {
 //        telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
 //        telemetry.addData("Right Axon", diffy.getRightDiffyPose());
 //
+
         boolean currentButtonState = gamepad2.right_bumper;
 //
         if (currentButtonState && !previousButtonState) {
@@ -167,9 +168,16 @@ public class MainTeleOp extends CommandOpMode {
         }
         previousButtonState = currentButtonState;
 
-//        diffy.manualRotate();
+        //This stuff might not work
+        diffy.manualRotate(diffy.leftPosition()+(gamepad2.left_trigger-gamepad2.right_trigger)*.01);//Probably need to tune value
+        while (gamepad2.dpad_left) {
+            diffy.manualSpin(0.01);
+        } while (gamepad2.dpad_right) {
+            diffy.manualSpin(-0.01);
+        }
 
-        telemetry.addData("Diffy Pos:", diffy.currentPosition());
+        telemetry.addData("Diffy Left Pos:", diffy.leftPosition());
+        telemetry.addData("Diffy Right Pos:", diffy.rightPosition());
 
         //Claw
         if (gamepad2.left_bumper) {
