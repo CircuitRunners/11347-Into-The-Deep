@@ -33,17 +33,17 @@ public class rightAuto extends OpMode{
 
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPos = new Pose(32, 62.5, Math.toRadians(0));
-    private Pose sample1GrabPos = new Pose(64, 26, Math.toRadians(0));//90 //25
+    private Pose preloadPos = new Pose(33.77, 62.5, Math.toRadians(0));
+    private Pose sample1GrabPos = new Pose(64, 24, Math.toRadians(0));//90 //25
     private Point sample1GrabCP1 = new Point(34, 12.5);
     private Point sample1GrabCP2 = new Point(59, 50);//48
-    private Pose sample1PlacePos = new Pose(13, 26);//, Math.toRadians(90)
-    private Pose sample2GrabPos = new Pose(60, 18);//, Math.toRadians(90)
+    private Pose sample1PlacePos = new Pose(18, 26);//, Math.toRadians(90)
+    private Pose sample2GrabPos = new Pose(60, 16);//, Math.toRadians(90)
     private Point sample2GrabCP = new Point(62, 35);
-    private Pose sample2PlacePos = new Pose(12, 18);//, Math.toRadians(90)
+    private Pose sample2PlacePos = new Pose(17, 18);//, Math.toRadians(90)
     private Pose sample3GrabPos = new Pose(41.5, 13);//, Math.toRadians(90)
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
-    private Pose specimenGrabPos = new Pose(12,34); //, Math.toRadians(225)
+    private Pose specimenGrabPos = new Pose(15.5,34); //, Math.toRadians(225)
     private Point specimen1GrabCP = new Point(45, 34);
     private Pose specimen1PlacePos = new Pose(32, 61, Math.toRadians(0));
     private Pose specimen2PlacePos = new Pose(32, 62, Math.toRadians(0));

@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftResetCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
-import org.firstinspires.ftc.teamcode.commands.presets.testCommand;
+//import org.firstinspires.ftc.teamcode.commands.presets.testCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;

@@ -130,7 +130,7 @@ public class MainTeleOp extends CommandOpMode {
         super.run();
         //Drivebase
         db.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-
+        arm.update();
         //Reset
         if (gamepad1.square) {
             db.reset();
@@ -141,7 +141,7 @@ public class MainTeleOp extends CommandOpMode {
         if (gamepad2.right_stick_button) {
             arm.resetArmPosition();
         }
-//        arm.setPower(gamepad2.right_stick_x);
+      arm.manual(-gamepad2.right_stick_y);
 
         //Slides
         if (gamepad2.left_stick_button) {
@@ -151,16 +151,16 @@ public class MainTeleOp extends CommandOpMode {
         
 
         while (gamepad2.dpad_left) {
-            diffy.moveDiffyP();
+            diffy.rotateDiffyL();
         } while (gamepad2.dpad_right) {
-            diffy.moveDiffyN();
+            diffy.rotateDiffyR();
         }
 
-        while (gamepad2.left_trigger > 0.1) {
-            diffy.rotateDiffyL();
+        while (gamepad2.dpad_up) {
+            diffy.moveDiffyP();
         }
-        while (gamepad2.right_trigger > 0.1) {
-            diffy.rotateDiffyR();
+        while (gamepad2.dpad_down) {
+            diffy.moveDiffyN();
         }
 
         boolean currentButtonState = gamepad2.right_bumper;

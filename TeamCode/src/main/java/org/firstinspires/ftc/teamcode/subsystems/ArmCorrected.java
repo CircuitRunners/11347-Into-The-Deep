@@ -18,10 +18,10 @@ public class ArmCorrected extends SubsystemBase {
         MID(290),
         AUTO(1400),
         BASKET_HIGH(1900),
-        SPECIMEN(400),
+        SPECIMEN(500),
         TOPBAR(1800),
         HOVER_SUB(534),
-        GRAB_SUB(2000),
+        GRAB_SUB(1450),
         GRAB_SAMPLE(3250);
 
         public int position;
@@ -99,8 +99,9 @@ public class ArmCorrected extends SubsystemBase {
     }
 
     public void manual(double a) {
-        setArmTarget(target + ((int) a) * 5);
+        setArmTarget(target + (int) ((a) * 20));
     }
+
 
     //    public static int TestingVar = 1000;
     public void toTopBar() {
