@@ -286,6 +286,7 @@ public class rightAuto extends OpMode{
     public void loop() {
         follower.update();
         arm.update();
+        diffy.update();
         autonomousPathUpdate();
         telemetry.addData("Current Path #:", pathState);
         telemetry.addData("Arm Position:", arm.getCurrentPosition());
