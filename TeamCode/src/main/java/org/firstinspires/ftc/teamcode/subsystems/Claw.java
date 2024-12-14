@@ -15,7 +15,7 @@ public class Claw extends SubsystemBase {
     private final ElapsedTime switchTimer = new ElapsedTime(); // Timer for switch delay
 
     public enum ServoStates {
-        OPEN(-0.10),
+        OPEN(0.0),
         CLOSE(0.175);
 
         private final double position;
@@ -37,7 +37,6 @@ public class Claw extends SubsystemBase {
         switchTimer.reset();  // Initialize the timer
         open = new RunAction(this::open);
         close = new RunAction(this::close);
-
     }
 
     public void open() {

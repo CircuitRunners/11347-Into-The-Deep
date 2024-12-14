@@ -17,7 +17,9 @@ public class Diffy extends SubsystemBase {
         CENTER(0.58, 0.55),
         START(0.92, 0.885),
         END(0.2, 0.18),
+        SPECIMEN(0.68,0.67),
         SUB(0.76, 0.78);
+
 
         private final double positionL, positionR;
         ServoStates(double positionL, double positionR) {
@@ -33,7 +35,7 @@ public class Diffy extends SubsystemBase {
         }
     }
 
-    public RunAction centerDiffy, startDiffy, endDiffy, subDiffy;
+    public RunAction centerDiffy, startDiffy, endDiffy, subDiffy, specimenDiffy;
 
     public Diffy(HardwareMap h) {
         leftDiffyServo = h.get(Servo.class, "leftDiffyServo");
@@ -48,11 +50,13 @@ public class Diffy extends SubsystemBase {
         startDiffy = new RunAction(this::startDiffy);
         endDiffy = new RunAction(this::endDiffy);
         subDiffy = new RunAction(this::subDiffy);
+        specimenDiffy = new RunAction(this::specimenDiffy);
     }
 
     public void centerDiffy() {
         setPosition(ServoStates.CENTER);
     }
+    public void specimenDiffy(){setPosition(ServoStates.SPECIMEN);}
 
     public void startDiffy() {
         setPosition(ServoStates.START);

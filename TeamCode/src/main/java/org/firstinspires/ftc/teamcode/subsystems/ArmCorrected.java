@@ -16,10 +16,11 @@ public class ArmCorrected extends SubsystemBase {
     public enum ArmPositions{
         REST(5),
         MID(290),
-        AUTO(1400),
+        AUTO(750),
+        AUTO2(2100),
         BASKET_HIGH(1900),
-        SPECIMEN(500),
-        TOPBAR(1800),
+        SPECIMEN(680),
+        TOPBAR(1850),
         HOVER_SUB(534),
         GRAB_SUB(1450),
         GRAB_SAMPLE(3250);
@@ -47,7 +48,7 @@ public class ArmCorrected extends SubsystemBase {
     private double voltageComp;
     private double VOLTAGE_WHEN_TUNED = 13.0;
 
-    public RunAction toTopBar, toGrabSample, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition, armAuto;
+    public RunAction toTopBar, toGrabSample, toGrabPos, toRestPos, toBasketPos, toSpecimenPos, resetArmPosition, armAuto, armAuto2;
 
     public ArmCorrected(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -65,6 +66,7 @@ public class ArmCorrected extends SubsystemBase {
         toSpecimenPos = new RunAction(this::toSpecimenPos);
         resetArmPosition = new RunAction(this::resetArmPosition);
         armAuto = new RunAction(this::armAuto);
+        armAuto2 = new RunAction(this::armAuto2);
         toGrabSample = new RunAction(this::grabSample);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
@@ -122,6 +124,9 @@ public class ArmCorrected extends SubsystemBase {
     }
     public void armAuto() {
         setArmTarget(ArmPositions.AUTO.position);
+    }
+    public void armAuto2() {
+        setArmTarget(ArmPositions.AUTO2.position);
     }
     public void grabSample() {setArmTarget(ArmPositions.AUTO.position);}
 
