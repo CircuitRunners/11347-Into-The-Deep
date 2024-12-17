@@ -16,10 +16,10 @@ public class ArmCorrected extends SubsystemBase {
     public enum ArmPositions{
         REST(5),
         MID(290),
-        AUTO(750),
+        AUTO(650),
         AUTO2(2100),
         BASKET_HIGH(1900),
-        SPECIMEN(680),
+        SPECIMEN(600),
         TOPBAR(1850),
         HOVER_SUB(534),
         GRAB_SUB(1450),

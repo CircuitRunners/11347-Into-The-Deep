@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.util.Action;
 
 
 @Autonomous
-public class rightAutoLM3 extends OpMode{
+public class leftPreload extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
@@ -35,8 +35,9 @@ public class rightAutoLM3 extends OpMode{
 
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
+    private Pose basket = new Pose(12, 100, Math.toRadians(0));
     private Pose preloadPos = new Pose(placex, 62.5, Math.toRadians(0));
-//    private Pose sample1GrabPos = new Pose(64, 24, Math.toRadians(0));//90 //25
+    //    private Pose sample1GrabPos = new Pose(64, 24, Math.toRadians(0));//90 //25
 //    private Point sample1GrabCP1 = new Point(34, 12.5);
 //    private Point sample1GrabCP2 = new Point(59, 50);//48
 //    private Pose sample1PlacePos = new Pose(18, 26);//, Math.toRadians(90)
@@ -52,12 +53,13 @@ public class rightAutoLM3 extends OpMode{
 //    //private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
     private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
-    private PathChain preload, sample1, sample2, sample3Grab, sample3Place, specimen1Grab, specimen1GrabFromSample2, specimen1GrabStraight, specimen1Place, specimen2Grab, specimen2Place, specimen3Grab, specimen3Place, park, parkFromSample2, parkFromPreload;
+    private PathChain preload, sample1, sample2, sample3Grab, sample3Place, specimen1Grab, specimen1GrabFromSample2, specimen1GrabStraight, specimen1Place, specimen2Grab, specimen2Place, specimen3Grab, specimen3Place, park, parkFromSample2, parkFromPreload, basketTo;
     public void buildPaths() {
         preload = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPosition), new Point(preloadPos)))
                 .setConstantHeadingInterpolation(preloadPos.getHeading())
                 .build();
+
 //        sample1 = follower.pathBuilder()
 //                .addPath(new BezierCurve(new Point(preloadPos), sample1GrabCP1, sample1GrabCP2, new Point(sample1GrabPos)))
 //                .setConstantHeadingInterpolation(sample1GrabPos.getHeading())
@@ -119,8 +121,8 @@ public class rightAutoLM3 extends OpMode{
 //                .setConstantHeadingInterpolation(parkPos.getHeading())
 //                .build();
         parkFromPreload = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(preloadPos), new Point(parkPos)))
-                .setConstantHeadingInterpolation(parkPos.getHeading())
+                .addPath(new BezierLine(new Point(preloadPos), new Point(basket)))
+                .setConstantHeadingInterpolation(basket.getHeading())
                 .build();
 
     }
@@ -150,8 +152,8 @@ public class rightAutoLM3 extends OpMode{
             case 2:
                 if (!follower.isBusy()) {
                     //move arm back to rest
-                    Actions.runBlocking(claw.open);
                     Actions.runBlocking(arm.toRestPos);
+                    Actions.runBlocking(claw.open);
                     Actions.runBlocking(diffy.centerDiffy);
                     //follower.followPath(sample1, true);
                     setPathState(13);
@@ -265,10 +267,12 @@ public class rightAutoLM3 extends OpMode{
                     // //place specimen. probably doesn't work again
                     // Actions.runBlocking(arm.toTopBar);
                     // Actions.runBlocking(new SleepCommand(1));
-                    // Actions.runBlocking(claw.openClaw);
+                     Actions.runBlocking(claw.close);
+                     Actions.runBlocking(diffy.startDiffy);
                     // Actions.runBlocking(arm.toTopBar);
                     //follower.followPath(park);
                     //follower.followPath(parkFromSample2, true);
+
                     follower.followPath(parkFromPreload);
                     //setPathState(14);
                 }

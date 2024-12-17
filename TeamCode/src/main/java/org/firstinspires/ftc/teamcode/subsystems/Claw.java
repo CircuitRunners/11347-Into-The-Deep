@@ -16,7 +16,7 @@ public class Claw extends SubsystemBase {
 
     public enum ServoStates {
         OPEN(0.0),
-        CLOSE(0.175);
+        CLOSE(0.17);
 
         private final double position;
 

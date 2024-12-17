@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.support.SleepCommand;
 
 
 @Autonomous
-public class leftAuto extends OpMode{
+public class moveLeft extends OpMode{
 
     private Follower follower;
     private Timer pathTimer;
@@ -34,52 +34,17 @@ public class leftAuto extends OpMode{
 
     // Define key poses
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPos = new Pose(32.8, 62.5, Math.toRadians(0));
-    private Pose sample1Pos = new Pose(26, 118, Math.toRadians(0));
-    //private Point sample1CP = new Point(15, 105);
-    private Pose placePos = new Pose(20, 122, Math.toRadians(135));//14.5, 128, -45
-    private Pose sample2Pos = new Pose(26, 127, Math.toRadians(0));
-    private Pose sample3Pos = new Pose(45.5, 125, Math.toRadians(90));
-    //private Point sample3CP = new Point(46, 117);
-    private Pose parkPos = new Pose(63, 98, Math.toRadians(270));
-    private Point parkCP = new Point(62, 129);
+    private Pose endPosition = new Pose(10.5, 100.5, Math.toRadians(0));
 
 
 
 
     private PathChain preload, sample1Grab, sample1Place, sample2Grab, sample2Place, sample3Grab, sample3Place, park;
     public void buildPaths() {
-        preload = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPosition), new Point(preloadPos)))
-                .setConstantHeadingInterpolation(preloadPos.getHeading())
-                .build();
-        sample1Grab = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(preloadPos), new Point(sample1Pos)))
-                .setConstantHeadingInterpolation(sample1Pos.getHeading())
-                .build();
-        sample1Place = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(sample1Pos), new Point(placePos)))
-                .setLinearHeadingInterpolation(sample1Pos.getHeading(), placePos.getHeading())
-                .build();
-        sample2Grab = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(placePos), new Point(sample2Pos)))
-                .setLinearHeadingInterpolation(placePos.getHeading(), sample2Pos.getHeading())
-                .build();
-        sample2Place = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(sample2Pos), new Point(placePos)))
-                .setLinearHeadingInterpolation(sample2Pos.getHeading(), placePos.getHeading())
-                .build();
-        sample3Grab = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(placePos), new Point(sample3Pos)))
-                .setLinearHeadingInterpolation(placePos.getHeading(), sample3Pos.getHeading())
-                .build();
-        sample3Place = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(sample3Pos), new Point(placePos)))
-                .setLinearHeadingInterpolation(sample3Pos.getHeading(), placePos.getHeading())
-                .build();
+
         park = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(preloadPos), parkCP, new Point(parkPos)))
-                .setLinearHeadingInterpolation(preloadPos.getHeading(), parkPos.getHeading())
+                .addPath(new BezierLine(new Point(startPosition), new Point(endPosition)))
+                .setLinearHeadingInterpolation(endPosition.getHeading(), endPosition.getHeading())
                 .build();
 
     }
@@ -87,9 +52,9 @@ public class leftAuto extends OpMode{
     public void autonomousPathUpdate() {
         switch (pathState) {
             case -2:
-                Actions.runBlocking(arm.toTopBar);
-                follower.followPath(preload, true);
-                setPathState(-1);
+//                Actions.runBlocking(arm.toTopBar);
+//                follower.followPath(preload, true);
+                setPathState(9);
                 break;
             case -1:
                 if (!follower.isBusy()) {
@@ -200,9 +165,9 @@ public class leftAuto extends OpMode{
                 break;
             case 9:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(arm.toRestPos);
-                    //move slides down
-                    Actions.runBlocking(claw.close);
+//                    Actions.runBlocking(arm.toRestPos);
+//                    //move slides down
+//                    Actions.runBlocking(claw.close);
                     follower.followPath(park, true);
                     setPathState(10);
                 }
@@ -210,7 +175,7 @@ public class leftAuto extends OpMode{
             case 10:
                 if (!follower.isBusy()) {
                     //touch bar
-                    Actions.runBlocking(arm.toBasketPos);
+                    //Actions.runBlocking(arm.toBasketPos);
                     //setPathState(11);
                 }
                 break;

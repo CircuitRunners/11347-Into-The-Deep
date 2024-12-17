@@ -45,7 +45,7 @@ public class MainTeleOp extends CommandOpMode {
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 5.0);
-        claw.close();
+//        claw.close();
         telemetry.addData(">", "Hardware Map Initialized");
         telemetry.update();
 
@@ -138,7 +138,9 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         //Arm
-        if (gamepad2.right_stick_button) {
+
+        if (gamepad2.triangle) {
+            arm.setArmTarget(0);
             arm.resetArmPosition();
         }
       arm.manual(-gamepad2.right_stick_y);

@@ -209,7 +209,7 @@ public class rightAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //place specimen. this probably doesn't work
                     Actions.runBlocking(diffy.centerDiffy);
-//                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.open);
                     setPathState(9);
                 }
@@ -217,7 +217,7 @@ public class rightAuto extends OpMode{
             case 9:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armAuto);
-                    //Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(new SleepCommand(1));
                     follower.followPath(specimen2Grab, true);
                     setPathState(10);
                 }
@@ -227,10 +227,10 @@ public class rightAuto extends OpMode{
                     //grab specimen
 //                    Actions.runBlocking(arm.toSpecimenPos);
                     Actions.runBlocking(diffy.centerDiffy);
-//                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(claw.close);
                     Actions.runBlocking(arm.armAuto2);
-//                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(new SleepCommand(1));
                     Actions.runBlocking(diffy.startDiffy);
                     follower.followPath(specimen2Place, true);
                     setPathState(11);
@@ -241,8 +241,8 @@ public class rightAuto extends OpMode{
                     //place Specimen. pro
                     // bably still doesn't work
                     Actions.runBlocking(diffy.centerDiffy);
-//                    Actions.runBlocking(new SleepCommand(1));
-//                    Actions.runBlocking(claw.open);
+                    Actions.runBlocking(new SleepCommand(1));
+                    Actions.runBlocking(claw.open);
                     //Actions.runBlocking(arm.toRestPos);
                     //follower.followPath(specimen3Grab);
                     setPathState(12);//Skipping specimen 3
@@ -252,6 +252,8 @@ public class rightAuto extends OpMode{
                 if (!follower.isBusy()) {
                     //grab specimen
                     Actions.runBlocking(arm.toRestPos);
+                    Actions.runBlocking(diffy.startDiffy);
+                    Actions.runBlocking(claw.close);
                     //follower.followPath(specimen3Place); meow
                     setPathState(13);
                 }
@@ -265,12 +267,12 @@ public class rightAuto extends OpMode{
                     // Actions.runBlocking(arm.toTopBar);
                     //follower.followPath(park);
                     follower.followPath(parkFromSample2, true);
-                    //setPathState(13);
+                    //setPathState(14);
                 }
                 break;
-//            case 13:
+//            case 14:
 //                if (!follower.isBusy()) {
-//                    setPathState(14);
+//                    setPathState(15);
 //                }
             default:
                 requestOpModeStop();
