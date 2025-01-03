@@ -6,12 +6,13 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import org.firstinspires.ftc.teamcode.support.Actions;
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
@@ -66,53 +67,53 @@ public class MainTeleOp extends CommandOpMode {
 
         //HIGH BASKET PRESETS
         //LIFT
-//        new Trigger(() -> manipulator.getLeftY() > 0.4)
-//                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.HIGH)
-//                        .withTimeout(3500)
-//                        .interruptOn(() -> manualLiftCommand.isManualActive()));
+        manipulator.getGamepadButton(GamepadKeys.Button.A)
+                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.HIGH)
+                        .withTimeout(3500)
+                        .interruptOn(() -> manualLiftCommand.isManualActive()));
 //        //ARM
 //        new Trigger(() -> manipulator.getLeftY() > 0.4)
 //                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
 //                        .withTimeout(2500)
 //                        .interruptOn(() -> manualArmCommand.isManualActive()));
-//
-//        //REST PRESETS
+
+        //REST PRESETS
 //        new Trigger(() -> manipulator.getLeftY() < -0.4)
 //                .whenActive(new testDownCommand(lift, arm, claw)
 //                        .withTimeout(3500)
 //                        .interruptOn(() -> manualArmCommand.isManualActive() || manualLiftCommand.isManualActive()));
 //
-//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.RIGHT_BUMPER))
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B))
 //                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.SPECIMEN)
 //                        .withTimeout(2500)
 //                        .interruptOn(() -> manualArmCommand.isManualActive()));
 //
 //
 //        //ARM
-//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.Y)) // Triangle
-//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
-//                        .withTimeout(2500)
-//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+        manipulator.getGamepadButton(GamepadKeys.Button.Y) // Triangle
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
+                        .withTimeout(2500)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
 //        //ARM
-//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) // Circle
-//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
-//                        .withTimeout(2500)
-//                        .interruptOn(() -> manualArmCommand.isManualActive()));
-//        //ARM
-//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A)) // Cross
-//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
-//                        .withTimeout(2500)
-//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+////        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) // Circle
+////                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
+////                        .withTimeout(2500)
+////                        .interruptOn(() -> manualArmCommand.isManualActive()));
+        //ARM
+         manipulator.getGamepadButton(GamepadKeys.Button.B) // Circle
+                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+                        .withTimeout(2500)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
 //        //ARM
 //        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.X)) // Square
 //                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
 //                        .withTimeout(2500)
 //                                .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) // Circle
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.TOPBAR)
-                        .withTimeout(2500)
-                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) // Circle
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.TOPBAR)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
 
 
         telemetry.addData(">", "Commands Ready");
@@ -138,7 +139,12 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         //Arm
+        if (gamepad2.square){
+            Actions.runBlocking(arm.toTopBar);
+            arm.toTopBar();
+            arm.update();
 
+        }
         if (gamepad2.triangle) {
             arm.setArmTarget(0);
             arm.resetArmPosition();
@@ -150,7 +156,7 @@ public class MainTeleOp extends CommandOpMode {
             lift.resetLiftPosition();
         }
         lift.setLiftPower(gamepad2.left_stick_y);
-        
+
 
         while (gamepad2.dpad_left) {
             diffy.rotateDiffyL();

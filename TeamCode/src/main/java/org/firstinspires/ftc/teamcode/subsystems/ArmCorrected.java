@@ -21,7 +21,7 @@ public class ArmCorrected extends SubsystemBase {
         BASKET_HIGH(1900),
         SPECIMEN(600),
         TOPBAR(1850),
-        HOVER_SUB(534),
+        HOVER_SUB(3100),
         GRAB_SUB(1450),
         GRAB_SAMPLE(3250);
 

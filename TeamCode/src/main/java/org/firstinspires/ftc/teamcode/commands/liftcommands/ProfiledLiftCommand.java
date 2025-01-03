@@ -18,10 +18,10 @@ public class ProfiledLiftCommand extends CommandBase {
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    PIDCoefficients coefficients = new PIDCoefficients(0.03, 0.001, 0.0); // Adjust PID coefficients as needed
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.03, 0.001, 0.0); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
-    double kV = 0.0, kA = 0.0, kStatic = 0.00;
+    public static double kV = 0, kA = 0, kStatic = 0.00;
 
     // The tolerance for getting to a certain position. Strict tries to get just a bit closer.
     private double LIFT_POSITION_TOLERANCE = 15,
@@ -135,7 +135,7 @@ public class ProfiledLiftCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) lift.setLiftPower(-0.15); // 0.0078
+        if (holdAtEnd) lift.setLiftPower(-0.5); // 0.0078
         else lift.brake_power(); // Assuming brake_power() is a method to stop the lift
     }
 }

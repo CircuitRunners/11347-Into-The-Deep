@@ -8,7 +8,7 @@ import com.arcrobotics.ftclib.command.WaitCommand
 import org.firstinspires.ftc.teamcode.commands.armcommands.ProfiledArmCommand
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand
 import org.firstinspires.ftc.teamcode.subsystems.Arm
-import org.firstinspires.ftc.teamcode.subsystems.Arm.ArmPositions
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected.ArmPositions
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected
 import org.firstinspires.ftc.teamcode.subsystems.Claw
 import org.firstinspires.ftc.teamcode.subsystems.Slides
@@ -28,6 +28,7 @@ class ArmToScoringCommand(arm: ArmCorrected, claw: Claw, preset: Presets) : Para
 
     init {
         addCommands(
+
             when (preset) {
 //                Presets.HOLD ->
 //                    ProfiledArmCommand(arm, arm.armPosition, true)

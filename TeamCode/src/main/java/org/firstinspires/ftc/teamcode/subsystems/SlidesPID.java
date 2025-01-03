@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.support.RunAction;
 
-public class SlidesPID{
+public class SlidesPID extends SubsystemBase{
     //TODO Rename References
     public enum SlidePositions {
         STAGE_0(-30), // Ground
