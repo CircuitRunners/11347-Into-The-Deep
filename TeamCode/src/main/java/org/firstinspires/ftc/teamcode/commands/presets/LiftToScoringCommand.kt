@@ -41,7 +41,7 @@ class LiftToScoringCommand(lift: Slides, preset: Presets, arm: ArmCorrected) : P
                     Presets.SHORT ->
                         ProfiledLiftCommand(lift, SlidePositions.STAGE_1.position, true)
                     Presets.MID ->
-                        ProfiledLiftCommand(lift, SlidePositions.STAGE_2.position, true)
+                        ProfiledLiftCommand(lift, SlidePositions.STAGE_2.position, false)
                     Presets.HIGH ->
                         ProfiledLiftCommand(lift, SlidePositions.STAGE_3.position, true)
 

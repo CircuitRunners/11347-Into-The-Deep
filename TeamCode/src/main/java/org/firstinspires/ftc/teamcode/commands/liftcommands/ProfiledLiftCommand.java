@@ -13,15 +13,14 @@ import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 @Config
 public class ProfiledLiftCommand extends CommandBase {
-
     PIDFController liftController;
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.05, 0.00, 0.01); // Adjust PID coefficients as needed
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.06, 0.00, 0.01); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
-    public static double kV = 0, kA = 0, kStatic = 0.00;
+    public static double kV = 0, kA = 0, kStatic = 0.08;
 
     // The tolerance for getting to a certain position. Strict tries to get just a bit closer.
     private double LIFT_POSITION_TOLERANCE = 15,
@@ -35,10 +34,10 @@ public class ProfiledLiftCommand extends CommandBase {
             MOTION_PROFILE_MAX_ACCEL = 3250,
             MOTION_PROFILE_MAX_JERK = 0;
 
-    final double GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE = -0.08,//0.03
-            GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE = -0.1,//0.05
-            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = -0.15,
-            GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE = -0.2;
+    final double GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE = 0.08,//0.03
+            GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE = 0.1,//0.05
+            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = 0.15,
+            GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE = 0.2;
     final double LIFT_FIRST_STAGE_POSITION_TICKS = -870,
             LIFT_SECOND_STAGE_POSITION_TICKS = -1966,
             LIFT_THIRD_STAGE_POSITION_TICKS = -3070;

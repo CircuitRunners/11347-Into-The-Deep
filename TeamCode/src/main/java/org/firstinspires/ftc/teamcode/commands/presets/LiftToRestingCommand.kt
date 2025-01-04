@@ -5,10 +5,10 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup
 import com.arcrobotics.ftclib.command.SequentialCommandGroup
 import com.arcrobotics.ftclib.command.WaitCommand
 import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand
-import org.firstinspires.ftc.teamcode.subsystems.SlidesPID
-import org.firstinspires.ftc.teamcode.subsystems.SlidesPID.SlidePositions
+import org.firstinspires.ftc.teamcode.subsystems.Slides
+import org.firstinspires.ftc.teamcode.subsystems.Slides.SlidePositions
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected
-class LiftToRestingCommand(lift: SlidesPID, preset: Presets, arm: ArmCorrected) : ParallelCommandGroup() {
+class LiftToRestingCommand(lift: Slides, preset: Presets, arm: ArmCorrected) : ParallelCommandGroup() {
 
     enum class Presets {
         DOWN,

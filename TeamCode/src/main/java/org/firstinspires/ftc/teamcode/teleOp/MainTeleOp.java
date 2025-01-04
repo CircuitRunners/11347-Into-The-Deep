@@ -17,14 +17,14 @@ import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
-import org.firstinspires.ftc.teamcode.subsystems.SlidesPID;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.commands.presets.LiftToRestingCommand;
 
 @TeleOp
 public class MainTeleOp extends CommandOpMode {
     //arm stuff
     private ArmCorrected arm;
-    private SlidesPID lift;
+    private Slides lift;
     private Diffy diffy;
     private Claw claw;
     private Diffy.ServoStates currentState;
@@ -43,7 +43,7 @@ public class MainTeleOp extends CommandOpMode {
         arm = new ArmCorrected(hardwareMap);
         diffy = new Diffy(hardwareMap);
         currentState = Diffy.ServoStates.START;
-        lift = new SlidesPID(hardwareMap);
+        lift = new Slides(hardwareMap);
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 5.0);
