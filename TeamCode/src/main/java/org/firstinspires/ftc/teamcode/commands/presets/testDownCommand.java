@@ -11,15 +11,16 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.subsystems.SlidesPID;
 
 public class testDownCommand extends ParallelCommandGroup {
     private ManualArmCommand manualArmCommand;
-    public testDownCommand(SlidesPID lift, ArmCorrected arm, Claw claw) {
+    public testDownCommand(Slides lift, ArmCorrected arm, Claw claw) {
         addCommands(
                 new SequentialCommandGroup(
                         new ParallelCommandGroup(
-                                new ProfiledLiftCommand(lift, SlidesPID.SlidePositions.STAGE_0.position, false),
+                                new ProfiledLiftCommand(lift, Slides.SlidePositions.STAGE_0.position, false),
                                 new SequentialCommandGroup(
                                         new WaitCommand(500),
                                         new ProfiledArmCommand(arm, Arm.ArmPositions.REST.position, true, false, true, 3500)

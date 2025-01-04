@@ -22,12 +22,13 @@ import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.subsystems.SlidesPID;
 import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 @Disabled
 @TeleOp (name="Lift Tester")
 public class LiftTester extends CommandOpMode {
-    private SlidesPID lift;
+    private Slides lift;
     private ArmCorrected arm;
     private Claw claw;
     private Diffy diffy;
@@ -42,7 +43,7 @@ public class LiftTester extends CommandOpMode {
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
-        lift = new SlidesPID(hardwareMap);
+        lift = new Slides(hardwareMap);
         arm = new ArmCorrected(hardwareMap);
         claw = new Claw(hardwareMap);
 

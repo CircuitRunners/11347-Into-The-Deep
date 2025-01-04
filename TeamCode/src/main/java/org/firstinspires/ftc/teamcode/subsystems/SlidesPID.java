@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.support.RunAction;
 
-public class SlidesPID extends SubsystemBase{
+public class SlidesPID extends SubsystemBase {
     //TODO Rename References
     public enum SlidePositions {
         STAGE_0(-30), // Ground
@@ -59,8 +59,8 @@ public class SlidesPID extends SubsystemBase{
 
         // Negate the gravity when stopped ?
         //TODO gravity PID coefficients?
-        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
         voltageComp = VOLTAGE_WHEN_LIFT_TUNED / voltageSensor.getVoltage();

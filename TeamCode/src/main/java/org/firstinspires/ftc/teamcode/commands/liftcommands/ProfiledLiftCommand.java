@@ -9,7 +9,7 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.subsystems.SlidesPID;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 @Config
 public class ProfiledLiftCommand extends CommandBase {
@@ -18,7 +18,7 @@ public class ProfiledLiftCommand extends CommandBase {
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.03, 0.001, 0.01); // Adjust PID coefficients as needed
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.05, 0.00, 0.01); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
     public static double kV = 0, kA = 0, kStatic = 0.00;
@@ -30,31 +30,30 @@ public class ProfiledLiftCommand extends CommandBase {
     private double liftPosition = 0;
     private double liftVelocity = 0;
     private double controllerOutput = 0;
-    public static double idkwhythisworks = 5;
 
-    final double MOTION_PROFILE_MAX_VELOCITY = 3000,//3000
-            MOTION_PROFILE_MAX_ACCEL = 3750,
+    final double MOTION_PROFILE_MAX_VELOCITY = 2500,//3000
+            MOTION_PROFILE_MAX_ACCEL = 3250,
             MOTION_PROFILE_MAX_JERK = 0;
 
-    final double GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE = 0.05,//0.03
-            GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE = 0.8,//0.05
-            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = 0.10,
-            GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE = 0.15;
+    final double GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE = -0.08,//0.03
+            GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE = -0.1,//0.05
+            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = -0.15,
+            GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE = -0.2;
     final double LIFT_FIRST_STAGE_POSITION_TICKS = -870,
             LIFT_SECOND_STAGE_POSITION_TICKS = -1966,
             LIFT_THIRD_STAGE_POSITION_TICKS = -3070;
 
     boolean holdAtEnd;
-    final SlidesPID lift;
+    final Slides lift;
     final double targetPosition;
 
     double setPointPos;
 
-    public ProfiledLiftCommand(SlidesPID lift, int targetPosition, boolean holdAtEnd){
+    public ProfiledLiftCommand(Slides lift, int targetPosition, boolean holdAtEnd){
         this(lift, targetPosition, holdAtEnd, false);
     }
 
-    public ProfiledLiftCommand(SlidesPID lift, int targetPosition, boolean holdAtEnd, boolean strict){
+    public ProfiledLiftCommand(Slides lift, int targetPosition, boolean holdAtEnd, boolean strict){
         addRequirements(lift);
 
         if (strict) this.LIFT_POSITION_TOLERANCE = LIFT_POSITION_TOLERANCE_STRICT;
@@ -86,7 +85,7 @@ public class ProfiledLiftCommand extends CommandBase {
 
         // Prevent it from going down TOO fast
         // This is the same as the maximum amount of kG compensation subtracted from max negative value
-        liftController.setOutputBounds(-0.87, 1.0);
+        liftController.setOutputBounds(-1.0, 0.8);
     }
 
     @Override
