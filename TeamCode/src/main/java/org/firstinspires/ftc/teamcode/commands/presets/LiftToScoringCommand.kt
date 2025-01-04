@@ -9,8 +9,9 @@ import org.firstinspires.ftc.teamcode.subsystems.SlidesPID
 import org.firstinspires.ftc.teamcode.subsystems.SlidesPID.SlidePositions
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected
 import org.firstinspires.ftc.teamcode.subsystems.Slides
+import org.firstinspires.ftc.teamcode.subsystems.Diffy
 
-class LiftToScoringCommand(lift: Slides, preset: Presets, arm: ArmCorrected) : ParallelCommandGroup() {
+class LiftToScoringCommand(diffy: Diffy, lift: Slides, preset: Presets, arm: ArmCorrected) : ParallelCommandGroup() {
 
     enum class Presets {
         DOWN,
@@ -25,14 +26,16 @@ class LiftToScoringCommand(lift: Slides, preset: Presets, arm: ArmCorrected) : P
             ParallelCommandGroup(
                 SequentialCommandGroup(
                     // Change this ms to change when the arm comes up
-                    WaitCommand(800),
+                    WaitCommand(1000),
                     InstantCommand({
-                        //arm.toBasketPos();
+                        arm.toBasketPos();
                     }),
+                        WaitCommand(200),
+                        InstantCommand({
+                            diffy.centerDiffy();
+                        }),
                 ),
-                InstantCommand({
 
-                }),
                 when (preset) {
                     Presets.DOWN ->
                         ProfiledLiftCommand(lift, SlidePositions.STAGE_0.position, false)

@@ -69,7 +69,7 @@ public class MainTeleOp extends CommandOpMode {
         //HIGH BASKET PRESETS
         //LIFT
         manipulator.getGamepadButton(GamepadKeys.Button.A)
-                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.MID, arm)
+                .whenActive(new LiftToScoringCommand(diffy, lift, LiftToScoringCommand.Presets.MID, arm)
                         .withTimeout(3500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 //        //ARM
