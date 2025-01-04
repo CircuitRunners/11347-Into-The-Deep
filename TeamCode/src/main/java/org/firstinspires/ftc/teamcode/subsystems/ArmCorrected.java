@@ -64,7 +64,7 @@ public class ArmCorrected extends SubsystemBase {
         toRestPos = new RunAction(this::toRestPos);
         toBasketPos = new RunAction(this::toBasketPos);
         toSpecimenPos = new RunAction(this::toSpecimenPos);
-        resetArmPosition = new RunAction(this::resetArmPosition);
+        resetArmPosition = new RunAction(this::resetArmEncoderPosition);
         armAuto = new RunAction(this::armAuto);
         armAuto2 = new RunAction(this::armAuto2);
         toGrabSample = new RunAction(this::grabSample);
@@ -131,7 +131,13 @@ public class ArmCorrected extends SubsystemBase {
     public void grabSample() {setArmTarget(ArmPositions.AUTO.position);}
 
 
+    public void resetArmEncoderPosition() {
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     public void resetArmPosition() {
+        setArmTarget(0);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
