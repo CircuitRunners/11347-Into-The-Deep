@@ -6,11 +6,11 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.subsystems.SlidesPID;
 
 public class ManualLiftCommand extends CommandBase {
 
-    private final Slides lift;
+    private final SlidesPID lift;
     private final GamepadEx manipulator;
 
     private final double up = -1.0; // 0.75
@@ -19,7 +19,7 @@ public class ManualLiftCommand extends CommandBase {
     private final double slowUp = -.5; // 0.37
     private final double slowDown = 0.37; // -1.0
 
-    public ManualLiftCommand(Slides lift, GamepadEx manipulator) {
+    public ManualLiftCommand(SlidesPID lift, GamepadEx manipulator) {
         addRequirements(lift);
 
         this.lift = lift;

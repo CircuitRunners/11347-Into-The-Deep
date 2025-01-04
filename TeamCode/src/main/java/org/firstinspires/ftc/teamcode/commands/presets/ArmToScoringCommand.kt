@@ -11,9 +11,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected.ArmPositions
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected
 import org.firstinspires.ftc.teamcode.subsystems.Claw
+import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Slides
 
-class ArmToScoringCommand(arm: ArmCorrected, claw: Claw, preset: Presets) : ParallelCommandGroup() {
+class ArmToScoringCommand(arm: ArmCorrected, claw: Claw, diffy: Diffy, preset: Presets) : ParallelCommandGroup() {
     enum class Presets {
 //        HOLD,
         REST,
@@ -28,7 +29,16 @@ class ArmToScoringCommand(arm: ArmCorrected, claw: Claw, preset: Presets) : Para
 
     init {
         addCommands(
+            ParallelCommandGroup(
+                    SequentialCommandGroup(
+                            WaitCommand(500),
+                            InstantCommand({
 
+                                diffy.startDiffy();
+                            })
+
+                    )
+            ),
             when (preset) {
 //                Presets.HOLD ->
 //                    ProfiledArmCommand(arm, arm.armPosition, true)

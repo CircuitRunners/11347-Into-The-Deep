@@ -18,7 +18,7 @@ public class ProfiledArmCommand extends CommandBase {
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    public static PIDCoefficients coefficients = new PIDCoefficients(0.01, 0.0, 0.001); // Adjust PID coefficients as needed
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.04, 0.0, 0.01); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
     public static double kV = 0.3, kA = 0.2, kStatic = 0.00;

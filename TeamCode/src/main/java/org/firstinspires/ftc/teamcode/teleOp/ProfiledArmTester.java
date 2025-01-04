@@ -17,11 +17,13 @@ import org.firstinspires.ftc.teamcode.commands.armcommands.ProfiledArmCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 
 @TeleOp
 public class ProfiledArmTester extends CommandOpMode {
     private ArmCorrected arm;
     private Claw claw;
+    private Diffy diffy;
     ElapsedTime timer;
     private ManualArmCommand manualArmCommand;
 
@@ -41,22 +43,22 @@ public class ProfiledArmTester extends CommandOpMode {
         arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_DOWN))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.BASKET_HIGH)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.GRAB_SUB)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.HOVER_SUB)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_RIGHT))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.REST)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 

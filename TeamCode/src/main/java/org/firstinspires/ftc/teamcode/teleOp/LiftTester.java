@@ -22,14 +22,15 @@ import org.firstinspires.ftc.teamcode.commands.presets.testDownCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
-
+import org.firstinspires.ftc.teamcode.subsystems.SlidesPID;
+import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 @Disabled
 @TeleOp (name="Lift Tester")
 public class LiftTester extends CommandOpMode {
-    private Slides lift;
+    private SlidesPID lift;
     private ArmCorrected arm;
     private Claw claw;
+    private Diffy diffy;
     private ManualLiftCommand manualLiftCommand;
     private ManualLiftResetCommand manualLiftResetCommand;
     private ManualArmCommand manualArmCommand;
@@ -41,50 +42,50 @@ public class LiftTester extends CommandOpMode {
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
-        lift = new Slides(hardwareMap);
+        lift = new SlidesPID(hardwareMap);
         arm = new ArmCorrected(hardwareMap);
         claw = new Claw(hardwareMap);
 
-        manualLiftCommand = new ManualLiftCommand(lift, manipulator);
+        //manualLiftCommand = new ManualLiftCommand(lift, manipulator);
         manualArmCommand = new ManualArmCommand(arm, manipulator);
-        manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
+        //manualLiftResetCommand = new ManualLiftResetCommand(lift, manipulator);
 
         lift.setDefaultCommand(new PerpetualCommand(manualLiftCommand));
         arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
 
         //LIFT
         new Trigger(() -> manipulator.getLeftY() > 0.4)
-                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.HIGH)
+                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.HIGH, arm)
                         .withTimeout(3500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 
         //ARM
         new Trigger(() -> manipulator.getLeftY() > 0.4)
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.BASKET_HIGH)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         //LIFT
         new Trigger(() -> manipulator.getLeftY() < -0.4)
-                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.DOWN)
+                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.DOWN, arm)
                         .withTimeout(2500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 
         //ARM
         new Trigger(() -> manipulator.getLeftY() < -0.4)
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.REST)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         //Mid preset
         new Trigger(() -> manipulator.getRightY() > -0.4)
-                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.SHORT)
+                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.SHORT, arm)
                         .withTimeout(2500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 
         //Short preset
         new Trigger(() -> manipulator.getRightY() < 0.4)
-                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.MID)
+                .whenActive(new LiftToScoringCommand(lift, LiftToScoringCommand.Presets.MID, arm)
                         .withTimeout(3000)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
 

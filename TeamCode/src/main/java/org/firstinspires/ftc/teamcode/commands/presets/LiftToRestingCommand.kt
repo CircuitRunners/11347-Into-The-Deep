@@ -8,14 +8,10 @@ import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand
 import org.firstinspires.ftc.teamcode.subsystems.SlidesPID
 import org.firstinspires.ftc.teamcode.subsystems.SlidesPID.SlidePositions
 import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected
-class LiftToScoringCommand(lift: SlidesPID, preset: Presets, arm: ArmCorrected) : ParallelCommandGroup() {
+class LiftToRestingCommand(lift: SlidesPID, preset: Presets, arm: ArmCorrected) : ParallelCommandGroup() {
 
     enum class Presets {
         DOWN,
-        AUTO,
-        SHORT,
-        MID,
-        HIGH
     }
 
     init {
@@ -25,7 +21,7 @@ class LiftToScoringCommand(lift: SlidesPID, preset: Presets, arm: ArmCorrected) 
                     // Change this ms to change when the arm comes up
                     WaitCommand(800),
                     InstantCommand({
-                        //arm.toBasketPos();
+                        arm.toRestPos();
                     }),
                 ),
                 InstantCommand({
@@ -34,14 +30,6 @@ class LiftToScoringCommand(lift: SlidesPID, preset: Presets, arm: ArmCorrected) 
                 when (preset) {
                     Presets.DOWN ->
                         ProfiledLiftCommand(lift, SlidePositions.STAGE_0.position, false)
-                    Presets.AUTO ->
-                        ProfiledLiftCommand(lift, SlidePositions.AUTO.position, true)
-                    Presets.SHORT ->
-                        ProfiledLiftCommand(lift, SlidePositions.STAGE_1.position, true)
-                    Presets.MID ->
-                        ProfiledLiftCommand(lift, SlidePositions.STAGE_2.position, true)
-                    Presets.HIGH ->
-                        ProfiledLiftCommand(lift, SlidePositions.STAGE_3.position, true)
 
                 }
             )
