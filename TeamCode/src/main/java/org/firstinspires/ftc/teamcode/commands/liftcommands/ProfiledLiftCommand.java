@@ -66,7 +66,7 @@ public class ProfiledLiftCommand extends CommandBase {
         // Gravity feedforward term to counteract gravity
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             // Feedforward Gravitational Below
-            double kG = 0;
+            double kG = 0.05;
             if (liftPosition > LIFT_FIRST_STAGE_POSITION_TICKS) {
                 kG = GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE;
             }

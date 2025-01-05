@@ -34,7 +34,7 @@ class ArmToScoringCommand(arm: ArmCorrected, claw: Claw, diffy: Diffy, preset: P
                             WaitCommand(500),
                             InstantCommand({
 
-                                diffy.startDiffy();
+                                diffy.subDiffy();
                             })
 
                     )

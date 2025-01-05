@@ -68,7 +68,7 @@ public class MainTeleOp extends CommandOpMode {
 
         //HIGH BASKET PRESETS
         //LIFT
-        manipulator.getGamepadButton(GamepadKeys.Button.A)
+        manipulator.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(new LiftToScoringCommand(diffy, lift, LiftToScoringCommand.Presets.MID, arm)
                         .withTimeout(3500)
                         .interruptOn(() -> manualLiftCommand.isManualActive()));
@@ -91,7 +91,7 @@ public class MainTeleOp extends CommandOpMode {
 //
 //
 //        //ARM
-        manipulator.getGamepadButton(GamepadKeys.Button.Y) // Triangle
+        manipulator.getGamepadButton(GamepadKeys.Button.A) // Triangle
                 .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.HOVER_SUB)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
@@ -204,25 +204,35 @@ public class MainTeleOp extends CommandOpMode {
         if (toggleDirectionForward) {
             switch (currentState) {
                 case START:
-                    diffy.startDiffy();
-                    currentState = Diffy.ServoStates.CENTER;
-                    break;
-
-                case CENTER:
-                    diffy.centerDiffy();
+                    diffy.subDiffy();
                     currentState = Diffy.ServoStates.END;
                     break;
 
                 case END:
-                    diffy.endDiffy();
+                    diffy.centerDiffy();
                     currentState = Diffy.ServoStates.CENTER;
                     toggleDirectionForward = false;
                     break;
+//                case START:
+//                    diffy.startDiffy();
+//                    currentState = Diffy.ServoStates.CENTER;
+//                    break;
+//
+//                case CENTER:
+//                    diffy.centerDiffy();
+//                    currentState = Diffy.ServoStates.END;
+//                    break;
+//
+//                case END:
+//                    diffy.endDiffy();
+//                    currentState = Diffy.ServoStates.CENTER;
+//                    toggleDirectionForward = false;
+//                    break;
             }
         } else {
             switch (currentState) {
                 case CENTER:
-                    diffy.startDiffy();
+                    diffy.subDiffy();//start
                     currentState = Diffy.ServoStates.START;
                     toggleDirectionForward = true;
                     break;

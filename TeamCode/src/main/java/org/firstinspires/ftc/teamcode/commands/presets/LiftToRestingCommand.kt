@@ -21,7 +21,7 @@ class LiftToRestingCommand(lift: Slides, preset: Presets, arm: ArmCorrected) : P
                     // Change this ms to change when the arm comes up
                     WaitCommand(800),
                     InstantCommand({
-                        arm.toRestPos();
+                        arm.toSpecimenPos();
                     }),
                 ),
                 InstantCommand({
