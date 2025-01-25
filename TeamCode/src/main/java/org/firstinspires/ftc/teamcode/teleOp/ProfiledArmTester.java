@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -14,13 +15,15 @@ import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
 import org.firstinspires.ftc.teamcode.commands.armcommands.ProfiledArmCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 
 @TeleOp
 public class ProfiledArmTester extends CommandOpMode {
-    private Arm arm;
+    private ArmCorrected arm;
     private Claw claw;
+    private Diffy diffy;
     ElapsedTime timer;
     private ManualArmCommand manualArmCommand;
 
@@ -29,7 +32,7 @@ public class ProfiledArmTester extends CommandOpMode {
         schedule(new BulkCacheCommand(hardwareMap));
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
-        arm = new Arm(hardwareMap);
+        arm = new ArmCorrected(hardwareMap);
         claw = new Claw(hardwareMap);
         timer = new ElapsedTime();
 
@@ -40,22 +43,22 @@ public class ProfiledArmTester extends CommandOpMode {
         arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_DOWN))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.BASKET_HIGH)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.GRAB_SUB)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.HOVER_SUB)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
         new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_RIGHT))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.REST)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
@@ -68,20 +71,8 @@ public class ProfiledArmTester extends CommandOpMode {
     public void run() {
         super.run();
 
-        //stops from changing gravity by more than 0.01 per press
-        if (timer.milliseconds() >= 500) { // originally 700, need to test with 500
-            if (gamepad2.left_bumper) {
-
-            } else if (gamepad2.right_bumper) {
-
-            }
-            timer.reset();
-        }
-
-
-
 //        telemetry.addData("Gravity Coefficent >", );
-        telemetry.addData("position >", arm.getArmPosition());
+        telemetry.addData("position >", arm.getCurrentPosition());
         telemetry.update();
     }
 }

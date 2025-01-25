@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 
 @Config
 public class ProfiledArmCommand extends CommandBase {
@@ -17,16 +18,14 @@ public class ProfiledArmCommand extends CommandBase {
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    PIDCoefficients coefficients = new PIDCoefficients(0.01, 0.0, 0.0001); // Adjust PID coefficients as needed
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.04, 0.0, 0.01); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
-    double kV = 0.0, kA = 0.0, kStatic = 0.00;
+    public static double kV = 0.3, kA = 0.2, kStatic = 0.00;
 
     // The tolerance for getting to a certain position. Strict tries to get just a bit closer.
     private double ARM_POSITION_TOLERANCE = 15,
             ARM_POSITION_TOLERANCE_STRICT = 10;
-    private double ARM_POWER_INSIDE = 0.14,
-            ARM_POWER_OUTSIDE = -0.24;
 
     private double armPosition = 0, armVelocity = 0, controllerOutput = 0;
 
@@ -35,7 +34,7 @@ public class ProfiledArmCommand extends CommandBase {
             MOTION_PROFILE_MAX_JERK = 0;
 
     boolean holdAtEnd;
-    final Arm arm;
+    final ArmCorrected arm;
     final double targetPosition;
 
     double setPointPos;
@@ -43,20 +42,29 @@ public class ProfiledArmCommand extends CommandBase {
 
     public double gravity = 0.05;
 
-    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd) {
-        this(arm, targetPosition, holdAtEnd, false, true);
+    public ProfiledArmCommand(ArmCorrected arm, int targetPosition, boolean holdAtEnd) {
+        this(arm, targetPosition, holdAtEnd, false, true, 0);
     }
 
-    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict) {
-        this(arm, targetPosition, holdAtEnd, strict, true);
+    public ProfiledArmCommand(ArmCorrected arm, int targetPosition, boolean holdAtEnd, boolean strict) {
+        this(arm, targetPosition, holdAtEnd, strict, true, 0);
     }
 
-    public ProfiledArmCommand(Arm arm, int targetPosition, boolean holdAtEnd, boolean strict, boolean isInside) {
+    public ProfiledArmCommand(ArmCorrected arm, int targetPosition, boolean holdAtEnd, boolean strict, boolean isInside) {
+        this(arm, targetPosition, holdAtEnd, strict, isInside, 0);
+    }
+
+    public ProfiledArmCommand(ArmCorrected arm, int targetPosition, boolean holdAtEnd, boolean strict, boolean isInside, int delay) {
+        // Add a delay before proceeding with initialization
+        try {
+            Thread.sleep(delay); // ms delay before proceeding
+        } catch (InterruptedException e) {
+            e.printStackTrace(); // Handle interruption
+        }
+
         addRequirements(arm);
 
         if (strict) this.ARM_POSITION_TOLERANCE = ARM_POSITION_TOLERANCE_STRICT;
-
-        if (!isInside) this.ARM_POWER_INSIDE = ARM_POWER_OUTSIDE;
 
         this.holdAtEnd = holdAtEnd;
         this.arm = arm;
@@ -74,7 +82,7 @@ public class ProfiledArmCommand extends CommandBase {
 
         // Prevent it from going down TOO fast
         // This is the same as the maximum amount of kG compensation subtracted from max negative value
-        armController.setOutputBounds(-0.87, 1.0);
+        armController.setOutputBounds(-1.0, 1.0);
     }
 
     @Override
@@ -83,7 +91,7 @@ public class ProfiledArmCommand extends CommandBase {
 
         // Generate the motion profile
         profile = MotionProfileGenerator.generateSimpleMotionProfile(
-                new MotionState(arm.getArmPosition(), arm.getArmVelocity()),
+                new MotionState(arm.getCurrentPosition(), arm.getArmVelocity()),
                 new MotionState(targetPosition, 0),
                 MOTION_PROFILE_MAX_VELOCITY,
                 MOTION_PROFILE_MAX_ACCEL,
@@ -95,7 +103,7 @@ public class ProfiledArmCommand extends CommandBase {
 
     @Override
     public void execute(){
-        armPosition = arm.getArmPosition();
+        armPosition = arm.getCurrentPosition();
         armVelocity = arm.getArmVelocity();
 
         double currentTime = timer.seconds();
@@ -110,22 +118,22 @@ public class ProfiledArmCommand extends CommandBase {
         controllerOutput = armController.update(armPosition, armVelocity);
 
         // Update the lift power with the controller
-        arm.setPowerActual(controllerOutput);
+        arm.manual(controllerOutput);
 
         // Additional SetPoint variables can be set here if needed
         setPointPos = state.getX();
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         // End if the lift position is within the tolerance
         return Math.abs(targetPosition - armPosition) <= ARM_POSITION_TOLERANCE;
     }
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) arm.setPowerActual(ARM_POWER_INSIDE); //TODO: CHECK FOR ISSUES ARM_POWER_INSIDE
-        else arm.brake_power(isInside); // Assuming brake_power() is a method to stop the lift
+        if (holdAtEnd) arm.manual(0); //TODO: CHECK FOR ISSUES ARM_POWER_INSIDE
+        else arm.brake(); // Assuming brake_power() is a method to stop the lift
     }
 
     public double getGravity() {

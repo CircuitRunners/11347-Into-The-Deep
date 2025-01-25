@@ -13,11 +13,11 @@ public class ManualLiftCommand extends CommandBase {
     private final Slides lift;
     private final GamepadEx manipulator;
 
-    private final double up = 0.75;
-    private final double down = -0.4;
+    private final double up = -1.0; // 0.75
+    private final double down = 0.65; // -0.4
 
-    private final double slowUp = 0.37;
-    private final double slowDown = -1.0;
+    private final double slowUp = -.5; // 0.37
+    private final double slowDown = 0.37; // -1.0
 
     public ManualLiftCommand(Slides lift, GamepadEx manipulator) {
         addRequirements(lift);
@@ -56,20 +56,20 @@ public class ManualLiftCommand extends CommandBase {
 
         //Otherwise, do nothing
         else {
-            if (lift.getLiftPosition() < 10) lift.setLiftPower(0);
-                // Counter motor being on close to the bottom
-            else if (lift.getLiftPosition() < 40) lift.setLiftPower(-.05);
+            if (lift.getLiftPosition() > -10) lift.setLiftPower(0);
+            // Counter motor being on close to the bottom
+            else if (lift.getLiftPosition() > -40) lift.setLiftPower(-.05);
                 // Slide 1 Counter
-            else if (lift.getLiftPosition() < 850)
-                lift.setLiftPower(0.09*lift.getVoltageComp()); //0.19 *
+            else if (lift.getLiftPosition() > -850)
+                lift.setLiftPower(-0.09*lift.getVoltageComp()); //0.19 *
                 // Slide 2 counter
-            else if (lift.getLiftPosition() < 1380)
-                lift.setLiftPower(0.10*lift.getVoltageComp()); //0.20 * lift.getVoltageComp()
+            else if (lift.getLiftPosition() > -1380)
+                lift.setLiftPower(-0.10*lift.getVoltageComp()); //0.20 * lift.getVoltageComp()
                 // Slide 3 counter
-            else if (lift.getLiftPosition() < 1640)
-                lift.setLiftPower(0.11*lift.getVoltageComp()); //0.20 * lift.getVoltageComp()
+            else if (lift.getLiftPosition() > -1640)
+                lift.setLiftPower(-0.11*lift.getVoltageComp()); //0.20 * lift.getVoltageComp()
                 // Other Counter
-            else lift.setLiftPower(0.13*lift.getVoltageComp());
+            else lift.setLiftPower(-0.13*lift.getVoltageComp());
         }
     }
 }

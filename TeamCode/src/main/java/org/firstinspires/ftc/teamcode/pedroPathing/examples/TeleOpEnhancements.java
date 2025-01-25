@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
  * @version 1.0, 3/21/2024
  */
 @TeleOp(name = "Pedro Pathing TeleOp Enhancements", group = "Test")
-public class TeleOpEnhancements extends OpMode {
+public class    TeleOpEnhancements extends OpMode {
     private Follower follower;
 
     private DcMotorEx leftFront;

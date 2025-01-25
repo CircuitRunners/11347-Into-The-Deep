@@ -13,15 +13,14 @@ import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 @Config
 public class ProfiledLiftCommand extends CommandBase {
-
     PIDFController liftController;
     private MotionProfile profile;
     ElapsedTime timer = new ElapsedTime();
 
-    PIDCoefficients coefficients = new PIDCoefficients(0.03, 0.001, 0.0); // Adjust PID coefficients as needed
+    public static PIDCoefficients coefficients = new PIDCoefficients(0.06, 0.00, 0.01); // Adjust PID coefficients as needed
 
     // Feedforward Coefficients
-    double kV = 0.0, kA = 0.0, kStatic = 0.00;
+    public static double kV = 0, kA = 0, kStatic = 0.08;
 
     // The tolerance for getting to a certain position. Strict tries to get just a bit closer.
     private double LIFT_POSITION_TOLERANCE = 15,
@@ -31,14 +30,14 @@ public class ProfiledLiftCommand extends CommandBase {
     private double liftVelocity = 0;
     private double controllerOutput = 0;
 
-    final double MOTION_PROFILE_MAX_VELOCITY = 3000,
-            MOTION_PROFILE_MAX_ACCEL = 3750,
+    final double MOTION_PROFILE_MAX_VELOCITY = 2500,//3000
+            MOTION_PROFILE_MAX_ACCEL = 3250,
             MOTION_PROFILE_MAX_JERK = 0;
 
-    final double GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE = 0.03,
-            GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE = 0.05,
-            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = 0.10,
-            GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE = 0.15;
+    final double GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE = 0.08,//0.03
+            GRAVITY_FEEDFORWARD_COMPENSATION_SECOND_STAGE = 0.1,//0.05
+            GRAVITY_FEEDFORWARD_COMPENSATION_THIRD_STAGE = 0.15,
+            GRAVITY_FEEDFORWARD_COMPENSATION_FOURTH_STAGE = 0.2;
     final double LIFT_FIRST_STAGE_POSITION_TICKS = -870,
             LIFT_SECOND_STAGE_POSITION_TICKS = -1966,
             LIFT_THIRD_STAGE_POSITION_TICKS = -3070;
@@ -67,7 +66,7 @@ public class ProfiledLiftCommand extends CommandBase {
         // Gravity feedforward term to counteract gravity
         liftController = new PIDFController(coefficients, kV, kA, kStatic, (x, v) -> {
             // Feedforward Gravitational Below
-            double kG = 0;
+            double kG = 0.05;
             if (liftPosition > LIFT_FIRST_STAGE_POSITION_TICKS) {
                 kG = GRAVITY_FEEDFORWARD_COMPENSATION_FIRST_STAGE;
             }
@@ -85,7 +84,7 @@ public class ProfiledLiftCommand extends CommandBase {
 
         // Prevent it from going down TOO fast
         // This is the same as the maximum amount of kG compensation subtracted from max negative value
-        liftController.setOutputBounds(-0.87, 1.0);
+        liftController.setOutputBounds(-1.0, 0.8);
     }
 
     @Override
@@ -135,7 +134,7 @@ public class ProfiledLiftCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        if (holdAtEnd) lift.setLiftPower(-0.078);
+        if (holdAtEnd) lift.setLiftPower(-0.5); // 0.0078
         else lift.brake_power(); // Assuming brake_power() is a method to stop the lift
     }
 }

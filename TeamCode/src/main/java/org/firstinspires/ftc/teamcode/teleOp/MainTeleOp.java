@@ -6,26 +6,32 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import org.firstinspires.ftc.teamcode.support.Actions;
 import org.firstinspires.ftc.teamcode.auto.BulkCacheCommand;
 import org.firstinspires.ftc.teamcode.commands.armcommands.ManualArmCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.ManualLiftCommand;
+import org.firstinspires.ftc.teamcode.commands.liftcommands.ProfiledLiftCommand;
 import org.firstinspires.ftc.teamcode.commands.presets.ArmToScoringCommand;
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.CRDiffy;
+import org.firstinspires.ftc.teamcode.commands.presets.LiftToScoringCommand;
+import org.firstinspires.ftc.teamcode.subsystems.ArmCorrected;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Diffy;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.commands.presets.LiftToRestingCommand;
 
 @TeleOp
 public class MainTeleOp extends CommandOpMode {
     //arm stuff
-    private Arm arm;
+    private ArmCorrected arm;
     private Slides lift;
-    private CRDiffy diffy;
+    private Diffy diffy;
     private Claw claw;
+    private Diffy.ServoStates currentState;
     private Drivebase db;
 //    private Limelight limelight;
 
+    private ManualLiftCommand manualLiftCommand;
     private ManualArmCommand manualArmCommand;
 
     @Override
@@ -34,12 +40,14 @@ public class MainTeleOp extends CommandOpMode {
         GamepadEx driver = new GamepadEx(gamepad1);
         GamepadEx manipulator = new GamepadEx(gamepad2);
 
-        arm = new Arm(hardwareMap);
-        diffy = new CRDiffy(hardwareMap);
+        arm = new ArmCorrected(hardwareMap);
+        diffy = new Diffy(hardwareMap);
+        currentState = Diffy.ServoStates.START;
         lift = new Slides(hardwareMap);
         claw = new Claw(hardwareMap);
         db = new Drivebase(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 5.0);
+//        claw.close();
         telemetry.addData(">", "Hardware Map Initialized");
         telemetry.update();
 
@@ -51,28 +59,68 @@ public class MainTeleOp extends CommandOpMode {
 //        telemetry.addData(">", "Limelight Ready");
 //        telemetry.update();
 
+        // Command Stuff
+        manualLiftCommand = new ManualLiftCommand(lift, manipulator);
         manualArmCommand = new ManualArmCommand(arm, manipulator);
 
+        lift.setDefaultCommand(new PerpetualCommand(manualLiftCommand));
         arm.setDefaultCommand(new PerpetualCommand(manualArmCommand));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.Y)) //Triangle
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+        //HIGH BASKET PRESETS
+        //LIFT
+        manipulator.getGamepadButton(GamepadKeys.Button.Y)
+                .whenActive(new LiftToScoringCommand(diffy, lift, LiftToScoringCommand.Presets.MID, arm)
+                        .withTimeout(3500)
+                        .interruptOn(() -> manualLiftCommand.isManualActive()));
+//        //ARM
+//        new Trigger(() -> manipulator.getLeftY() > 0.4)
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.BASKET_HIGH)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+
+        //REST PRESETS
+//        new Trigger(() -> manipulator.getLeftY() < -0.4)
+//                .whenActive(new testDownCommand(lift, arm, claw)
+//                        .withTimeout(3500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive() || manualLiftCommand.isManualActive()));
+//
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B))
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.SPECIMEN)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//
+//
+//        //ARM
+        manipulator.getGamepadButton(GamepadKeys.Button.A) // Triangle
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.HOVER_SUB)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
+//        //ARM
+//        new manipulator.getButton(GamepadKeys.Button.B)) // Circle
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.GRAB_SUB) //GRAB_SUB
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
+        //ARM
+         manipulator.getGamepadButton(GamepadKeys.Button.B) // Circle
+                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.BASKET_HIGH)
+                        .withTimeout(2500)
+                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//        //ARM
+//        manipulator.getGamepadButton(GamepadKeys.Button.X) // Square
+//                .whenActive(new ArmToScoringCommand(arm, claw, diffy, ArmToScoringCommand.Presets.REST)
+//                        .withTimeout(2500)
+//                                .interruptOn(() -> manualArmCommand.isManualActive()));
+        manipulator.getGamepadButton(GamepadKeys.Button.X) // Square
+                .whenActive(new LiftToRestingCommand(lift, LiftToRestingCommand.Presets.DOWN, arm)
                         .withTimeout(2500)
                         .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.HOVER_SUB)
-                        .interruptOn(() -> manualArmCommand.isManualActive()));
+//        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.B)) // Circle
+//                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.TOPBAR)
+//                        .withTimeout(2500)
+//                        .interruptOn(() -> manualArmCommand.isManualActive()));
 
-        new Trigger(() -> manipulator.getButton(GamepadKeys.Button.A))
-                .whenActive(new ArmToScoringCommand(arm, claw, ArmToScoringCommand.Presets.REST)
-                        .withTimeout(2500)
-                        .interruptOn(() -> manualArmCommand.isManualActive()));
 
         telemetry.addData(">", "Commands Ready");
         telemetry.update();
@@ -81,12 +129,15 @@ public class MainTeleOp extends CommandOpMode {
         telemetry.update();
     }
 
+    boolean previousButtonState = false;
+    private boolean toggleDirectionForward = true;
+
     @Override
     public void run() {
         super.run();
         //Drivebase
         db.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-
+        arm.update();
         //Reset
         if (gamepad1.square) {
             db.reset();
@@ -94,12 +145,18 @@ public class MainTeleOp extends CommandOpMode {
         }
 
         //Arm
-        if (gamepad2.right_stick_button) {
-            arm.resetArmPosition();
+        if (gamepad2.square){
+            Actions.runBlocking(arm.toTopBar);
+            arm.toTopBar();
+            arm.update();
+
         }
-//        arm.setPower(gamepad2.right_stick_x);
-        telemetry.addData("Arm Encoder Pos >", arm.getArmPosition());
-        telemetry.addData("Interpolation>", arm.estimateArmPos());
+//        while (gamepad2.circle) {
+//            diffy.centerDiffy();
+//            currentState = Diffy.ServoStates.CENTER;
+//            break;
+//        }
+      arm.manual(-gamepad2.right_stick_y);
 
         //Slides
         if (gamepad2.left_stick_button) {
@@ -107,45 +164,80 @@ public class MainTeleOp extends CommandOpMode {
         }
         lift.setLiftPower(gamepad2.left_stick_y);
 
-        //Diffy
+
         while (gamepad2.dpad_left) {
-            diffy.moveDiffy(0.4);
+            diffy.rotateDiffyL();
         } while (gamepad2.dpad_right) {
-            diffy.moveDiffy(-0.4);
+            diffy.rotateDiffyR();
         }
-        diffy.rotateDiffy(gamepad2.left_trigger - gamepad2.right_trigger);
-        telemetry.addData("Left Axon", diffy.getLeftDiffyPose());
-        telemetry.addData("Right Axon", diffy.getRightDiffyPose());
+
+        while (gamepad2.dpad_up) {
+            diffy.moveDiffyP();
+        }
+        while (gamepad2.dpad_down) {
+            diffy.moveDiffyN();
+        }
+
+        boolean currentButtonState = gamepad2.right_bumper;
+        if (currentButtonState && !previousButtonState) {
+            toggleDiffyPosition();
+        }
+        previousButtonState = currentButtonState;
+
+
 
         //Claw
         if (gamepad2.left_bumper) {
             claw.switchState();
         }
+
         telemetry.addData("Is Open? >", claw.isOpen());
-
-//        LLResult result = limelight.getLatestResult();
-//
-//        if (result != null && result.isValid()) {
-//            double tx = result.getTx();  // Horizontal offset
-//            double ty = result.getTy();  // Vertical offset
-//
-//            telemetry.addData("tx", tx);
-//            telemetry.addData("ty", ty);
-//
-//            if (limelight.isTargetAligned(result)) {
-//                telemetry.addData("Alignment", "Target is centered!");
-//            } else {
-//                telemetry.addData("Alignment", "Target is NOT centered!");
-//            }
-//        } else {
-//            telemetry.addData("Limelight", "No valid data");
-//        }
-//        // Stop Limelight
-//        limelight.stopLimelight();
-
         telemetry.addData("Lift Height", lift.getLiftPosition());
+        telemetry.addData("Arm Pos", arm.getCurrentPosition());
+        telemetry.addData("Arm Target", arm.getArmTarget());
         telemetry.addData("imuHeading", db.getCorrectedYaw());
         telemetry.addData("imuNONCO", db.imu.getYaw());
         telemetry.update();
+    }
+
+    public void toggleDiffyPosition() {
+        if (toggleDirectionForward) {
+            switch (currentState) {
+                case START:
+                    diffy.subDiffy();
+                    currentState = Diffy.ServoStates.END;
+                    break;
+
+                case END:
+                    diffy.centerDiffy();
+                    currentState = Diffy.ServoStates.CENTER;
+                    toggleDirectionForward = false;
+                    break;
+//                case START:
+//                    diffy.startDiffy();
+//                    currentState = Diffy.ServoStates.CENTER;
+//                    break;
+//
+//                case CENTER:
+//                    diffy.centerDiffy();
+//                    currentState = Diffy.ServoStates.END;
+//                    break;
+//
+//                case END:
+//                    diffy.endDiffy();
+//                    currentState = Diffy.ServoStates.CENTER;
+//                    toggleDirectionForward = false;
+//                    break;
+            }
+        } else {
+            switch (currentState) {
+                case CENTER:
+                    diffy.subDiffy();//start
+                    currentState = Diffy.ServoStates.START;
+                    toggleDirectionForward = true;
+                    break;
+            }
+        }
+
     }
 }

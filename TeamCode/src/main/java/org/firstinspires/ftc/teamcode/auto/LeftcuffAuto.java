@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.util.Action;
 
 
 @Autonomous
-public class rightAuto extends OpMode{
+public class LeftcuffAuto extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
@@ -31,11 +31,11 @@ public class rightAuto extends OpMode{
     public ArmCorrected arm;
     //    private Slides lift;
     private Diffy diffy;
-    private double placex = 32.8;
+    //private double placex = 32.8;
 
     // These are estimates and probably not great
     private Pose startPosition = new Pose(10.5, 62.5, Math.toRadians(0));
-    private Pose preloadPos = new Pose(placex, 62.5, Math.toRadians(0));
+    private Pose preloadPos = new Pose(10.5, 100.5, Math.toRadians(0));
     private Pose sample1GrabPos = new Pose(64, 24, Math.toRadians(0));//90 //25
     private Point sample1GrabCP1 = new Point(34, 12.5);
     private Point sample1GrabCP2 = new Point(59, 50);//48
@@ -47,8 +47,8 @@ public class rightAuto extends OpMode{
     private Pose sample3PlacePos = new Pose(20, 13, Math.toRadians(0));
     private Pose specimenGrabPos = new Pose(15.5,34); //, Math.toRadians(225)
     private Point specimen1GrabCP = new Point(45, 34);
-    private Pose specimen1PlacePos = new Pose(placex + 0.5, 61, Math.toRadians(0));
-    private Pose specimen2PlacePos = new Pose(placex, 62, Math.toRadians(0));
+    //private Pose specimen1PlacePos = new Pose(placex + 0.5, 61, Math.toRadians(0));
+    //private Pose specimen2PlacePos = new Pose(placex, 62, Math.toRadians(0));
     //private Pose specimen3PlacePos = new Pose(34, 61, Math.toRadians(0));
     private Pose parkPos = new Pose(10, 10, Math.toRadians(0));
 
@@ -90,47 +90,47 @@ public class rightAuto extends OpMode{
                 .addPath(new BezierLine(new Point(sample2PlacePos), new Point(specimenGrabPos)))
                 .setLinearHeadingInterpolation(sample2PlacePos.getHeading(), specimenGrabPos.getHeading())
                 .build();
-        specimen1Place = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen1PlacePos)))
-                .setLinearHeadingInterpolation(specimenGrabPos.getHeading(), specimen1PlacePos.getHeading())
-                .build();
-        specimen2Grab = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimen1PlacePos), new Point(specimenGrabPos)))
-                .setLinearHeadingInterpolation(specimen1PlacePos.getHeading(), specimenGrabPos.getHeading())
-                .build();
-        specimen2Place = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen2PlacePos)))
-                .setLinearHeadingInterpolation(specimenGrabPos.getHeading(), specimen2PlacePos.getHeading())
-                .build();
-        specimen3Grab = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimen2PlacePos), new Point(specimenGrabPos)))
-                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
-                .build();
-//        specimen3Place = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen3PlacePos)))
-//                .setConstantHeadingInterpolation(specimen3PlacePos.getHeading())
+//        specimen1Place = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen1PlacePos)))
+//                .setLinearHeadingInterpolation(specimenGrabPos.getHeading(), specimen1PlacePos.getHeading())
 //                .build();
-//        park = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(specimen3PlacePos), new Point(parkPos)))
+//        specimen2Grab = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(specimen1PlacePos), new Point(specimenGrabPos)))
+//                .setLinearHeadingInterpolation(specimen1PlacePos.getHeading(), specimenGrabPos.getHeading())
+//                .build();
+//        specimen2Place = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen2PlacePos)))
+//                .setLinearHeadingInterpolation(specimenGrabPos.getHeading(), specimen2PlacePos.getHeading())
+//                .build();
+//        specimen3Grab = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(specimen2PlacePos), new Point(specimenGrabPos)))
+//                .setConstantHeadingInterpolation(specimenGrabPos.getHeading())
+//                .build();
+////        specimen3Place = follower.pathBuilder()
+////                .addPath(new BezierLine(new Point(specimenGrabPos), new Point(specimen3PlacePos)))
+////                .setConstantHeadingInterpolation(specimen3PlacePos.getHeading())
+////                .build();
+////        park = follower.pathBuilder()
+////                .addPath(new BezierLine(new Point(specimen3PlacePos), new Point(parkPos)))
+////                .setConstantHeadingInterpolation(parkPos.getHeading())
+////                .build();
+//        parkFromSample2 = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(specimen2PlacePos), new Point(parkPos)))
 //                .setConstantHeadingInterpolation(parkPos.getHeading())
 //                .build();
-        parkFromSample2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimen2PlacePos), new Point(parkPos)))
-                .setConstantHeadingInterpolation(parkPos.getHeading())
-                .build();
 
     }
 
     public void autonomousPathUpdate() {
         switch (pathState) {
             case -1:
-                Actions.runBlocking(arm.toTopBar);
+                //Actions.runBlocking(arm.toTopBar);
                 setPathState(0);
                 break;
             case 0:
                 if (!follower.isBusy()) {
                     follower.followPath(preload, true);
-                    setPathState(1);
+
                 }
 
                 break;
@@ -150,7 +150,7 @@ public class rightAuto extends OpMode{
                     Actions.runBlocking(arm.toRestPos);
                     Actions.runBlocking(diffy.centerDiffy);
                     follower.followPath(sample1, true);
-                    setPathState(3);
+//                    setPathState(3);
                 }
                 break;
             case 3:

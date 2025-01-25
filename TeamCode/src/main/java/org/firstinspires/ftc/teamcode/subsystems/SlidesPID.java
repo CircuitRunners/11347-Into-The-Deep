@@ -1,18 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-public class Slides extends SubsystemBase{
+import org.firstinspires.ftc.teamcode.support.RunAction;
+
+public class SlidesPID extends SubsystemBase {
     //TODO Rename References
     public enum SlidePositions {
-        STAGE_0(0), // Ground
+        STAGE_0(-30), // Ground
         AUTO(-200), // Low Bar
         STAGE_1(-1070), // Low Bucket
-        STAGE_2(-2145), // High Bar
+        STAGE_2(-2200), // High Bar
         STAGE_3(-3130); // High Bucket
 
         public int position;
@@ -28,12 +31,18 @@ public class Slides extends SubsystemBase{
     private int UPPER_LIMIT = -3180, LOWER_LIMIT = -50;
     DcMotorEx leftSlideMotor;
     DcMotorEx rightSlideMotor;
+    private PIDController controller;
+    public static double p = 0.02, i = 0, d = 0.0001;
+    public static double f = 0.00;
 
+    public static double target = 0;
     private VoltageSensor voltageSensor;
     private double voltageComp;
     private double VOLTAGE_WHEN_LIFT_TUNED = 13.0;
-
-    public Slides(HardwareMap hardwareMap) {
+    public RunAction scoring, rest;
+    public SlidesPID(HardwareMap hardwareMap) {
+        controller = new PIDController(p, i, d);
+        //target = getLiftPosition();
         leftSlideMotor = hardwareMap.get(DcMotorEx.class, "leftSlideMotor");
         rightSlideMotor = hardwareMap.get(DcMotorEx.class, "rightSlideMotor");
 
@@ -50,23 +59,34 @@ public class Slides extends SubsystemBase{
 
         // Negate the gravity when stopped ?
         //TODO gravity PID coefficients?
-        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
         voltageComp = VOLTAGE_WHEN_LIFT_TUNED / voltageSensor.getVoltage();
+        scoring = new RunAction(this::scoring);
+        rest = new RunAction(this::rest);
     }
 
-    @Override
-    public void periodic(){
-        // happens every loop
+    public void update() {
+        controller.setPID(p, i, d);
+        double armPos = getLiftPosition();
+        double pid = controller.calculate(armPos, target);
+        double ff = Math.sin(Math.toRadians(target)) * f;
+
+        double power = pid + ff;
+
+        rightSlideMotor.setPower(power);
+        leftSlideMotor.setPower(power);
     }
 
     public void setLiftPower(double power) {
         leftSlideMotor.setPower(power);
         rightSlideMotor.setPower(power);
     }
-
+    public void setLiftTarget(int new_target) {
+        target = new_target;
+    }
     public void brake_power(){
         setLiftPower(0);
     }
@@ -94,6 +114,8 @@ public class Slides extends SubsystemBase{
     public void setRightMotor(double power) {
         rightSlideMotor.setPower(power);
     }
+    public void scoring() {setLiftTarget(SlidePositions.STAGE_2.getPosition());}
+    public void rest() {setLiftTarget(SlidePositions.STAGE_0.getPosition());}
 
     public void resetLiftPosition() {
         leftSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -1,5 +1,22 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.tuning;
 
+import static org.firstinspires.ftc.teamcode.support.Constants.MASS_IN_KG;
+import static org.firstinspires.ftc.teamcode.support.Constants.X_MOVEMENT;
+import static org.firstinspires.ftc.teamcode.support.Constants.Y_MOVEMENT;
+import static org.firstinspires.ftc.teamcode.support.Constants.centripetalForceScaling;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveD;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveF;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveI;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveP;
+import static org.firstinspires.ftc.teamcode.support.Constants.driveT;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalD;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalF;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalI;
+import static org.firstinspires.ftc.teamcode.support.Constants.translationalP;
+import static org.firstinspires.ftc.teamcode.support.Constants.forwardZeroPowerAccel;
+import static org.firstinspires.ftc.teamcode.support.Constants.lateralZeroPowerAccel;
+import static org.firstinspires.ftc.teamcode.support.Constants.zeroPowerAccelMultiplier;
+
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
@@ -30,18 +47,18 @@ public class FollowerConstants {
 
     // This section is for setting the actual drive vector for the front left wheel, if the robot
     // is facing a heading of 0 radians with the wheel centered at (0,0)
-    private static double xMovement = 81.34056; // 60.617520819111576, 58.74611374581603, 60.226880730156, 60.30598867806962,  || Tuned: 61.985691138700631 || Default: 81.34056
-    private static double yMovement = 65.43028; //  || Tuned: 52.9389937811475548 || Default: 65.43028
+    private static double xMovement = X_MOVEMENT; // Default: 81.34056, X_INIT is in Constants (in support)
+    private static double yMovement = Y_MOVEMENT; // Default: 65.43028, Y_INIT is in Constants (in support)
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
     public static Vector frontLeftVector = MathFunctions.normalizeVector(new Vector(convertToPolar[0], convertToPolar[1]));
 
 
     // Translational PIDF coefficients (don't use integral)
     public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.09,
-            0,
-            0.005,
-            0);
+            translationalP,
+            translationalI,
+            translationalD,
+            translationalF);
 
     // Translational Integral
     public static CustomPIDFCoefficients translationalIntegral = new CustomPIDFCoefficients(
@@ -56,9 +73,9 @@ public class FollowerConstants {
 
     // Heading error PIDF coefficients
     public static CustomPIDFCoefficients headingPIDFCoefficients = new CustomPIDFCoefficients(
-            1,
+            3,
             0,
-            0,
+            0.1,
             0);
 
     // Feed forward constant added on to the heading PIDF
@@ -67,11 +84,11 @@ public class FollowerConstants {
 
     // Drive PIDF coefficients
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.009,
-            0,
-            0.0004,
-            0.6,
-            0);
+            driveP,
+            driveI,
+            driveD,
+            driveT,
+            driveF);
 
     // Feed forward constant added on to the drive PIDF
     public static double drivePIDFFeedForward = 0.01;
@@ -83,19 +100,19 @@ public class FollowerConstants {
 
 
     // Mass of robot in kilograms
-    public static double mass = 10.6; //10.6 KG //10.65942
+    public static double mass = MASS_IN_KG; //10.6 KG //10.65942
 
     // Centripetal force to power scaling
-    public static double centripetalScaling = 0.0006;
+    public static double centripetalScaling = centripetalForceScaling;
 
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double forwardZeroPowerAcceleration = -56.3081534292184762; // -57.144567671336716, -54.980326607200745, -57.41244609626607, -59.1542552300004, -52.84917154128845 || Tuned: 56.3081534292184762 ||Default: -34.62719
+    public static double forwardZeroPowerAcceleration = forwardZeroPowerAccel; //
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double lateralZeroPowerAcceleration = -87.60674605839757; // -79.28761894963705, -79.79366743347813, -95.17555128800514, -88.02246262239191, -95.75442999847562 || Tuned: 87.60674605839757 ||Default: -78.15554
+    public static double lateralZeroPowerAcceleration = lateralZeroPowerAccel; //
 
     // A multiplier for the zero power acceleration to change the speed the robot decelerates at
     // the end of paths.
@@ -104,7 +121,7 @@ public class FollowerConstants {
     // Decreasing this will cause the deceleration at the end of the Path to be slower, making the
     // robot slower but reducing risk of end-of-path overshoots or localization slippage.
     // This can be set individually for each Path, but this is the default.
-    public static double zeroPowerAccelerationMultiplier = 4;
+    public static double zeroPowerAccelerationMultiplier = zeroPowerAccelMultiplier;
 
 
     // When the robot is at the end of its current Path or PathChain and the velocity goes below
@@ -139,7 +156,7 @@ public class FollowerConstants {
     public static double holdPointTranslationalScaling = 0.45;
 
     // This is scales the heading error correction power when the Follower is holding a Point.
-    public static double holdPointHeadingScaling = 0.35;
+    public static double holdPointHeadingScaling = 0.45;
 
     // This is the number of times the velocity is recorded for averaging when approximating a first
     // and second derivative for on the fly centripetal correction. The velocity is calculated using
